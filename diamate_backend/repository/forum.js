@@ -10,6 +10,17 @@ async function createPost(userId, title, content, timestamp) {
 	return { success, error };
 }
 
+async function getPostById(id) {
+	const query = 'SELECT * FROM posts WHERE id = $1';
+	const params = [id];
+	const { success, data, error } = await repository.query(query, params);
+	if (success) {
+		return { success, data };
+	}
+	return { success, error };
+}
+
 module.exports = {
-	createPost
+	createPost,
+	getPostById
 };

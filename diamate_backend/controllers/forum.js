@@ -14,6 +14,18 @@ async function createPost(req, res) {
 	}
 }
 
+async function getPost(req, res) {
+	const { id } = req.params;
+	const result = await forumRepository.getPostById(id);
+	if (result.success) {
+		res.status(200).json(result.data);
+	}
+	else {
+		res.status(500).json({ error: 'Internal server error' });
+	}
+}
+
 module.exports = {
-	createPost
+	createPost,
+	getPost
 };
