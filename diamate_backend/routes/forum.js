@@ -3,7 +3,8 @@ const ForumController = require('../controllers/forum');
 const verifyToken = require('../controllers/middleware/verify_token');
 
 router.route('/post').post(verifyToken, ForumController.createPost);
-router.route('/post/:id').get(verifyToken, ForumController.getPost);
+router.route('/:id').get(verifyToken, ForumController.getPost);
+router.route('/:id').post(verifyToken, ForumController.setUpvote);
 
 
 router.get('/test', (req, res) => {
