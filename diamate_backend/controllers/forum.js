@@ -15,6 +15,20 @@ async function createPost(req, res) {
 	}
 }
 
+async function getPosts(req, res) {
+	let param = { page: 1, limit: 20 };
+	const page = param.page;
+	const limit = param.limit;
+	const offset = (page - 1) * limit;
+	const result = await forumRepository.getPosts(offset, limit);
+	if (result.success) {
+		res.status(200).json(result.data);
+	}
+	else {
+		res.status(500).json({ error: 'Internal server error: query failed' });
+	}
+}
+
 async function getPost(req, res) {
 	const { id } = req.params;
 	const result = await forumRepository.getPostById(id);
@@ -70,6 +84,7 @@ async function setUpvote(req, res) {
 
 module.exports = {
 	createPost,
+	getPosts,
 	getPost,
 	setUpvote
 };

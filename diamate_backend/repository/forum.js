@@ -10,6 +10,16 @@ async function createPost(userId, title, content, timestamp) {
 	return { success, error };
 }
 
+async function getPosts(offset, limit) {
+	const query = 'SELECT * FROM posts ORDER BY created DESC OFFSET $1 LIMIT $2';
+	const params = [offset, limit];
+	const { success, data, error } = await repository.query(query, params);
+	if (success) {
+		return { success, data };
+	}
+	return { success, error };
+}
+
 async function getPostById(id) {
 	const query = 'SELECT * FROM posts WHERE id = $1';
 	const params = [id];
@@ -22,5 +32,6 @@ async function getPostById(id) {
 
 module.exports = {
 	createPost,
+	getPosts,
 	getPostById
 };
