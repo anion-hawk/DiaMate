@@ -25,9 +25,9 @@ class MyApp extends StatelessWidget {
       builder: (context, orientation, deviceType) {
         return MaterialApp(
           theme: theme,
-          title: 'diamate_version2',
+          title: 'diamate',
           debugShowCheckedModeBanner: false,
-          initialRoute: AppRoutes.loginScreen,
+          initialRoute: AppRoutes.registerPatientScreen,
           routes: AppRoutes.routes,
         );
       },

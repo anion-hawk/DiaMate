@@ -30,8 +30,8 @@ import 'package:diamate_frontend/presentation/login_screen/login_screen.dart';
 // import 'package:diamate_frontend/presentation/new_group_one_screen/new_group_one_screen.dart';
 // import 'package:diamate_frontend/presentation/msg_screen/msg_screen.dart';
 // import 'package:diamate_frontend/presentation/messegewithpeers_tab_container_screen/messegewithpeers_tab_container_screen.dart';
-// import 'package:diamate_frontend/presentation/expert_register_screen/expert_register_screen.dart';
-// import 'package:diamate_frontend/presentation/expert_registertwo_screen/expert_registertwo_screen.dart';
+ import 'package:diamate_frontend/presentation/expert_register_screen/expert_register_screen.dart';
+ import 'package:diamate_frontend/presentation/expert_registertwo_screen/expert_registertwo_screen.dart';
 // import 'package:diamate_frontend/presentation/doctor_profile_screen/doctor_profile_screen.dart';
 // import 'package:diamate_frontend/presentation/doctor_edit_profile_screen/doctor_edit_profile_screen.dart';
 // import 'package:diamate_frontend/presentation/doctor_edit_profile_two_screen/doctor_edit_profile_two_screen.dart';
@@ -158,6 +158,7 @@ class AppRoutes {
     registerScreen: (context) => RegisterScreen(),
     registerPatientScreen: (context) => RegisterPatientScreen(),
     loginScreen: (context) => LoginScreen(),
+
     // plannerScreen: (context) => PlannerScreen(),
     // addDietScreen: (context) => AddDietScreen(),
     // showPlannerScreen: (context) => ShowPlannerScreen(),
@@ -187,8 +188,8 @@ class AppRoutes {
     // msgScreen: (context) => MsgScreen(),
     // messegewithpeersTabContainerScreen: (context) =>
     //     MessegewithpeersTabContainerScreen(),
-    // expertRegisterScreen: (context) => ExpertRegisterScreen(),
-    // expertRegistertwoScreen: (context) => ExpertRegistertwoScreen(),
+      expertRegisterScreen: (context) => ExpertRegisterScreen(),
+      expertRegistertwoScreen: (context) => ExpertRegistertwoScreen(),
     // doctorProfileScreen: (context) => DoctorProfileScreen(),
     // doctorEditProfileScreen: (context) => DoctorEditProfileScreen(),
     // doctorEditProfileTwoScreen: (context) => DoctorEditProfileTwoScreen(),

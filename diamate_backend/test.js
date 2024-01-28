@@ -1,3 +1,5 @@
-const timestamp = new Date()
+diseases = ["Insulin resistance", 'Diabetes insipidus', 'Cataract', 'PCOS', 'Hypertension', 'Thyroid disease', 'Coeliac disease', 'GGGg']
 
-console.log(timestamp)
+const transformedDiseases = diseases.map(disease => disease.toLowerCase().replace(/ /g, '_'));
+
+console.log(transformedDiseases)
