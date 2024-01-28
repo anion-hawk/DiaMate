@@ -8,6 +8,7 @@ import 'package:diamate_frontend/widgets/custom_flat_button.dart';
 import 'package:diamate_frontend/presentation/register_screen/register_screen.dart';
 import 'package:http/http.dart' as http;
 import 'package:diamate_frontend/config.dart';
+import 'package:flutter/material.dart';
 
 import 'package:flutter/material.dart';
 
@@ -22,20 +23,86 @@ class LoginScreen extends StatelessWidget {
   TextEditingController passwordController = TextEditingController();
 
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  void loginUser() async {
-    if (emailController.text.isNotEmpty && passwordController.text.isNotEmpty) {
-      var reqbody = {
-        "email": emailController.text,
-        "password": passwordController.text
-      };
-      print(reqbody);
+  // void loginUser() async {
+  //   if (emailController.text.isNotEmpty && passwordController.text.isNotEmpty) {
+  //     var reqbody = {
+  //       "email": emailController.text,
+  //       "password": passwordController.text
+  //     };
+  //     print(reqbody);
+  //     var response = await http.post(Uri.parse(login),
+  //         headers: {"ContentType": "application/json"}, body: reqbody);
+  //     print(response.body);
+  //   } else {
+  //     print("hoynaiiiiiiii");
+  //   }
+  // }
+  void loginUser(BuildContext context) async {
+  if (emailController.text.isNotEmpty && passwordController.text.isNotEmpty) {
+    var reqbody = {
+      "email": emailController.text,
+      "password": passwordController.text
+    };
+    print(reqbody);
+
+    try {
       var response = await http.post(Uri.parse(login),
           headers: {"ContentType": "application/json"}, body: reqbody);
-      print(response.body);
-    } else {
-      print("hoynaiiiiiiii");
+
+      if (response.statusCode == 200) {
+        // Login successful
+        print(response.body);
+        // Navigate to the next screen or perform any other actions
+      } else {
+        // Login unsuccessful
+        print("Login failed. Incorrect email or password.");
+
+        // Show an AlertDialog with an error message
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text("Login Failed"),
+              content: Text("Incorrect email or password. Please try again."),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(); // Close the dialog
+                  },
+                  child: Text("OK"),
+                ),
+              ],
+            );
+          },
+        );
+      }
+    } catch (error) {
+      // Handle network errors or other exceptions
+      print("An error occurred: $error");
+
+      // Show an AlertDialog with an error message
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Error"),
+            content: Text("An error occurred. Please try again later."),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(); // Close the dialog
+                },
+                child: Text("OK"),
+              ),
+            ],
+          );
+        },
+      );
     }
+  } else {
+    print("hoynaiiiiiiii");
   }
+}
 
   @override
   Widget build(BuildContext context) {
@@ -156,7 +223,7 @@ class LoginScreen extends StatelessWidget {
                         buttonTextStyle: CustomTextStyles
                             .titleMediumPoppinsOnErrorContainerMedium,
                         onPressed: () {
-                          loginUser();
+                          loginUser(context);
                         }),
                     SizedBox(height: 37.v),
                     Text(
@@ -166,7 +233,7 @@ class LoginScreen extends StatelessWidget {
                     SizedBox(height: 6.v),
                     CustomFlatButton(
                       text: "Register Now",
-                      buttonTextStyle: const TextStyle(
+                      buttonTextStyle:const TextStyle(
                         fontSize: 16.0,
                         fontWeight: FontWeight.w600,
                         color: Colors.blue,
