@@ -22,6 +22,7 @@ app.get('/status', (req, res) => {
 
 app.use('/auth', require('./routes/auth'));
 app.use('/forum', require('./routes/forum'));
+app.use('/user', require('./routes/user'));
 
 
 
