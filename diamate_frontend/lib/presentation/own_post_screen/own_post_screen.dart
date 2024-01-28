@@ -1,3 +1,6 @@
+import 'package:diamate_frontend/config.dart';
+import 'package:diamate_frontend/widgets/app_bar/app_bar_trailing_button.dart';
+
 import '../own_post_screen/widgets/healthchipview_item_widget.dart';
 import 'package:diamate_frontend/core/app_export.dart';
 import 'package:diamate_frontend/widgets/app_bar/appbar_leading_iconbutton.dart';
@@ -7,21 +10,19 @@ import 'package:diamate_frontend/widgets/app_bar/custom_app_bar.dart';
 import 'package:diamate_frontend/widgets/custom_icon_button.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 
 class OwnPostScreen extends StatefulWidget {
-
   @override
   _OwnPostScreen createState() => _OwnPostScreen();
 }
 
 class _OwnPostScreen extends State<OwnPostScreen> {
-
   //OwnPostScreen({Key? key}) : super(key: key);
 
   late XFile? _image;
-
-  
 
   Future<void> _pickImage() async {
     print('pressed');
@@ -33,9 +34,40 @@ class _OwnPostScreen extends State<OwnPostScreen> {
     });
   }
 
+
+
+  TextEditingController titleController = TextEditingController();
+
+  TextEditingController contentController = TextEditingController();
+  final String authToken = "auth-token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjBiM2I3ODg2LWUxZDItNDc5Yi1hNGNlLTEwNmYzNDA1ZDRmZiIsImlhdCI6MTcwNjQ0OTI2MX0.8fB6kWVs6o05giujaUUCyIXVN5nsEfSJkniW_e1UXn0; Path=/; HttpOnly; Expires=Sun, 04 Feb 2024 13:41:01 GMT;";
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  void savePost(BuildContext context) async {
+    if (titleController.text.isNotEmpty && contentController.text.isNotEmpty) {
+      var reqbody = {
+        "title": titleController.text,
+        "content": contentController.text
+      };
+      print(reqbody);
+      var response = await http.post(Uri.parse(own_post),
+          headers: {
+            "cookie":authToken,
+            "ContentType": "application/json"}, body: reqbody);
+      print(response.body);
+      print(response.statusCode);
+
+      if (response.statusCode >= 200 && response.statusCode < 300) {
+        print(response);
+      } else {
+        print("Error: ${response.statusCode}");
+      }
+    } else {
+      print("hoynaiiiiiiii");
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
-
     return SafeArea(
         child: Scaffold(
             appBar: _buildAppBar(context),
@@ -46,19 +78,24 @@ class _OwnPostScreen extends State<OwnPostScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       SizedBox(height: 9.v),
-                      //TextField(
-                        // decoration: InputDecoration(
-                        //   hintText: "Enter title",
-                        //   hintStyle: theme.textTheme.headlineLarge,
-                        //   border: InputBorder.none,
-                        //   filled: true,
-                        //   fillColor: Colors.transparent,
-                        //   contentPadding: EdgeInsets.symmetric(
-                        //       horizontal: 10.0, vertical: 15.0),
-                        // ),
-                      //),
+                      TextField(
+                        controller: titleController,
+                        decoration: InputDecoration(
+                          hintText: "Enter title",
+                          hintStyle: theme.textTheme.headlineLarge,
+                          border: InputBorder.none,
+                          filled: true,
+                          fillColor: Colors.transparent,
+                          labelStyle: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                          contentPadding: EdgeInsets.symmetric(
+                              horizontal: 10.0, vertical: 15.0),
+                        ),
+                      ),
                       SizedBox(height: 21.v),
                       TextField(
+                        controller: contentController,
                         style: CustomTextStyles.bodyLargePoppinsPrimary,
                         maxLines:
                             null, // Set to null or a specific number to allow multiline input
@@ -83,9 +120,7 @@ class _OwnPostScreen extends State<OwnPostScreen> {
                             width: 40.adaptSize,
                             //onPressed: _pickImage,
                             child: CustomImageView(
-                                imagePath: ImageConstant.imgUserPrimary40x40)
-                                ),
-                        
+                                imagePath: ImageConstant.imgUserPrimary40x40)),
                       ])
                     ]))));
   }
@@ -105,7 +140,14 @@ class _OwnPostScreen extends State<OwnPostScreen> {
         actions: [
           AppbarTrailingImage(
               imagePath: ImageConstant.imgSave,
-              margin: EdgeInsets.fromLTRB(5.h, 13.v, 5.h, 9.v))
+              margin: EdgeInsets.fromLTRB(5.h, 13.v, 5.h, 9.v),
+              onTap: () {
+                savePost(context);
+              print("print");
+            },
+              
+             ),
+              
         ],
         styleType: Style.bgFill_1);
   }

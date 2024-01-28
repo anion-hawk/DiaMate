@@ -6,3 +6,4 @@ final login = baseUrl + "/auth/login";
 final show_post = baseUrl + "/forum/show";
 final registration = baseUrl + "/auth/register";
 final compUserProf = baseUrl + "/user/complete-profile";
+final own_post = baseUrl + "/forum/post";
