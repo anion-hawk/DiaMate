@@ -20,7 +20,18 @@ async function getCommentById(id) {
 	return { success, error };
 }
 
+async function getCommentsByPostId(postId) {
+	const query = 'SELECT * FROM comments WHERE post = $1 ORDER BY created DESC';
+	const params = [postId];
+	const { success, data, error } = await repository.query(query, params);
+	if (success) {
+		return { success, data };
+	}
+	return { success, error };
+}
+
 module.exports = {
 	createComment,
-	getCommentById
+	getCommentById,
+	getCommentsByPostId
 };

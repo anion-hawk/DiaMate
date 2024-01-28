@@ -8,7 +8,8 @@ router.route('/posts').get(verifyToken, forumController.getPosts);
 router.route('/:id').get(verifyToken, forumController.getPost);
 router.route('/:id').post(verifyToken, forumController.setUpvote);
 
-router.route('/:id/comment').post(verifyToken, commentController.createComment);
+router.route('/:id/comments').post(verifyToken, commentController.createComment);
+router.route('/:id/comments').get(verifyToken, commentController.getComments);
 
 router.get('/test', (req, res) => {
 	res.json({ message: 'in /forum/test' });

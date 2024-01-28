@@ -44,6 +44,23 @@ async function createComment(req, res) {
 	}
 }
 
+
+async function getComments(req, res) {
+	const { id } = req.params;
+	const validPost = await isValidPost(id, res);
+	if (!validPost) {
+		return;
+	}
+	const result = await commentRepository.getCommentsByPostId(id);
+	if (result.success) {
+		res.status(200).json(result.data);
+	}
+	else {
+		res.status(500).json({ error: 'Internal server error' });
+	}
+}
+
 module.exports = {
-	createComment
+	createComment,
+	getComments
 }
