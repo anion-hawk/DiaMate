@@ -102,9 +102,9 @@ async function completePatientProfile(req, res) {
     } else {
         diabetes_type = 0;
     }
-
-    const disease_keys = diseases.map(disease => disease.toLowerCase().replace(/ /g, '_'));
-
+    console.log(diseases);
+    const disease_keys = JSON.parse(diseases).map(disease => disease.toLowerCase().replace(/ /g, '_'));
+    console.log(disease_keys);
     let queryBody = {
         id,
         diabetes_type,
