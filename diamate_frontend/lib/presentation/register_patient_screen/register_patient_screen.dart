@@ -133,7 +133,7 @@ class RegisterPatientScreen extends StatelessWidget {
       runSpacing: 11.v,
       spacing: 11.h,
       children: List<Widget>.generate(
-          7, (index) => CoeliacdiseasechipviewItemWidget()),
+          1, (index) => DiseaseWidget()),
     );
   }
 }

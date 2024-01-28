@@ -10,7 +10,6 @@ import 'package:diamate_frontend/presentation/expert_registertwo_screen/expert_r
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import 'package:diamate_frontend/config.dart';
-
 class RegisterScreen extends StatelessWidget {
   RegisterScreen({Key? key})
       : super(
@@ -20,6 +19,7 @@ class RegisterScreen extends StatelessWidget {
   TextEditingController nameEditTextController = TextEditingController();
 
   TextEditingController emailEditTextController = TextEditingController();
+
 
   TextEditingController dobEditTextController = TextEditingController();
 
@@ -36,7 +36,8 @@ class RegisterScreen extends StatelessWidget {
   String selectedUserRole = "";
 
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-void regUser(String s) async
+
+  void regUser(String s) async
 {
      if (emailEditTextController.text.isNotEmpty && passwordController.text.isNotEmpty && dobEditTextController.text.isNotEmpty && nameEditTextController.text.isNotEmpty ) {
       var reqbody = {
@@ -55,6 +56,7 @@ void regUser(String s) async
     }
 }
  
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -222,6 +224,7 @@ void regUser(String s) async
         textInputType: TextInputType.emailAddress,
         prefix: Container(
           margin: EdgeInsets.fromLTRB(20.h, 8.v, 11.h, 8.v),
+
           child: CustomImageView(
             imagePath: ImageConstant.imgLockBlueGray100,
             height: 16.v,
@@ -311,11 +314,13 @@ void regUser(String s) async
       child: Stack(
         alignment: Alignment.bottomCenter,
         children: [
+
           //_buildEditText(context),
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
               height: 70.v,
+
               width: 293.h,
               margin: EdgeInsets.only(bottom: 62.v),
               decoration: BoxDecoration(
@@ -344,6 +349,7 @@ void regUser(String s) async
             onChanged: (value) {
               selectedUserRole = value; // Update the selectedUserRole variable
             },
+
           ),
           Align(
             alignment: Alignment.centerLeft,
@@ -355,6 +361,7 @@ void regUser(String s) async
               child: Column(
                 //mainAxisSize: MainAxisSize.min,
                 //crossAxisAlignment: CrossAxisAlignment.start,
+
 
                 children: [
                   // Padding(
@@ -384,6 +391,7 @@ void regUser(String s) async
                     "Patient/Doctor/Others",
                     style: theme.textTheme.labelLarge!.copyWith(fontSize: 18.0),
                   ),
+
                 ],
               ),
             ),
@@ -403,6 +411,7 @@ void regUser(String s) async
       ),
       buttonTextStyle:
           CustomTextStyles.titleMediumPoppinsOnErrorContainerMedium,
+
       onPressed: () {
         // Handle button press
         regUser(selectedUserRole);
@@ -423,6 +432,7 @@ void regUser(String s) async
           );
         }
       },
+
     );
   }
 }
