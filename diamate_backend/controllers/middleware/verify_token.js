@@ -32,7 +32,7 @@ async function verifyToken(req, res, next) {
 			}
 		}
 		else {
-			res.status(500).json({ error: 'Internal server error' });
+			res.status(500).json({ error: 'Internal server error: could not verify user' });
 		}
 	}
 	catch (err) {
