@@ -40,18 +40,24 @@ async function getPost(req, res) {
 	}
 }
 
-async function setUpvote(req, res) {
-	const { id } = req.params;
-	const postQuery = await forumRepository.getPostById(id);
+async function isValidPost(postId, res) {
+	const postQuery = await forumRepository.getPostById(postId);
 	if (!postQuery.success) {
 		res.status(500).json({ error: 'Internal server error: cannot find post' });
-		return;
+		return false;
 	}
 	if (postQuery.data.length === 0) {
 		res.status(404).json({ error: 'Post not found' });
+		return false;
+	}
+	return true;
+}
+
+async function setUpvote(req, res) {
+	const { id } = req.params;
+	if (!isValidPost(id, res)) {
 		return;
 	}
-
 	const user = req.user;
 	const { isUpvote } = req.body;
 	const upvoteQuery = await upvoteRepository.checkUpvote(user.id, id);
@@ -86,5 +92,6 @@ module.exports = {
 	createPost,
 	getPosts,
 	getPost,
-	setUpvote
+	setUpvote,
+	isValidPost
 };
