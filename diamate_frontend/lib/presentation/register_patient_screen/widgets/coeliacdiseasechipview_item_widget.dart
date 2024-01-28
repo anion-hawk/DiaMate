@@ -2,19 +2,28 @@ import 'package:diamate_frontend/core/app_export.dart';
 import 'package:flutter/material.dart';
 
 class DiseaseWidget extends StatefulWidget {
-  const DiseaseWidget({Key? key}) : super(key: key);
+  final void Function(List<String> selectedOptions) onOptionsChanged;
+
+  const DiseaseWidget({Key? key, required this.onOptionsChanged}) : super(key: key);
 
   @override
   _DiseaseWidget createState() => _DiseaseWidget();
 }
 
 class _DiseaseWidget extends State<DiseaseWidget> {
-  
   List<String> selectedOptions = [];
 
   @override
   Widget build(BuildContext context) {
-    List<String> options = ['Coeliac disease', 'Thyroid disease', 'Polycystic Ovary syndrome', 'Eye Cataract', 'Diabetes insipidus', 'Insulin resistance', 'High blood pressure'];
+    List<String> options = [
+      'Coeliac disease',
+      'Thyroid disease',
+      'PCOS',
+      'Eye Cataract',
+      'Diabetes insipidus',
+      'Insulin resistance',
+      'HighTension'
+    ];
 
     return Column(
       children: [
@@ -53,6 +62,9 @@ class _DiseaseWidget extends State<DiseaseWidget> {
                     } else {
                       selectedOptions.remove(option);
                     }
+
+                    // Pass the updated selected options to the parent widget
+                    widget.onOptionsChanged(selectedOptions);
                   });
                 },
               );

@@ -6,6 +6,9 @@ import 'package:diamate_frontend/widgets/custom_text_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:diamate_frontend/widgets/custom_flat_button.dart';
 import 'package:diamate_frontend/presentation/login_screen/login_screen.dart';
+import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
+import 'package:diamate_frontend/config.dart';
 
 class RegisterPatientScreen extends StatelessWidget {
   RegisterPatientScreen({Key? key})
@@ -16,11 +19,25 @@ class RegisterPatientScreen extends StatelessWidget {
   List<String> dropdownItemList = [
     "Type 1",
     "Type 2",
-    
   ];
 
   TextEditingController dateController = TextEditingController();
-
+  List<String> selectedDiseases = [];
+  String dType = "";
+  void completeUserProfile() async{
+    if(dateController.text.isNotEmpty && dType.isNotEmpty)
+    {
+      var reqbody = {
+      "type": dType,
+      "diagnosis_date": dateController.text,
+      "diseases": selectedDiseases
+    };
+    print(reqbody);
+        var response = await http.post(Uri.parse(compUserProf),
+            headers: {"ContentType": "application/json"}, body: reqbody);
+        print(response.body);
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -58,7 +75,9 @@ class RegisterPatientScreen extends StatelessWidget {
                   hintText: "Type 1/ Type 2",
                   hintStyle: theme.textTheme.labelLarge!,
                   items: dropdownItemList,
-                  onChanged: (value) {},
+                  onChanged: (value) {
+                    dType = value;
+                  },
                 ),
               ),
               SizedBox(height: 19.v),
@@ -67,11 +86,34 @@ class RegisterPatientScreen extends StatelessWidget {
                   left: 10.h,
                   right: 9.h,
                 ),
-                child: CustomTextFormField(
-                  controller: dateController,
-                  hintText: "Date of Diagnosis",
-                  hintStyle: theme.textTheme.labelLarge!,
-                  textInputAction: TextInputAction.done,
+                child: InkWell(
+                  onTap: () {
+                    _selectDate(context);
+                  },
+                  child: AbsorbPointer(
+                    child: CustomTextFormField(
+                      controller: dateController,
+                      hintText: "Date of Diagnosis",
+                      hintStyle: theme.textTheme.labelLarge!,
+                      textInputType: TextInputType.datetime,
+                      prefix: Container(
+                        margin: EdgeInsets.fromLTRB(20.h, 8.v, 11.h, 8.v),
+                        child: CustomImageView(
+                          imagePath: ImageConstant.imgCalendar,
+                          height: 16.v,
+                          width: 20.h,
+                        ),
+                      ),
+                      prefixConstraints: BoxConstraints(
+                        maxHeight: 46.v,
+                      ),
+                      contentPadding: EdgeInsets.only(
+                        top: 14.v,
+                        right: 30.h,
+                        bottom: 14.v,
+                      ),
+                    ),
+                  ),
                 ),
               ),
               SizedBox(height: 18.v),
@@ -87,38 +129,19 @@ class RegisterPatientScreen extends StatelessWidget {
               ),
               SizedBox(height: 14.v),
               _buildCoeliacDiseaseChipView(context),
-              Spacer(),
+              const Spacer(),
               CustomElevatedButton(
-                text: "Register",
+                text: "Complete Profile",
                 margin: EdgeInsets.only(
                   left: 10.h,
                   right: 9.h,
                 ),
                 buttonTextStyle:
                     CustomTextStyles.titleMediumPoppinsOnErrorContainerMedium,
+                onPressed: () {
+                  completeUserProfile();
+                },
               ),
-              SizedBox(height: 16.v),
-              Text(
-                "Already have an account?",
-                style: CustomTextStyles.labelLargeBluegray900,
-              ),
-              SizedBox(height: 4.v),
-              CustomFlatButton(
-                      text: "Login",
-                      buttonTextStyle: TextStyle(
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.blue,
-                      ),
-                      onPressed: () {
-                        // Handle button press
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => LoginScreen()),
-                        );
-                      },
-                    ),
               SizedBox(height: 5.v),
             ],
           ),
@@ -127,13 +150,30 @@ class RegisterPatientScreen extends StatelessWidget {
     );
   }
 
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now(),
+    );
+
+    if (pickedDate != null) {
+      // Update the selected date
+      dateController.text = DateFormat('yyyy-MM-dd').format(pickedDate);
+    }
+  }
+
   /// Section Widget
   Widget _buildCoeliacDiseaseChipView(BuildContext context) {
-    return Wrap(
-      runSpacing: 11.v,
-      spacing: 11.h,
-      children: List<Widget>.generate(
-          1, (index) => DiseaseWidget()),
+    return DiseaseWidget(
+      onOptionsChanged: (options) {
+        // Receive the selected options from DiseaseWidget
+        selectedDiseases = options;
+        print("Selected Diseases: $selectedDiseases ");
+        print(dateController.text);
+        print(dType);
+      },
     );
   }
 }

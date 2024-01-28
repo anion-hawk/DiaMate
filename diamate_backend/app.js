@@ -2,6 +2,7 @@ const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
 const app = express();
+const verifyToken = require('./middleware/verify_token');
 
 app.use(cors());
 app.options('*', cors());
@@ -21,7 +22,18 @@ app.get('/status', (req, res) => {
 });
 
 app.use('/auth', require('./routes/auth'));
+app.use(async function (req, res, next) {
+    const verified = await verifyToken(req, res, next);
+    if (verified) {
+        next();
+    }
+    else {
+        return;
+    }
+});
+
 app.use('/forum', require('./routes/forum'));
+app.use('/user', require('./routes/user'));
 
 
 

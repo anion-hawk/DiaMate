@@ -17,6 +17,7 @@ class CustomTextFormField extends StatelessWidget {
     this.maxLines,
     this.hintText,
     this.hintStyle,
+    this.hintColor,
     this.prefix,
     this.prefixConstraints,
     this.suffix,
@@ -55,6 +56,8 @@ class CustomTextFormField extends StatelessWidget {
   final String? hintText;
 
   final TextStyle? hintStyle;
+
+  final Color? hintColor;
 
   final Widget? prefix;
 

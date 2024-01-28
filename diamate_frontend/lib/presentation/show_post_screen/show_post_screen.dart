@@ -7,16 +7,32 @@ import 'package:diamate_frontend/widgets/app_bar/custom_app_bar.dart';
 import 'package:diamate_frontend/widgets/custom_search_view.dart';
 import 'package:diamate_frontend/widgets/custom_text_form_field.dart';
 import 'package:flutter/material.dart';
+import 'package:timeago/timeago.dart' as timeago;
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 final int maxVisibleNestedComments = 3;
+bool showReplies = false;
+bool showComment = false;
+bool showLikes = false;
+int likeCount = 0;
 
 class Comment {
   String content;
+  User user;
   List<Comment> nestedComments;
+  int likeCount;
+  DateTime timestamp;
 
-  Comment(this.content, this.nestedComments);
+  Comment(this.content, this.user, this.likeCount, this.timestamp,
+      this.nestedComments);
+}
+
+class User {
+  String username;
+  String profilePicture;
+
+  User(this.username, this.profilePicture);
 }
 
 // ignore_for_file: must_be_immutable
@@ -28,6 +44,7 @@ class ShowPostScreen extends StatefulWidget {
 }
 
 class _ShowPostScreenState extends State<ShowPostScreen> {
+  bool showAllComments = true;
   String postTime = "";
   String postTitle = "";
   String postContent = "";
@@ -36,7 +53,32 @@ class _ShowPostScreenState extends State<ShowPostScreen> {
 
   TextEditingController textController = TextEditingController();
 
-  List<Comment> comments = [];
+  List<Comment> comments = [
+    Comment(
+      "This is the first comment.",
+      User("User1", "profile_picture_url1"),
+      12,
+      DateTime.now(),
+      [
+        Comment("Reply to the first comment.",
+            User("User2", "profile_picture_url2"), 10, DateTime.now(), []),
+        Comment("Another reply to the first comment.",
+            User("User3", "profile_picture_url3"), 12, DateTime.now(), []),
+      ],
+    ),
+    Comment("This is the second comment.",
+        User("User4", "profile_picture_url4"), 11, DateTime.now(), []),
+    Comment(
+      "This is the third comment.",
+      User("User5", "profile_picture_url5"),
+      12,
+      DateTime.now(),
+      [
+        Comment("Reply to the third comment.",
+            User("User6", "profile_picture_url6"), 16, DateTime.now(), []),
+      ],
+    ),
+  ];
 
   @override
   void initState() {
@@ -118,39 +160,51 @@ class _ShowPostScreenState extends State<ShowPostScreen> {
             Align(
               alignment: Alignment.center,
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 13.h),
-                child: Row(
-                  children: [
-                    CircleAvatar(
-                      // Replace this with your image logic
-                      child: Icon(Icons.person),
-                      radius: 12.0,
-                    ),
-                    SizedBox(width: 5.0),
-                    Expanded(
-                      child: CustomTextFormField(
-                        controller: textController,
-                        hintText: "Write a Comment",
-                        hintColor: appTheme.gray500,
-                        alignment: Alignment.center,
-                        borderDecoration: InputBorder.none,
-                      ),
-                    ),
-                    SizedBox(
-                        width:
-                            8.0), // Adjust the spacing between the text field and button
-                    InkWell(
-                      onTap: () {
-                        // Handle send button tap
-                        // You can access the entered text using textController.text
-                      },
-                      child: Icon(Icons.send),
-                    ),
-                  ],
+                  padding: EdgeInsets.symmetric(horizontal: 13.h),
+                  child: Row(
+                    children: [
+                      if (showComment)
+                        CircleAvatar(
+                          // Replace this with your image logic
+                          child: Icon(Icons.person),
+                          radius: 12.0,
+                        ),
+                      if (showComment) SizedBox(width: 5.0),
+                      if (showComment)
+                        Expanded(
+                          child: CustomTextFormField(
+                            controller: textController,
+                            hintText: "Write a Comment",
+                            hintColor: appTheme.gray500,
+                            alignment: Alignment.center,
+                            borderDecoration: InputBorder.none,
+                          ),
+                        ),
+                      if (showComment)
+                        SizedBox(
+                          width: 8.0,
+                        ),
+                      if (showComment)
+                        InkWell(
+                          onTap: () {},
+                          child: Icon(Icons.send),
+                        ),
+                    ],
+                  )),
+            ),
+            SizedBox(
+                height:
+                    3.5), // Adjust the spacing between the text field and button
+
+            if (showAllComments)
+              // Render all comments
+              Expanded(
+                child: ListView.builder(
+                  itemCount: comments.length,
+                  itemBuilder: (context, index) =>
+                      _buildCommentWidget(comments[index]),
                 ),
               ),
-            ),
-            SizedBox(height: 18.v),
 
             // Container(
             //     width: 242.h,
@@ -160,7 +214,6 @@ class _ShowPostScreenState extends State<ShowPostScreen> {
             //     maxLines: 2,
             //     overflow: TextOverflow.ellipsis,
             //     style: CustomTextStyles.bodySmallPoppinsPrimary)
-            _buildComments(comments)
 
             // )
           ])),
@@ -193,36 +246,65 @@ class _ShowPostScreenState extends State<ShowPostScreen> {
         alignment: Alignment.center,
         child: Padding(
             padding: EdgeInsets.only(left: 5.h, right: 15.h),
-            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              CustomImageView(
-                  imagePath: ImageConstant.imgArrowRightPrimary,
-                  height: 20.v,
-                  width: 26.h),
-              Text("56.9k", style: CustomTextStyles.titleMediumPoppinsBlue300),
-              CustomImageView(
-                  imagePath: ImageConstant.imgLightBulb,
-                  height: 20.v,
-                  width: 26.h),
-              Spacer(flex: 39),
-              CustomImageView(
-                  imagePath: ImageConstant.imgSettingsBlue300,
-                  height: 20.adaptSize,
-                  width: 20.adaptSize),
-              Padding(
-                  padding: EdgeInsets.only(left: 5.h),
-                  child: Text("4682",
-                      style: CustomTextStyles.titleMediumPoppinsBlue300)),
-              Spacer(flex: 60),
-              CustomImageView(
-                  imagePath: ImageConstant.imgBookmark,
-                  height: 20.v,
-                  width: 21.h,
-                  margin: EdgeInsets.only(bottom: 2.v)),
-              CustomImageView(
-                  imagePath: ImageConstant.imgTwitter,
-                  height: 15.v,
-                  width: 16.h,
-                  margin: EdgeInsets.only(left: 5.h, top: 4.v, bottom: 4.v))
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center, 
+              children: [
+              Row(
+      children: [
+        GestureDetector(
+          onTap: () {
+            // Handle increase button tap
+            setState(() {
+              likeCount++;
+            });
+          },
+          child: CustomImageView(
+            imagePath: ImageConstant.imgArrowRightPrimary,
+            height: 20.v,
+            width: 26.h,
+          ),
+        ),
+        Text(likeCount.toString(), style: CustomTextStyles.titleMediumPoppinsBlue300),
+        GestureDetector(
+          onTap: () {
+            // Handle decrease button tap
+            setState(() {
+              likeCount--;
+            });
+          },
+          child: CustomImageView(
+            imagePath: ImageConstant.imgLightBulb,
+            height: 20.v,
+            width: 26.h,
+          ),
+        ),
+      ],
+    ),
+              Spacer(flex: 5),
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    // Toggle the visibility of the section when the button is pressed
+                    showComment = !showComment;
+                  });
+                },
+                child: Row(
+                  children: [
+                    CustomImageView(
+                      imagePath: ImageConstant.imgSettingsBlue300,
+                      height: 20.adaptSize,
+                      width: 20.adaptSize,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left: 5.h),
+                      child: Text("4682",
+                          style: CustomTextStyles.titleMediumPoppinsBlue300),
+                    ),
+                  ],
+                ),
+              )
+
+              //Spacer(flex: 60),
             ])));
   }
 
@@ -246,6 +328,106 @@ class _ShowPostScreenState extends State<ShowPostScreen> {
               child: Text("30 minutes ago",
                   style: CustomTextStyles.labelMediumBlue300))
         ]));
+  }
+
+  Widget _buildCommentWidget(Comment comment, {int indent = 1}) {
+    final double indentWidth = 25.0;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        ListTile(
+          contentPadding: EdgeInsets.only(
+              left: indent * indentWidth, right: 15.h, top: 5.v, bottom: 5.v),
+          title: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  CircleAvatar(
+                    backgroundImage: NetworkImage(comment.user.profilePicture),
+                    radius: 20.0,
+                    child: Align(
+                      alignment: Alignment(0, 0),
+                      child: Container(),
+                    ),
+                  ),
+                  SizedBox(width: 8.0),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        comment.user.username,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16.0,
+                        ),
+                      ),
+                      Text(
+                        timeago.format(comment.timestamp, locale: 'en_short'),
+                        style: TextStyle(
+                          fontSize: 12.0,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              SizedBox(height: 5.0),
+              Text(comment.content),
+            ],
+          ),
+          subtitle: Row(
+            children: [
+              IconButton(
+                icon: Icon(Icons.arrow_upward, size: 20.0),
+                onPressed: () {
+                  // Handle like/upvote button press
+                  setState(() {
+                    comment.likeCount++;
+                  });
+                },
+              ),
+              Text(comment.likeCount.toString()),
+              IconButton(
+                icon: Icon(Icons.arrow_downward, size: 20.0),
+                onPressed: () {
+                  // Handle dislike/downvote button press
+                  setState(() {
+                    comment.likeCount--;
+                  });
+                },
+              ),
+              IconButton(
+                icon: Icon(Icons.reply, size: 20.0),
+                onPressed: () {
+                  // Handle reply button press
+                },
+              ),
+              IconButton(
+                icon: Icon(Icons.delete, size: 20.0),
+                onPressed: () {
+                  // Handle delete button press
+                },
+              ),
+              if (comment.nestedComments.isNotEmpty)
+                TextButton(
+                  onPressed: () {
+                    setState(() {
+                      showReplies = !showReplies;
+                    });
+                  },
+                  child: Text(showReplies ? "Hide Replies" : "View Replies"),
+                ),
+            ],
+          ),
+        ),
+        if (showReplies)
+          // Display nested comments with replies using recursion
+          for (int i = 0; i < comment.nestedComments.length; i++)
+            _buildCommentWidget(comment.nestedComments[i], indent: indent + 2),
+      ],
+    );
   }
 
   /// Section Widget
@@ -284,56 +466,5 @@ class _ShowPostScreenState extends State<ShowPostScreen> {
   /// Navigates back to the previous screen.
   onTapArrowLeft(BuildContext context) {
     Navigator.pop(context);
-  }
-
-  Widget _buildComments(List<Comment> comments) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: comments.map((comment) {
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Display current comment content
-            _buildUserRow(context),
-            Text(
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nisi ligula",
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: CustomTextStyles.bodySmallPoppinsPrimary
-
-                //style: CustomTextStyles.bodySmallPoppinsPrimary,
-                ),
-            // Display nested comments
-            _buildNestedComments(comment.nestedComments),
-            // See More button for additional nested comments
-            if (comment.nestedComments.length > maxVisibleNestedComments)
-              TextButton(
-                onPressed: () {
-                  // Handle "See More" button tap
-                  print("show more");
-                },
-                child: Text("See More"),
-              ),
-
-            _buildArrowRightRow1(context)
-          ],
-        );
-      }).toList(),
-    );
-  }
-
-  Widget _buildNestedComments(List<Comment> nestedComments) {
-    if (nestedComments.isEmpty) {
-      return Container(); // No nested comments
-    }
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children:
-          nestedComments.take(maxVisibleNestedComments).map((nestedComment) {
-        return _buildComments(
-            [nestedComment]); // Recursively build nested comments
-      }).toList(),
-    );
   }
 }
