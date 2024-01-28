@@ -29,10 +29,11 @@ app.use(async function (req, res, next) {
         next();
     }
     else {
-        const users = await userRepository.getUserById('0b3b7886-e1d2-479b-a4ce-106f3405d4ff');
-        console.log(users.data[0]);
-        req.user = users.data[0];
-        next();
+        // const users = await userRepository.getUserById('0b3b7886-e1d2-479b-a4ce-106f3405d4ff');
+        // console.log(users.data[0]);
+        // req.user = users.data[0];
+        // next();
+        return;
     }
 });
 

@@ -18,10 +18,7 @@ async function loginHandler(queryResult, res) {
             const token = jwt.sign({ id: data.id }, process.env.JWT_ACCESS_TOKEN);
             res.cookie('auth-token', token, options);
             res.status(200).json({
-                id: data.id,
-                name: data.name,
-                role: data.role,
-                token: token
+                cookie: 'auth-token=' + token,
             });
         }
     } else {

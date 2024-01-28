@@ -13,7 +13,6 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-
 class OwnPostScreen extends StatefulWidget {
   @override
   _OwnPostScreen createState() => _OwnPostScreen();
@@ -34,12 +33,9 @@ class _OwnPostScreen extends State<OwnPostScreen> {
     });
   }
 
-
-
   TextEditingController titleController = TextEditingController();
 
   TextEditingController contentController = TextEditingController();
-  final String authToken = "auth-token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjBiM2I3ODg2LWUxZDItNDc5Yi1hNGNlLTEwNmYzNDA1ZDRmZiIsImlhdCI6MTcwNjQ0OTI2MX0.8fB6kWVs6o05giujaUUCyIXVN5nsEfSJkniW_e1UXn0; Path=/; HttpOnly; Expires=Sun, 04 Feb 2024 13:41:01 GMT;";
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   void savePost(BuildContext context) async {
     if (titleController.text.isNotEmpty && contentController.text.isNotEmpty) {
@@ -50,8 +46,9 @@ class _OwnPostScreen extends State<OwnPostScreen> {
       print(reqbody);
       var response = await http.post(Uri.parse(own_post),
           headers: {
-            "cookie":authToken,
-            "ContentType": "application/json"}, body: reqbody);
+            "token": cookies.join(''),
+          },
+          body: reqbody);
       print(response.body);
       print(response.statusCode);
 
@@ -64,7 +61,6 @@ class _OwnPostScreen extends State<OwnPostScreen> {
       print("hoynaiiiiiiii");
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -139,15 +135,13 @@ class _OwnPostScreen extends State<OwnPostScreen> {
         title: AppbarTitle(text: "Create Post"),
         actions: [
           AppbarTrailingImage(
-              imagePath: ImageConstant.imgSave,
-              margin: EdgeInsets.fromLTRB(5.h, 13.v, 5.h, 9.v),
-              onTap: () {
-                savePost(context);
+            imagePath: ImageConstant.imgSave,
+            margin: EdgeInsets.fromLTRB(5.h, 13.v, 5.h, 9.v),
+            onTap: () {
+              savePost(context);
               print("print");
             },
-              
-             ),
-              
+          ),
         ],
         styleType: Style.bgFill_1);
   }
