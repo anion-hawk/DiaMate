@@ -1,12 +1,12 @@
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
 
-const userRepository = require('../../repository/user');
+const userRepository = require('../repository/user');
 
 async function verifyToken(req, res, next) {
 	if (!req.headers) {
 		res.status(401).json({ error: 'Access denied: no header' });
-		return;
+		return false;
 	}
 	let token = undefined;
 	try {
@@ -14,10 +14,11 @@ async function verifyToken(req, res, next) {
 	}
 	catch (err) {
 		res.status(401).json({ error: 'Access denied: no auth token' });
+		return false;
 	}
 	if (!token) {
 		res.status(401).json({ error: 'Access denied: no such field' });
-		return;
+		return false;
 	}
 	try {
 		const user = jwt.verify(token, process.env.JWT_ACCESS_TOKEN);
@@ -28,16 +29,18 @@ async function verifyToken(req, res, next) {
 			}
 			else {
 				req.user = result.data[0];
-				next();
+				return true;
 			}
 		}
 		else {
 			res.status(500).json({ error: 'Internal server error: could not verify user' });
+			return false;
 		}
 	}
 	catch (err) {
 		console.log(err)
 		res.status(401).json({ error: 'Access denied' });
+		return false;
 	}
 
 }

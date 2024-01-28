@@ -1,11 +1,10 @@
 const router = require('express').Router();
 const userController = require('../controllers/user');
-const verifyToken = require('../controllers/middleware/verify_token');
 
 
-router.route('/profile').get(verifyToken, userController.getSelfProfile);
-router.route('/complete-profile').post(verifyToken, userController.completeProfile);
-router.route('/:id').get(verifyToken, userController.getUserById);
-router.route('/:id/follow').post(verifyToken, userController.followUser);
+router.route('/profile').get(userController.getSelfProfile);
+router.route('/complete-profile').post(userController.completeProfile);
+router.route('/:id').get(userController.getUserById);
+router.route('/:id/follow').post(userController.followUser);
 
 module.exports = router;
