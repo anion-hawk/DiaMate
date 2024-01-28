@@ -4,5 +4,4 @@ String baseUrl = (dotenv.dotenv.env['API_URL'])!;
 
 final login = baseUrl + "/auth/login";
 final registration = baseUrl + "/auth/register";
-
-
+final compUserProf = baseUrl + "/user/complete-profile";
