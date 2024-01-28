@@ -44,32 +44,63 @@ class LoginScreen extends StatelessWidget {
   //   }
   // }
   void loginUser(BuildContext context) async {
-  if (emailController.text.isNotEmpty && passwordController.text.isNotEmpty) {
-    var reqbody = {
-      "email": emailController.text,
-      "password": passwordController.text
-    };
-    print(reqbody);
+    if (emailController.text.isNotEmpty && passwordController.text.isNotEmpty) {
+      var reqbody = {
+        "email": emailController.text,
+        "password": passwordController.text
+      };
+      print(reqbody);
 
-    try {
-      var response = await http.post(Uri.parse(login),
-          headers: {"ContentType": "application/json"}, body: reqbody);
+      try {
+        var response = await http.post(Uri.parse(login),
+            headers: {"ContentType": "application/json"}, body: reqbody);
 
-      if (response.statusCode == 200) {
-        // Login successful
-        print(response.body);
-        // Navigate to the next screen or perform any other actions
-      } else {
-        // Login unsuccessful
-        print("Login failed. Incorrect email or password.");
+        if (response.statusCode == 200) {
+          // Login successful
+          print(response.body);
+          // Navigate to the next screen or perform any other actions
+          Navigator.pushNamed(
+            context,
+            AppRoutes.forumScreen,
+            arguments: {
+              'email': emailController.text,
+              'password': passwordController.text,
+            },
+          );
+        } else {
+          // Login unsuccessful
+          print("Login failed. Incorrect email or password.");
+
+          // Show an AlertDialog with an error message
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text("Login Failed"),
+                content: Text("Incorrect email or password. Please try again."),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop(); // Close the dialog
+                    },
+                    child: Text("OK"),
+                  ),
+                ],
+              );
+            },
+          );
+        }
+      } catch (error) {
+        // Handle network errors or other exceptions
+        print("An error occurred: $error");
 
         // Show an AlertDialog with an error message
         showDialog(
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: Text("Login Failed"),
-              content: Text("Incorrect email or password. Please try again."),
+              title: Text("Error"),
+              content: Text("An error occurred. Please try again later."),
               actions: [
                 TextButton(
                   onPressed: () {
@@ -82,17 +113,13 @@ class LoginScreen extends StatelessWidget {
           },
         );
       }
-    } catch (error) {
-      // Handle network errors or other exceptions
-      print("An error occurred: $error");
-
-      // Show an AlertDialog with an error message
+    } else {
       showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text("Error"),
-            content: Text("An error occurred. Please try again later."),
+            title: Text("Empty Field"),
+            content: Text("Please Enter Username and Password"),
             actions: [
               TextButton(
                 onPressed: () {
@@ -105,10 +132,7 @@ class LoginScreen extends StatelessWidget {
         },
       );
     }
-  } else {
-    print("hoynaiiiiiiii");
   }
-}
 
   @override
   Widget build(BuildContext context) {
@@ -229,7 +253,6 @@ class LoginScreen extends StatelessWidget {
                         buttonTextStyle: CustomTextStyles
                             .titleMediumPoppinsOnErrorContainerMedium,
                         onPressed: () {
-
                           print('pressed');
 
                           loginUser(context);
@@ -242,9 +265,7 @@ class LoginScreen extends StatelessWidget {
                     SizedBox(height: 6.v),
                     CustomFlatButton(
                       text: "Register Now",
-
-                      buttonTextStyle:const TextStyle(
-
+                      buttonTextStyle: const TextStyle(
                         fontSize: 16.0,
                         fontWeight: FontWeight.w600,
                         color: Colors.blue,

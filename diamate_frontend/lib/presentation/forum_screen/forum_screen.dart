@@ -301,7 +301,7 @@ class ForumScreen extends StatelessWidget {
             height: 10.v,
           );
         },
-        itemCount: 1,
+        itemCount: 20,
         itemBuilder: (context, index) {
           return PostlistcomponentItemWidget();
         },
