@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 // import 'package:diamate_frontend/presentation/main_profile_screen/main_profile_screen.dart';
 // import 'package:diamate_frontend/presentation/edit_profile_screen/edit_profile_screen.dart';
 // import 'package:diamate_frontend/presentation/user_profile_screen/user_profile_screen.dart';
-//import 'package:diamate_frontend/presentation/register_screen/register_screen.dart';
-//import 'package:diamate_frontend/presentation/register_patient_screen/register_patient_screen.dart';
+import 'package:diamate_frontend/presentation/register_screen/register_screen.dart';
+import 'package:diamate_frontend/presentation/register_patient_screen/register_patient_screen.dart';
 import 'package:diamate_frontend/presentation/login_screen/login_screen.dart';
 //import 'package:diamate_frontend/presentation/planner_screen/planner_screen.dart';
 // import 'package:diamate_frontend/presentation/add_diet_screen/add_diet_screen.dart';
@@ -30,8 +30,8 @@ import 'package:diamate_frontend/presentation/login_screen/login_screen.dart';
 // import 'package:diamate_frontend/presentation/new_group_one_screen/new_group_one_screen.dart';
 // import 'package:diamate_frontend/presentation/msg_screen/msg_screen.dart';
 // import 'package:diamate_frontend/presentation/messegewithpeers_tab_container_screen/messegewithpeers_tab_container_screen.dart';
-// import 'package:diamate_frontend/presentation/expert_register_screen/expert_register_screen.dart';
-// import 'package:diamate_frontend/presentation/expert_registertwo_screen/expert_registertwo_screen.dart';
+ import 'package:diamate_frontend/presentation/expert_register_screen/expert_register_screen.dart';
+ import 'package:diamate_frontend/presentation/expert_registertwo_screen/expert_registertwo_screen.dart';
 // import 'package:diamate_frontend/presentation/doctor_profile_screen/doctor_profile_screen.dart';
 // import 'package:diamate_frontend/presentation/doctor_edit_profile_screen/doctor_edit_profile_screen.dart';
 // import 'package:diamate_frontend/presentation/doctor_edit_profile_two_screen/doctor_edit_profile_two_screen.dart';
@@ -155,8 +155,8 @@ class AppRoutes {
     // mainProfileScreen: (context) => MainProfileScreen(),
     // editProfileScreen: (context) => EditProfileScreen(),
     // userProfileScreen: (context) => UserProfileScreen(),
-    // registerScreen: (context) => RegisterScreen(),
-    // registerPatientScreen: (context) => RegisterPatientScreen(),
+      registerScreen: (context) => RegisterScreen(),
+      registerPatientScreen: (context) => RegisterPatientScreen(),
       loginScreen: (context) => LoginScreen(),
     // plannerScreen: (context) => PlannerScreen(),
     // addDietScreen: (context) => AddDietScreen(),
@@ -182,8 +182,8 @@ class AppRoutes {
     // msgScreen: (context) => MsgScreen(),
     // messegewithpeersTabContainerScreen: (context) =>
     //     MessegewithpeersTabContainerScreen(),
-    // expertRegisterScreen: (context) => ExpertRegisterScreen(),
-    // expertRegistertwoScreen: (context) => ExpertRegistertwoScreen(),
+      expertRegisterScreen: (context) => ExpertRegisterScreen(),
+      expertRegistertwoScreen: (context) => ExpertRegistertwoScreen(),
     // doctorProfileScreen: (context) => DoctorProfileScreen(),
     // doctorEditProfileScreen: (context) => DoctorEditProfileScreen(),
     // doctorEditProfileTwoScreen: (context) => DoctorEditProfileTwoScreen(),

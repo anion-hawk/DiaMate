@@ -96,7 +96,6 @@ class RegisterPatientScreen extends StatelessWidget {
                 ),
                 buttonTextStyle:
                     CustomTextStyles.titleMediumPoppinsOnErrorContainerMedium,
-                //onPressed: ,    
               ),
               SizedBox(height: 16.v),
               Text(
@@ -138,5 +137,3 @@ class RegisterPatientScreen extends StatelessWidget {
     );
   }
 }
-
-

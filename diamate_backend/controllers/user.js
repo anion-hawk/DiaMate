@@ -40,7 +40,12 @@ async function logout(req, res) {
 
 async function register(req, res) {
     const { name, email, password, role } = req.body;
-    const result = await userRepository.register(name, email, password, role);
+    let rr = 0;
+    if(role == "Doctor")
+      rr = 2;
+    else if(role == "Patient")
+      rr = 1;
+    const result = await userRepository.register(name, email, password, rr);
     loginHandler(result, res);
 }
 

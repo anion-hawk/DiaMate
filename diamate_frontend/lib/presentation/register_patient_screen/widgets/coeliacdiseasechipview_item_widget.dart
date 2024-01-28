@@ -64,7 +64,3 @@ class _DiseaseWidget extends State<DiseaseWidget> {
     );
   }
 }
-
-
-
-
