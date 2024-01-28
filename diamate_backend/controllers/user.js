@@ -1,6 +1,7 @@
 require('dotenv').config();
 const userRepository = require('../repository/user');
 const patientRepository = require('../repository/patient');
+const followRepository = require('../repository/follow');
 const jwt = require('jsonwebtoken');
 
 async function loginHandler(queryResult, res) {
@@ -70,6 +71,10 @@ async function getUserById(req, res) {
     const result = await userRepository.getUserById(id);
     if (!result.success) {
         res.status(500).json({ error: "Internal server error" });
+        return;
+    }
+    if (result.data.length === 0) {
+        res.status(404).json({ error: "User not found" });
         return;
     }
     res.status(200).json(result.data[0]);
@@ -147,7 +152,52 @@ async function completeProfile(req, res) {
             break;;
     }
     return;
+}
 
+async function followUser(req, res) {
+    const { id } = req.params;
+    const { id: followerId } = req.user;
+    const { follow } = req.body;
+    if (id === followerId) {
+        res.status(400).json({ error: "Cannot follow self" });
+        return;
+    }
+    const userQuery = await userRepository.getUserById(id);
+    if (!userQuery.success) {
+        res.status(500).json({ error: "Internal server error" });
+        return;
+    }
+    if (userQuery.data.length === 0) {
+        res.status(404).json({ error: "User not found" });
+        return;
+    }
+    const isFollowingQuery = await followRepository.isFollowing(followerId, id);
+    if (!isFollowingQuery.success) {
+        res.status(500).json({ error: "Internal server error" });
+        return;
+    }
+    if (follow) {
+        if (isFollowingQuery.isFollowing) {
+            res.status(200).json({ message: "Already following" });
+            return;
+        }
+        const result = await followRepository.followUser(followerId, id);
+        if (!result.success) {
+            res.status(500).json({ error: "Internal server error" });
+            return;
+        }
+        res.status(200).json({ message: "Followed successfully" });
+    }
+    else {
+        const result = await followRepository.unfollowUser(followerId, id);
+        if (!result.success) {
+            res.status(500).json({ error: "Internal server error" });
+            return;
+        }
+        res.status(200).json({ message: "Unfollowed successfully" });
+    }
+
+    return;
 }
 
 module.exports = {
@@ -156,5 +206,6 @@ module.exports = {
     register,
     getSelfProfile,
     getUserById,
-    completeProfile
+    completeProfile,
+    followUser
 };
