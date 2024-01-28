@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 class DiseaseWidget extends StatefulWidget {
   final void Function(List<String> selectedOptions) onOptionsChanged;
 
-  const DiseaseWidget({Key? key, required this.onOptionsChanged}) : super(key: key);
+  const DiseaseWidget({Key? key, required this.onOptionsChanged})
+      : super(key: key);
 
   @override
   _DiseaseWidget createState() => _DiseaseWidget();
@@ -19,7 +20,7 @@ class _DiseaseWidget extends State<DiseaseWidget> {
       'Coeliac disease',
       'Thyroid disease',
       'PCOS',
-      'Eye Cataract',
+      'Cataract',
       'Diabetes insipidus',
       'Insulin resistance',
       'Hypertension'
@@ -47,7 +48,8 @@ class _DiseaseWidget extends State<DiseaseWidget> {
                 ),
                 selected: selectedOptions.contains(option),
                 backgroundColor: Colors.transparent,
-                selectedColor: theme.colorScheme.primary, // Set background color when selected
+                selectedColor: theme
+                    .colorScheme.primary, // Set background color when selected
                 shape: RoundedRectangleBorder(
                   side: BorderSide(
                     color: theme.colorScheme.primary,

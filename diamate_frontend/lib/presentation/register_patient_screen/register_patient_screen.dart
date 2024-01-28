@@ -36,7 +36,7 @@ class RegisterPatientScreen extends StatelessWidget {
     };
     print(reqbody);
         var response = await http.post(Uri.parse(compUserProf),
-            headers: {"ContentType": "application/json"}, body: reqbody);
+            headers: {"token": cookies.join(''),}, body: reqbody);
         print(response.body);
     }
   }

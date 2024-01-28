@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:diamate_frontend/core/app_export.dart';
 import 'package:diamate_frontend/widgets/custom_drop_down.dart';
 import 'package:diamate_frontend/widgets/custom_elevated_button.dart';
@@ -57,6 +59,8 @@ class RegisterScreen extends StatelessWidget {
         var response = await http.post(Uri.parse(registration),
             headers: {"ContentType": "application/json"}, body: reqbody);
         print(response.body);
+        cookies.add(jsonDecode(response.body)['cookie']);
+        print(cookies);
         return true;
       } else {
         print("Passwords do not match. Please enter the correct password.");
