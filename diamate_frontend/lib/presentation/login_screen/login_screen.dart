@@ -2,15 +2,20 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:diamate_frontend/core/app_export.dart';
+import 'package:diamate_frontend/presentation/forum_screen/forum_screen.dart';
 import 'package:diamate_frontend/widgets/custom_elevated_button.dart';
 import 'package:diamate_frontend/widgets/custom_text_form_field.dart';
 import 'package:diamate_frontend/widgets/custom_flat_button.dart';
 import 'package:diamate_frontend/presentation/register_screen/register_screen.dart';
+import 'package:diamate_frontend/routes/app_routes.dart';
+
 import 'package:http/http.dart' as http;
 import 'package:diamate_frontend/config.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter/material.dart';
+
+//0 - Admin; 1 - Patient; 2 - Doctor
 
 class LoginScreen extends StatelessWidget {
   LoginScreen({Key? key})
@@ -23,6 +28,7 @@ class LoginScreen extends StatelessWidget {
   TextEditingController passwordController = TextEditingController();
 
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   // void loginUser() async {
   //   if (emailController.text.isNotEmpty && passwordController.text.isNotEmpty) {
   //     var reqbody = {
@@ -223,6 +229,9 @@ class LoginScreen extends StatelessWidget {
                         buttonTextStyle: CustomTextStyles
                             .titleMediumPoppinsOnErrorContainerMedium,
                         onPressed: () {
+
+                          print('pressed');
+
                           loginUser(context);
                         }),
                     SizedBox(height: 37.v),
@@ -233,7 +242,9 @@ class LoginScreen extends StatelessWidget {
                     SizedBox(height: 6.v),
                     CustomFlatButton(
                       text: "Register Now",
+
                       buttonTextStyle:const TextStyle(
+
                         fontSize: 16.0,
                         fontWeight: FontWeight.w600,
                         color: Colors.blue,
