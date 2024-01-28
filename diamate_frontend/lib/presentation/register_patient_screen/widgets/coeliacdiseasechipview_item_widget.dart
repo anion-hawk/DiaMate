@@ -22,7 +22,7 @@ class _DiseaseWidget extends State<DiseaseWidget> {
       'Eye Cataract',
       'Diabetes insipidus',
       'Insulin resistance',
-      'HighTension'
+      'Hypertension'
     ];
 
     return Column(
