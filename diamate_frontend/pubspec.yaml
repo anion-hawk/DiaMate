@@ -30,6 +30,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  image_picker:   
   cupertino_icons: ^1.0.2
   intl: ^0.18.0
   cached_network_image: ^3.3.0

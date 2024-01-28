@@ -5,15 +5,15 @@ import 'package:flutter/material.dart';
 // import 'package:diamate_frontend/presentation/main_profile_screen/main_profile_screen.dart';
 // import 'package:diamate_frontend/presentation/edit_profile_screen/edit_profile_screen.dart';
 // import 'package:diamate_frontend/presentation/user_profile_screen/user_profile_screen.dart';
-//import 'package:diamate_frontend/presentation/register_screen/register_screen.dart';
-//import 'package:diamate_frontend/presentation/register_patient_screen/register_patient_screen.dart';
+import 'package:diamate_frontend/presentation/register_screen/register_screen.dart';
+import 'package:diamate_frontend/presentation/register_patient_screen/register_patient_screen.dart';
 import 'package:diamate_frontend/presentation/login_screen/login_screen.dart';
 //import 'package:diamate_frontend/presentation/planner_screen/planner_screen.dart';
 // import 'package:diamate_frontend/presentation/add_diet_screen/add_diet_screen.dart';
 // import 'package:diamate_frontend/presentation/show_planner_screen/show_planner_screen.dart';
 // import 'package:diamate_frontend/presentation/medicine_container_screen/medicine_container_screen.dart';
 // import 'package:diamate_frontend/presentation/medicine_edit_screen/medicine_edit_screen.dart';
-// import 'package:diamate_frontend/presentation/forum_screen/forum_screen.dart';
+ import 'package:diamate_frontend/presentation/forum_screen/forum_screen.dart';
 // import 'package:diamate_frontend/presentation/post_screen/post_screen.dart';
 // import 'package:diamate_frontend/presentation/notifications_screen/notifications_screen.dart';
 // import 'package:diamate_frontend/presentation/own_post_screen/own_post_screen.dart';
@@ -36,7 +36,7 @@ import 'package:diamate_frontend/presentation/login_screen/login_screen.dart';
 // import 'package:diamate_frontend/presentation/doctor_edit_profile_screen/doctor_edit_profile_screen.dart';
 // import 'package:diamate_frontend/presentation/doctor_edit_profile_two_screen/doctor_edit_profile_two_screen.dart';
 // import 'package:diamate_frontend/presentation/doctor_forum_screen/doctor_forum_screen.dart';
-// import 'package:diamate_frontend/presentation/show_post_screen/show_post_screen.dart';
+ import 'package:diamate_frontend/presentation/show_post_screen/show_post_screen.dart';
 // import 'package:diamate_frontend/presentation/admin_forum_screen/admin_forum_screen.dart';
 // import 'package:diamate_frontend/presentation/post_report_screen/post_report_screen.dart';
 // import 'package:diamate_frontend/presentation/show_post_report_screen/show_post_report_screen.dart';
@@ -155,15 +155,20 @@ class AppRoutes {
     // mainProfileScreen: (context) => MainProfileScreen(),
     // editProfileScreen: (context) => EditProfileScreen(),
     // userProfileScreen: (context) => UserProfileScreen(),
-    // registerScreen: (context) => RegisterScreen(),
-    // registerPatientScreen: (context) => RegisterPatientScreen(),
-      loginScreen: (context) => LoginScreen(),
+    registerScreen: (context) => RegisterScreen(),
+    registerPatientScreen: (context) => RegisterPatientScreen(),
+    loginScreen: (context) => LoginScreen(),
     // plannerScreen: (context) => PlannerScreen(),
     // addDietScreen: (context) => AddDietScreen(),
     // showPlannerScreen: (context) => ShowPlannerScreen(),
     // medicineContainerScreen: (context) => MedicineContainerScreen(),
     // medicineEditScreen: (context) => MedicineEditScreen(),
-    // forumScreen: (context) => ForumScreen(),
+    forumScreen: (context) {
+    final arguments = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    final email = arguments['email'];
+    final password = arguments['password'];
+    return ForumScreen(email: email, password: password);
+  },
     // postScreen: (context) => PostScreen(),
     // notificationsScreen: (context) => NotificationsScreen(),
     // ownPostScreen: (context) => OwnPostScreen(),
@@ -188,7 +193,7 @@ class AppRoutes {
     // doctorEditProfileScreen: (context) => DoctorEditProfileScreen(),
     // doctorEditProfileTwoScreen: (context) => DoctorEditProfileTwoScreen(),
     // doctorForumScreen: (context) => DoctorForumScreen(),
-    // showPostScreen: (context) => ShowPostScreen(),
+     showPostScreen: (context) => ShowPostScreen(),
     // adminForumScreen: (context) => AdminForumScreen(),
     // postReportScreen: (context) => PostReportScreen(),
     // showPostReportScreen: (context) => ShowPostReportScreen(),
