@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const userRepository = require('../repository/user');
 
 async function verifyToken(req, res, next) {
+	return false;
 	if (!req.headers) {
 		res.status(401).json({ error: 'Access denied: no header' });
 		return false;

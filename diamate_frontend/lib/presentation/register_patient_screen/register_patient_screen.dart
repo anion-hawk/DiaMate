@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import '../register_patient_screen/widgets/coeliacdiseasechipview_item_widget.dart';
 import 'package:diamate_frontend/core/app_export.dart';
 import 'package:diamate_frontend/widgets/custom_drop_down.dart';
@@ -30,7 +32,7 @@ class RegisterPatientScreen extends StatelessWidget {
       var reqbody = {
       "type": dType,
       "diagnosis_date": dateController.text,
-      "diseases": selectedDiseases
+      "diseases": jsonEncode(selectedDiseases)
     };
     print(reqbody);
         var response = await http.post(Uri.parse(compUserProf),
@@ -168,6 +170,7 @@ class RegisterPatientScreen extends StatelessWidget {
   Widget _buildCoeliacDiseaseChipView(BuildContext context) {
     return DiseaseWidget(
       onOptionsChanged: (options) {
+        print(options.runtimeType);
         // Receive the selected options from DiseaseWidget
         selectedDiseases = options;
         print("Selected Diseases: $selectedDiseases ");
