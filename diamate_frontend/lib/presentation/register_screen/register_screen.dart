@@ -10,6 +10,7 @@ import 'package:diamate_frontend/presentation/expert_registertwo_screen/expert_r
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import 'package:diamate_frontend/config.dart';
+
 class RegisterScreen extends StatelessWidget {
   RegisterScreen({Key? key})
       : super(
@@ -20,10 +21,11 @@ class RegisterScreen extends StatelessWidget {
 
   TextEditingController emailEditTextController = TextEditingController();
 
-
   TextEditingController dobEditTextController = TextEditingController();
 
   TextEditingController passwordController = TextEditingController();
+
+  TextEditingController confirmPasswordController = TextEditingController();
 
   TextEditingController editTextController = TextEditingController();
 
@@ -36,26 +38,34 @@ class RegisterScreen extends StatelessWidget {
   String selectedUserRole = "";
 
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
-  void regUser(String s) async
-{
-     if (emailEditTextController.text.isNotEmpty && passwordController.text.isNotEmpty && dobEditTextController.text.isNotEmpty && nameEditTextController.text.isNotEmpty ) {
-      var reqbody = {
-        "name": nameEditTextController.text,
-        "email": emailEditTextController.text,
-        "password": passwordController.text,
-        //"dob": dobEditTextController.text,
-        "role": s
-      };
-      print(reqbody);
-      var response = await http.post(Uri.parse(registration),
-          headers: {"ContentType": "application/json"}, body: reqbody);
-      print(response.body);
-    } else {
-      print("hoynaiiiiiiii");
+  Future<bool> regUser(String s) async {
+    if (_formKey.currentState!.validate()) {
+      if (emailEditTextController.text.isNotEmpty &&
+          passwordController.text.isNotEmpty &&
+          confirmPasswordController.text.isNotEmpty &&
+          dobEditTextController.text.isNotEmpty &&
+          nameEditTextController.text.isNotEmpty &&
+          passwordController.text == confirmPasswordController.text) {
+        var reqbody = {
+          "name": nameEditTextController.text,
+          "email": emailEditTextController.text,
+          "password": passwordController.text,
+          //"dob": dobEditTextController.text,
+          "role": s
+        };
+        print(reqbody);
+        var response = await http.post(Uri.parse(registration),
+            headers: {"ContentType": "application/json"}, body: reqbody);
+        print(response.body);
+        return true;
+      } else {
+        print("Passwords do not match. Please enter the correct password.");
+        return false;
+      }
     }
-}
- 
+
+    return false;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -134,6 +144,10 @@ class RegisterScreen extends StatelessWidget {
                         ),
                       ),
                     ),
+                    SizedBox(
+                      height: 15.v,
+                    ),
+                    _buildConfirmPasswordEditText(context),
                     SizedBox(height: 15.v),
                     Divider(
                       color: appTheme.blueGray100,
@@ -224,7 +238,6 @@ class RegisterScreen extends StatelessWidget {
         textInputType: TextInputType.emailAddress,
         prefix: Container(
           margin: EdgeInsets.fromLTRB(20.h, 8.v, 11.h, 8.v),
-
           child: CustomImageView(
             imagePath: ImageConstant.imgLockBlueGray100,
             height: 16.v,
@@ -295,16 +308,56 @@ class RegisterScreen extends StatelessWidget {
     }
   }
 
-  /// Section Widget
-  Widget _buildEditText(BuildContext context) {
-    return CustomTextFormField(
-      width: 293.h,
-      controller: editTextController,
-      textInputAction: TextInputAction.done,
-      alignment: Alignment.topCenter,
-      obscureText: true,
+  Widget _buildConfirmPasswordEditText(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(
+        left: 10.h,
+        right: 9.h,
+      ),
+      child: CustomTextFormField(
+        controller: confirmPasswordController,
+        hintText: "Confirm Password",
+        hintStyle: theme.textTheme.labelLarge!,
+        textInputType: TextInputType.visiblePassword,
+        obscureText: true,
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return "Please enter the confirm password";
+          } else if (value != passwordController.text) {
+            return "Passwords do not match";
+          }
+          return null;
+        },
+        prefix: Container(
+          margin: EdgeInsets.fromLTRB(20.h, 8.v, 11.h, 8.v),
+          child: CustomImageView(
+            imagePath: ImageConstant.imgMaterialSymbolsLock,
+            height: 16.v,
+            width: 20.h,
+          ),
+        ),
+        prefixConstraints: BoxConstraints(
+          maxHeight: 46.v,
+        ),
+        contentPadding: EdgeInsets.only(
+          top: 14.v,
+          right: 30.h,
+          bottom: 14.v,
+        ),
+      ),
     );
   }
+
+  /// Section Widget
+  // Widget _buildEditText(BuildContext context) {
+  //   return CustomTextFormField(
+  //     width: 293.h,
+  //     controller: editTextController,
+  //     textInputAction: TextInputAction.done,
+  //     alignment: Alignment.topCenter,
+  //     obscureText: true,
+  //   );
+  // }
 
   /// Section Widget
   Widget _buildEditTextStack(BuildContext context) {
@@ -314,13 +367,11 @@ class RegisterScreen extends StatelessWidget {
       child: Stack(
         alignment: Alignment.bottomCenter,
         children: [
-
           //_buildEditText(context),
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
               height: 70.v,
-
               width: 293.h,
               margin: EdgeInsets.only(bottom: 62.v),
               decoration: BoxDecoration(
@@ -349,7 +400,6 @@ class RegisterScreen extends StatelessWidget {
             onChanged: (value) {
               selectedUserRole = value; // Update the selectedUserRole variable
             },
-
           ),
           Align(
             alignment: Alignment.centerLeft,
@@ -361,7 +411,6 @@ class RegisterScreen extends StatelessWidget {
               child: Column(
                 //mainAxisSize: MainAxisSize.min,
                 //crossAxisAlignment: CrossAxisAlignment.start,
-
 
                 children: [
                   // Padding(
@@ -391,7 +440,6 @@ class RegisterScreen extends StatelessWidget {
                     "Patient/Doctor/Others",
                     style: theme.textTheme.labelLarge!.copyWith(fontSize: 18.0),
                   ),
-
                 ],
               ),
             ),
@@ -401,38 +449,56 @@ class RegisterScreen extends StatelessWidget {
     );
   }
 
+  Future<void> handleRegistration(BuildContext context, String role) async {
+    bool ok = await regUser(role);
+    if (ok) {
+      if (role == "Doctor") {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => ExpertRegistertwoScreen()),
+        );
+      } else if (role == "Patient") {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => RegisterPatientScreen()),
+        );
+      }
+    }
+  }
+
   /// Section Widget
   Widget _buildNextButton(BuildContext context) {
     return CustomElevatedButton(
-      text: "Next",
+      text: "Register",
       margin: EdgeInsets.only(
         left: 10.h,
         right: 9.h,
       ),
       buttonTextStyle:
           CustomTextStyles.titleMediumPoppinsOnErrorContainerMedium,
-
-      onPressed: () {
+      onPressed: () async {
         // Handle button press
-        regUser(selectedUserRole);
-        if (selectedUserRole == "Doctor") {
-          // Navigate to Doctor registration screen
-          // You should replace 'DoctorRegisterScreen' with the actual screen for doctor registration
-          
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => ExpertRegistertwoScreen()),
-          );
-        } else if (selectedUserRole == "Patient") {
-          // Navigate to Patient registration screen
-          // You should replace 'PatientRegisterScreen' with the actual screen for patient registration
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => RegisterPatientScreen()),
-          );
+        bool ok = await regUser(selectedUserRole);
+        if (ok) {
+          if (selectedUserRole == "Doctor") {
+            // Navigate to Doctor registration screen
+            // You should replace 'DoctorRegisterScreen' with the actual screen for doctor registration
+
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => ExpertRegistertwoScreen()),
+            );
+          } else if (selectedUserRole == "Patient") {
+            // Navigate to Patient registration screen
+            // You should replace 'PatientRegisterScreen' with the actual screen for patient registration
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => RegisterPatientScreen()),
+            );
+          }
         }
       },
-
     );
   }
 }
