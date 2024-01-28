@@ -41,16 +41,44 @@ async function logout(req, res) {
 async function register(req, res) {
     const { name, email, password, role } = req.body;
     let rr = 0;
-    if(role == "Doctor")
-      rr = 2;
-    else if(role == "Patient")
-      rr = 1;
+    if (role == "Doctor")
+        rr = 2;
+    else if (role == "Patient")
+        rr = 1;
     const result = await userRepository.register(name, email, password, rr);
     loginHandler(result, res);
+}
+
+async function getSelfProfile(req, res) {
+    const { id } = req.user;
+    const result = await userRepository.getUserById(id);
+    if (!result.success) {
+        res.status(500).json({ error: "Internal server error" });
+        return;
+    }
+    res.status(200).json(result.data[0]);
+    return;
+}
+
+async function getUserById(req, res) {
+    const { id } = req.params;
+    if (id === req.user['id']) {
+        res.redirect(301, '/user/profile');
+        return;
+    }
+    const result = await userRepository.getUserById(id);
+    if (!result.success) {
+        res.status(500).json({ error: "Internal server error" });
+        return;
+    }
+    res.status(200).json(result.data[0]);
+    return;
 }
 
 module.exports = {
     login,
     logout,
-    register
+    register,
+    getSelfProfile,
+    getUserById
 };
