@@ -58,6 +58,8 @@ class LoginScreen extends StatelessWidget {
         if (response.statusCode == 200) {
           // Login successful
           print(response.body);
+          cookies.add(jsonDecode(response.body)['cookie']);
+          print(cookies);
           // Navigate to the next screen or perform any other actions
           Navigator.pushNamed(
             context,
