@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
           theme: theme,
           title: 'diamate',
           debugShowCheckedModeBanner: false,
-          initialRoute: AppRoutes.registerPatientScreen,
+          initialRoute: AppRoutes.loginScreen,
           routes: AppRoutes.routes,
         );
       },
