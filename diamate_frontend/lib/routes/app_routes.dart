@@ -1,5 +1,7 @@
 //github::::::::::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
 
+import 'dart:js';
+
 import 'package:flutter/material.dart';
 // import 'package:diamate_frontend/presentation/others_profile_screen/others_profile_screen.dart';
 // import 'package:diamate_frontend/presentation/main_profile_screen/main_profile_screen.dart';
@@ -194,7 +196,23 @@ class AppRoutes {
     // doctorEditProfileScreen: (context) => DoctorEditProfileScreen(),
     // doctorEditProfileTwoScreen: (context) => DoctorEditProfileTwoScreen(),
     // doctorForumScreen: (context) => DoctorForumScreen(),
-     showPostScreen: (context) => ShowPostScreen(),
+     
+     
+     showPostScreen: (context) {
+  final arguments = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>?;
+
+  if (arguments != null && arguments.containsKey('post')) {
+    return ShowPostScreen(post: arguments['post']);
+  } else {
+    // Handle the case when 'post' is not present in the arguments
+    return Scaffold(
+      body: Center(
+        child: Text('Invalid arguments for ShowPostScreen'),
+      ),
+    );
+  }
+}
+
     // adminForumScreen: (context) => AdminForumScreen(),
     // postReportScreen: (context) => PostReportScreen(),
     // showPostReportScreen: (context) => ShowPostReportScreen(),
