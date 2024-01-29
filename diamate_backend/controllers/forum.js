@@ -23,6 +23,16 @@ async function getPostAuthorDetails(post, res) {
 	return true;
 }
 
+async function getPostsDetails(posts, res) {
+	for (let post of posts) {
+		const authorFound = await getPostAuthorDetails(post, res);
+		if (!authorFound) {
+			return false;
+		}
+	}
+	return true;
+}
+
 async function createPost(req, res) {
 	const { title, content } = req.body;
 	const userId = req.user.id;
@@ -44,11 +54,9 @@ async function getPosts(req, res) {
 	const result = await forumRepository.getPosts(offset, limit);
 	if (result.success) {
 		let posts = result.data;
-		for (let post of posts) {
-			const authorFound = await getPostAuthorDetails(post, res);
-			if (!authorFound) {
-				return;
-			}
+		let postDetailsFound = await getPostsDetails(posts, res);
+		if (!postDetailsFound) {
+			return;
 		}
 		res.status(200).json(posts);
 	}
@@ -61,13 +69,16 @@ async function getPost(req, res) {
 	const { id } = req.params;
 	const result = await forumRepository.getPostById(id);
 	if (result.success) {
-		let post = result.data[0];
-		const authorFound = await getPostAuthorDetails(post, res);
-		if (!authorFound) {
+		if (result.data.length === 0) {
+			res.status(404).json({ error: 'Post not found' });
 			return;
 		}
-		console.log(post);
-		res.status(200).json(post);
+		let posts = result.data;
+		let postDetailsFound = await getPostsDetails(posts, res);
+		if (!postDetailsFound) {
+			return;
+		}
+		res.status(200).json(posts[0]);
 	}
 	else {
 		res.status(500).json({ error: 'Internal server error' });
