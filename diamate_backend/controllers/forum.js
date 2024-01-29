@@ -1,6 +1,27 @@
 require('dotenv').config();
 const forumRepository = require('../repository/forum');
+const userRepository = require('../repository/user');
 const upvoteRepository = require('../repository/upvote');
+
+async function getPostAuthorDetails(post, res) {
+	const authorQuery = await userRepository.getUserById(post.author);
+	if (!authorQuery.success) {
+		res.status(500).json({ error: 'Internal server error: cannot find author' });
+		return false;
+	}
+	if (authorQuery.data.length === 0) {
+		res.status(404).json({ error: 'Author not found' });
+		return false;
+	}
+	const author = authorQuery.data[0];
+	const authorDetails = {
+		id: author.id,
+		name: author.name,
+		role: author.role,
+	};
+	post.author = authorDetails;
+	return true;
+}
 
 async function createPost(req, res) {
 	const { title, content } = req.body;
@@ -22,7 +43,14 @@ async function getPosts(req, res) {
 	const offset = (page - 1) * limit;
 	const result = await forumRepository.getPosts(offset, limit);
 	if (result.success) {
-		res.status(200).json(result.data);
+		let posts = result.data;
+		for (let post of posts) {
+			const authorFound = await getPostAuthorDetails(post, res);
+			if (!authorFound) {
+				return;
+			}
+		}
+		res.status(200).json(posts);
 	}
 	else {
 		res.status(500).json({ error: 'Internal server error: query failed' });
@@ -33,7 +61,13 @@ async function getPost(req, res) {
 	const { id } = req.params;
 	const result = await forumRepository.getPostById(id);
 	if (result.success) {
-		res.status(200).json(result.data);
+		let post = result.data[0];
+		const authorFound = await getPostAuthorDetails(post, res);
+		if (!authorFound) {
+			return;
+		}
+		console.log(post);
+		res.status(200).json(post);
 	}
 	else {
 		res.status(500).json({ error: 'Internal server error' });
