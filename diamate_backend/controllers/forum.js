@@ -2,6 +2,7 @@ require('dotenv').config();
 const forumRepository = require('../repository/forum');
 const userRepository = require('../repository/user');
 const upvoteRepository = require('../repository/upvote');
+const commentRepository = require('../repository/comment');
 
 async function getPostAuthorDetails(post, res) {
 	const authorQuery = await userRepository.getUserById(post.author);
@@ -34,6 +35,17 @@ async function getPostUpvotes(post, res) {
 	return true;
 }
 
+async function getPostComments(post, res) {
+	const commentsQuery = await commentRepository.getCommentsByPostId(post.id);
+	if (!commentsQuery.success) {
+		res.status(500).json({ error: 'Internal server error: cannot find comments' });
+		return false;
+	}
+	const comments = commentsQuery.data;
+	post.comments = comments.length;
+	return true;
+}
+
 async function getPostsDetails(posts, req, res) {
 	for (let post of posts) {
 		const authorFound = await getPostAuthorDetails(post, res);
@@ -46,10 +58,14 @@ async function getPostsDetails(posts, req, res) {
 		}
 		const upvoteQuery = await upvoteRepository.checkUpvote(req.user.id, post.id);
 		if (!upvoteQuery.success) {
-			res.status(500).json({ error: 'Internal server error: cannot find upvote' });
+			res.status(500).json({ error: 'Internal server error: cannot access upvote' });
 		}
 		const status = !(upvoteQuery.data.length === 0);
 		post.upvoted = status;
+		const commentsQuery = await getPostComments(post, res);
+		if (!commentsQuery) {
+			return false;
+		}
 	}
 	return true;
 }
