@@ -23,12 +23,33 @@ async function getPostAuthorDetails(post, res) {
 	return true;
 }
 
-async function getPostsDetails(posts, res) {
+async function getPostUpvotes(post, res) {
+	const upvotesQuery = await upvoteRepository.getUpvotesByPostId(post.id);
+	if (!upvotesQuery.success) {
+		res.status(500).json({ error: 'Internal server error: cannot find upvotes' });
+		return false;
+	}
+	const upvotes = upvotesQuery.data;
+	post.upvotes = upvotes.length;
+	return true;
+}
+
+async function getPostsDetails(posts, req, res) {
 	for (let post of posts) {
 		const authorFound = await getPostAuthorDetails(post, res);
 		if (!authorFound) {
 			return false;
 		}
+		const upvotesCounted = await getPostUpvotes(post, res);
+		if (!upvotesCounted) {
+			return false;
+		}
+		const upvoteQuery = await upvoteRepository.checkUpvote(req.user.id, post.id);
+		if (!upvoteQuery.success) {
+			res.status(500).json({ error: 'Internal server error: cannot find upvote' });
+		}
+		const status = !(upvoteQuery.data.length === 0);
+		post.upvoted = status;
 	}
 	return true;
 }
@@ -54,7 +75,7 @@ async function getPosts(req, res) {
 	const result = await forumRepository.getPosts(offset, limit);
 	if (result.success) {
 		let posts = result.data;
-		let postDetailsFound = await getPostsDetails(posts, res);
+		let postDetailsFound = await getPostsDetails(posts, req, res);
 		if (!postDetailsFound) {
 			return;
 		}
@@ -74,7 +95,7 @@ async function getPost(req, res) {
 			return;
 		}
 		let posts = result.data;
-		let postDetailsFound = await getPostsDetails(posts, res);
+		let postDetailsFound = await getPostsDetails(posts, req, res);
 		if (!postDetailsFound) {
 			return;
 		}
