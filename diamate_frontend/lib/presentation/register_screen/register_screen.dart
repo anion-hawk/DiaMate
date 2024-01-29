@@ -30,7 +30,7 @@ class RegisterScreen extends StatelessWidget {
   TextEditingController confirmPasswordController = TextEditingController();
 
   TextEditingController editTextController = TextEditingController();
-
+  
   List<String> dropdownItemList = [
     "Doctor",
     "Patient",
@@ -55,6 +55,8 @@ class RegisterScreen extends StatelessWidget {
           //"dob": dobEditTextController.text,
           "role": s
         };
+        usaved = emailEditTextController.text;
+        psaved = passwordController.text;
         print(reqbody);
         var response = await http.post(Uri.parse(registration),
             headers: {"ContentType": "application/json"}, body: reqbody);

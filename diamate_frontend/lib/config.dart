@@ -1,5 +1,6 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart' as dotenv;
 import 'package:cookie_jar/cookie_jar.dart';
+import 'package:diamate_frontend/presentation/register_screen/register_screen.dart' as reg;
 
 String baseUrl = (dotenv.dotenv.env['API_URL'])!;
 
@@ -13,3 +14,6 @@ final own_post = baseUrl + "/forum/post";
 
 var cj = new CookieJar();
 var cookies = [];
+
+var usaved;
+var psaved ;

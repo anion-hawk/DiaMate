@@ -26,7 +26,7 @@ class RegisterPatientScreen extends StatelessWidget {
   TextEditingController dateController = TextEditingController();
   List<String> selectedDiseases = [];
   String dType = "";
-  void completeUserProfile() async{
+  void completeUserProfile(BuildContext context) async{
     if(dateController.text.isNotEmpty && dType.isNotEmpty)
     {
       var reqbody = {
@@ -38,6 +38,20 @@ class RegisterPatientScreen extends StatelessWidget {
         var response = await http.post(Uri.parse(compUserProf),
             headers: {"token": cookies.join(''),}, body: reqbody);
         print(response.body);
+
+        if (response.statusCode == 200 || response.statusCode == 201) {
+          // Login successful
+          print(response.body);
+          // Navigate to the next screen or perform any other actions
+          Navigator.pushNamed(
+            context,
+            AppRoutes.forumScreen,
+            arguments: {
+              'email': usaved,
+              'password': psaved,
+            },
+          );
+        }
     }
   }
   @override
@@ -141,7 +155,7 @@ class RegisterPatientScreen extends StatelessWidget {
                 buttonTextStyle:
                     CustomTextStyles.titleMediumPoppinsOnErrorContainerMedium,
                 onPressed: () {
-                  completeUserProfile();
+                  completeUserProfile(context);
                 },
               ),
               SizedBox(height: 5.v),
