@@ -54,7 +54,7 @@ class _OwnPostScreen extends State<OwnPostScreen> {
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
         print(response);
-        Navigator.pop(context);
+        //Navigator.pop(context);
       } else {
         print("Error: ${response.statusCode}");
       }
