@@ -2,6 +2,8 @@ const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
 const app = express();
+const verifyToken = require('./middleware/verify_token');
+const userRepository = require('./repository/user');
 
 app.use(cors());
 app.options('*', cors());
@@ -21,6 +23,22 @@ app.get('/status', (req, res) => {
 });
 
 app.use('/auth', require('./routes/auth'));
+app.use(async function (req, res, next) {
+    const verified = await verifyToken(req, res, next);
+    if (verified) {
+        next();
+    }
+    else {
+        // const users = await userRepository.getUserById('0b3b7886-e1d2-479b-a4ce-106f3405d4ff');
+        // console.log(users.data[0]);
+        // req.user = users.data[0];
+        // next();
+        return;
+    }
+});
+
+app.use('/forum', require('./routes/forum'));
+app.use('/user', require('./routes/user'));
 
 
 
