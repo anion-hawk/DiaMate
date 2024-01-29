@@ -29,7 +29,11 @@ class ForumScreen extends StatelessWidget {
   GlobalKey<NavigatorState> navigatorKey = GlobalKey();
 
   Future<List<Map<String, dynamic>>> fetchPosts() async {
-    final response = await http.get(Uri.parse(forum));
+    final response = await http.get(Uri.parse(forum),
+           headers: {"token": cookies.join(''),});
+
+
+    print(cookies);       
 
     if (response.statusCode == 200) {
       final List<dynamic> data = json.decode(response.body);
