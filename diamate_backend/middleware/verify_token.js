@@ -11,7 +11,6 @@ async function verifyToken(req, res, next) {
 	}
 	let token = undefined;
 	try {
-		console.log(req.headers);
 		token = req.headers['token'].split('=')[1];
 	}
 	catch (err) {
@@ -30,6 +29,7 @@ async function verifyToken(req, res, next) {
 				res.status(401).json({ error: 'User not found' });
 			}
 			else {
+				console.log('user:');
 				console.log(result.data[0]);
 				req.user = result.data[0];
 				return true;

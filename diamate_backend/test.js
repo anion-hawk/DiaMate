@@ -1,5 +1,10 @@
-diseases = ["Insulin resistance", 'Diabetes insipidus', 'Cataract', 'PCOS', 'Hypertension', 'Thyroid disease', 'Coeliac disease', 'GGGg']
-
-const transformedDiseases = diseases.map(disease => disease.toLowerCase().replace(/ /g, '_'));
-
-console.log(transformedDiseases)
+let a = {
+	x: 'x',
+	y: 'y'
+};
+console.log(a);
+a.y = {
+	xx: 'xx',
+	yy: 'yy'
+};
+console.log(a)

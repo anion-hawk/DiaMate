@@ -140,7 +140,8 @@ class _OwnPostScreen extends State<OwnPostScreen> {
             margin: EdgeInsets.fromLTRB(5.h, 13.v, 5.h, 9.v),
             onTap: () {
               savePost(context);
-              print("print");
+
+              onTapClose(context);
             },
           ),
         ],

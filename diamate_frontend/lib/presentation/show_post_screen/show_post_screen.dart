@@ -37,7 +37,8 @@ class User {
 
 // ignore_for_file: must_be_immutable
 class ShowPostScreen extends StatefulWidget {
-  ShowPostScreen({Key? key}) : super(key: key);
+  final Map<String, dynamic> post;
+  ShowPostScreen({required this.post,Key? key}) : super(key: key);
 
   @override
   _ShowPostScreenState createState() => _ShowPostScreenState();
@@ -45,11 +46,11 @@ class ShowPostScreen extends StatefulWidget {
 
 class _ShowPostScreenState extends State<ShowPostScreen> {
   bool showAllComments = true;
-  String postTime = "";
-  String postTitle = "";
-  String postContent = "";
-  String userName = "";
-  String userTimeAgo = "";
+  // String postTime = "";
+  // String postTitle = "";
+  // String postContent = "";
+  // String userName = "";
+  // String userTimeAgo = "";
 
   TextEditingController textController = TextEditingController();
 
@@ -90,17 +91,18 @@ class _ShowPostScreenState extends State<ShowPostScreen> {
   Future<void> fetchData() async {
     try {
       // Replace 'YOUR_BACKEND_URL' with your actual backend API endpoint to get post data
-      final response = await http.get(Uri.parse(show_post));
+      final response = await http.get(Uri.parse(show_post),
+      headers: {"token": cookies.join(''),});
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
 
         setState(() {
-          postTime = data["post_time"];
-          postTitle = data["post_title"];
-          postContent = data["post_content"];
-          userName = data["user_name"];
-          userTimeAgo = data["user_time_ago"];
+          // postTime = data["post_time"];
+          // postTitle = data["post_title"];
+          // postContent = data["post_content"];
+          // userName = data["user_name"];
+          // userTimeAgo = data["user_time_ago"];
         });
       } else {
         print("Failed to fetch data. Status code: ${response.statusCode}");
@@ -124,7 +126,8 @@ class _ShowPostScreenState extends State<ShowPostScreen> {
             SizedBox(height: 11.v),
             Padding(
                 padding: EdgeInsets.only(left: 15.h),
-                child: Text(postTime,
+                child: Text(
+                  widget.post['created'],
                     style: CustomTextStyles.bodyMediumPoppinsBlue300)),
             SizedBox(height: 13.v),
             Container(
@@ -132,7 +135,8 @@ class _ShowPostScreenState extends State<ShowPostScreen> {
                 margin: EdgeInsets.only(left: 14.h, right: 32.h),
                 child: Text(
                     //postTitle,
-                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nisi ligula, sodales at lacinia eget, volutpat a augue. Aliquam auctor nisi nisi, vel tristique enim faucibus non. Integer venenatis dui eu diam facilisis consectetur. Nulla facilisi. Sed sed consequat justo. ",
+                    widget.post['title'],
+                    //"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nisi ligula, sodales at lacinia eget, volutpat a augue. Aliquam auctor nisi nisi, vel tristique enim faucibus non. Integer venenatis dui eu diam facilisis consectetur. Nulla facilisi. Sed sed consequat justo. ",
                     maxLines: 3,
                     overflow: TextOverflow.ellipsis,
                     style: CustomTextStyles.titleLargeOxygenPrimary
@@ -145,7 +149,8 @@ class _ShowPostScreenState extends State<ShowPostScreen> {
                     margin: EdgeInsets.only(left: 15.h, right: 17.h),
                     child: Text(
                         //postContent,
-                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nisi ligula, sodales at lacinia eget, volutpat a augue. Aliquam auctor nisi nisi, vel tristique enim faucibus non. Integer venenatis dui eu diam facilisis consectetur. Nulla facilisi. Sed sed consequat justo. ",
+                        widget.post['content'],
+                        //"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nisi ligula, sodales at lacinia eget, volutpat a augue. Aliquam auctor nisi nisi, vel tristique enim faucibus non. Integer venenatis dui eu diam facilisis consectetur. Nulla facilisi. Sed sed consequat justo. ",
                         maxLines: 6,
                         overflow: TextOverflow.ellipsis,
                         style: CustomTextStyles.bodyMediumPoppinsBlack90002))),
@@ -165,7 +170,7 @@ class _ShowPostScreenState extends State<ShowPostScreen> {
                     children: [
                       if (showComment)
                         CircleAvatar(
-                          // Replace this with your image logic
+                          
                           child: Icon(Icons.person),
                           radius: 12.0,
                         ),

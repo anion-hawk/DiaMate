@@ -1,6 +1,74 @@
 require('dotenv').config();
 const forumRepository = require('../repository/forum');
+const userRepository = require('../repository/user');
 const upvoteRepository = require('../repository/upvote');
+const commentRepository = require('../repository/comment');
+
+async function getPostAuthorDetails(post, res) {
+	const authorQuery = await userRepository.getUserById(post.author);
+	if (!authorQuery.success) {
+		res.status(500).json({ error: 'Internal server error: cannot find author' });
+		return false;
+	}
+	if (authorQuery.data.length === 0) {
+		res.status(404).json({ error: 'Author not found' });
+		return false;
+	}
+	const author = authorQuery.data[0];
+	const authorDetails = {
+		id: author.id,
+		name: author.name,
+		role: author.role,
+	};
+	post.author = authorDetails;
+	return true;
+}
+
+async function getPostUpvotes(post, res) {
+	const upvotesQuery = await upvoteRepository.getUpvotesByPostId(post.id);
+	if (!upvotesQuery.success) {
+		res.status(500).json({ error: 'Internal server error: cannot find upvotes' });
+		return false;
+	}
+	const upvotes = upvotesQuery.data;
+	post.upvotes = upvotes.length;
+	return true;
+}
+
+async function getPostComments(post, res) {
+	const commentsQuery = await commentRepository.getCommentsByPostId(post.id);
+	if (!commentsQuery.success) {
+		res.status(500).json({ error: 'Internal server error: cannot find comments' });
+		return false;
+	}
+	const comments = commentsQuery.data;
+	post.comments = comments.length;
+	return true;
+}
+
+async function getPostsDetails(posts, req, res) {
+	for (let post of posts) {
+		const authorFound = await getPostAuthorDetails(post, res);
+		if (!authorFound) {
+			return false;
+		}
+		const upvotesCounted = await getPostUpvotes(post, res);
+		if (!upvotesCounted) {
+			return false;
+		}
+		const upvoteQuery = await upvoteRepository.checkUpvote(req.user.id, post.id);
+		if (!upvoteQuery.success) {
+			res.status(500).json({ error: 'Internal server error: cannot access upvote' });
+		}
+		const status = !(upvoteQuery.data.length === 0);
+		post.upvoted = status;
+		const commentsQuery = await getPostComments(post, res);
+		if (!commentsQuery) {
+			return false;
+		}
+	}
+	return true;
+}
 
 async function createPost(req, res) {
 	const { title, content } = req.body;
@@ -22,7 +90,12 @@ async function getPosts(req, res) {
 	const offset = (page - 1) * limit;
 	const result = await forumRepository.getPosts(offset, limit);
 	if (result.success) {
-		res.status(200).json(result.data);
+		let posts = result.data;
+		let postDetailsFound = await getPostsDetails(posts, req, res);
+		if (!postDetailsFound) {
+			return;
+		}
+		res.status(200).json(posts);
 	}
 	else {
 		res.status(500).json({ error: 'Internal server error: query failed' });
@@ -33,7 +106,16 @@ async function getPost(req, res) {
 	const { id } = req.params;
 	const result = await forumRepository.getPostById(id);
 	if (result.success) {
-		res.status(200).json(result.data);
+		if (result.data.length === 0) {
+			res.status(404).json({ error: 'Post not found' });
+			return;
+		}
+		let posts = result.data;
+		let postDetailsFound = await getPostsDetails(posts, req, res);
+		if (!postDetailsFound) {
+			return;
+		}
+		res.status(200).json(posts[0]);
 	}
 	else {
 		res.status(500).json({ error: 'Internal server error' });
