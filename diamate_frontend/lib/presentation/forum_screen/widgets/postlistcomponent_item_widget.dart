@@ -17,8 +17,10 @@ class PostlistcomponentItemWidget extends StatelessWidget {
     return GestureDetector(
         onTap: () {
           // Navigate to another page here
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => ShowPostScreen(post: post)));
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => ShowPostScreen(post: post)));
         },
         child: Container(
           padding: EdgeInsets.all(13.h),
@@ -99,18 +101,18 @@ class PostlistcomponentItemWidget extends StatelessWidget {
                                             SizedBox(height: 21.v),
                                             Row(
                                               children: [
-                                                Icon(Icons.remove_red_eye,
-                                                    size: 16,
-                                                    color: Colors.blue),
-                                                Padding(
-                                                  padding: EdgeInsets.only(
-                                                      left: 8.h),
-                                                  child: Text(
-                                                    "651,324",
-                                                    style: CustomTextStyles
-                                                        .bodySmallPrimary,
-                                                  ),
-                                                ),
+                                                // Icon(Icons.remove_red_eye,
+                                                //     size: 16,
+                                                //     color: Colors.blue),
+                                                // Padding(
+                                                //   padding: EdgeInsets.only(
+                                                //       left: 8.h),
+                                                //   child: Text(
+                                                //     "651,324",
+                                                //     style: CustomTextStyles
+                                                //         .bodySmallPrimary,
+                                                //   ),
+                                                // ),
                                                 Padding(
                                                   padding: EdgeInsets.only(
                                                       left: 15.h),
@@ -122,7 +124,7 @@ class PostlistcomponentItemWidget extends StatelessWidget {
                                                   padding: EdgeInsets.only(
                                                       left: 8.h),
                                                   child: Text(
-                                                    "36,6545",
+                                                    post['upvotes'].toString(),
                                                     style: CustomTextStyles
                                                         .bodySmallPrimary,
                                                   ),
@@ -138,7 +140,7 @@ class PostlistcomponentItemWidget extends StatelessWidget {
                                                   padding: EdgeInsets.only(
                                                       left: 8.h),
                                                   child: Text(
-                                                    "36",
+                                                    post['comments'].toString(),
                                                     style: CustomTextStyles
                                                         .bodySmallPrimary,
                                                   ),
@@ -156,13 +158,41 @@ class PostlistcomponentItemWidget extends StatelessWidget {
                           ),
                         ),
                       ),
-                      CustomImageView(
-                        imagePath: ImageConstant.imgRectangle4238,
-                        height: 30.adaptSize,
-                        width: 30.adaptSize,
-                        radius: BorderRadius.circular(10.h),
-                        alignment: Alignment.topRight,
-                      ),
+                      Row(
+                        children: [
+                          // User details (name and time)
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                post['author']['name'],
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16.0,
+                                ),
+                              ),
+                              Text(
+                                post['created'], // Replace with the actual time logic
+                                style: TextStyle(
+                                  fontSize: 12.0,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                              width:
+                                  8.0), // Adjust the spacing between user details and image
+                          // Image
+                          CustomImageView(
+                            imagePath: ImageConstant.imgRectangle4238,
+                            height: 30.adaptSize,
+                            width: 30.adaptSize,
+                            radius: BorderRadius.circular(10.h),
+                            alignment: Alignment.topRight,
+                          ),
+                        ],
+                      )
                     ],
                   ),
                 ),

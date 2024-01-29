@@ -14,7 +14,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
-class ForumScreen extends StatelessWidget {
+class ForumScreen extends StatefulWidget {
   final String email;
   final String password;
   ForumScreen({required this.email, required this.password, Key? key})
@@ -23,10 +23,29 @@ class ForumScreen extends StatelessWidget {
   //     : super(
   //         key: key,
   //       );
+  @override
+  _ForumScreenState createState() => _ForumScreenState();
+
+}
+
+
+
+class _ForumScreenState extends State<ForumScreen> {
 
   TextEditingController inputDataController = TextEditingController();
 
   GlobalKey<NavigatorState> navigatorKey = GlobalKey();
+
+
+   @override
+  void initState() {
+    super.initState();
+    // Fetch data from the backend when the widget is created
+    fetchPosts();
+  }
+
+  
+
 
   Future<List<Map<String, dynamic>>> fetchPosts() async {
     final response = await http.get(Uri.parse(forum),
