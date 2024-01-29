@@ -6,9 +6,11 @@ import 'package:diamate_frontend/widgets/app_bar/custom_app_bar.dart';
 import 'package:diamate_frontend/widgets/custom_bottom_bar.dart';
 import 'package:diamate_frontend/widgets/custom_elevated_button.dart';
 import 'package:diamate_frontend/widgets/custom_text_form_field.dart';
+import 'package:diamate_frontend/config.dart';
 
 import 'package:diamate_frontend/presentation/own_post_screen/own_post_screen.dart';
-
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
@@ -26,14 +28,25 @@ class ForumScreen extends StatelessWidget {
 
   GlobalKey<NavigatorState> navigatorKey = GlobalKey();
 
+  Future<List<Map<String, dynamic>>> fetchPosts() async {
+    final response = await http.get(Uri.parse(forum));
+
+    if (response.statusCode == 200) {
+      final List<dynamic> data = json.decode(response.body);
+      return data.cast<Map<String, dynamic>>();
+    } else {
+      throw Exception('Failed to load posts');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: _buildAppBar(context),
-        body:SingleChildScrollView(
-         child:Container(
+        body: SingleChildScrollView(
+            child: Container(
           width: double.maxFinite,
           padding: EdgeInsets.symmetric(horizontal: 11.h),
           child: Column(
@@ -46,8 +59,7 @@ class ForumScreen extends StatelessWidget {
               _buildPostListComponent(context),
             ],
           ),
-        )
-        ),
+        )),
         bottomNavigationBar: _buildBottomBar(context),
       ),
     );
@@ -219,22 +231,23 @@ class ForumScreen extends StatelessWidget {
   /// Section Widget
   Widget _buildInputData(BuildContext context) {
     return Container(
-  width: 174.h,
-  padding: EdgeInsets.symmetric(
-    horizontal: 10.h,
-    vertical: 9.v,
-  ),
-  decoration: BoxDecoration(
-    color: theme.colorScheme.onErrorContainer,
-    borderRadius: BorderRadius.circular(10), // Set your desired border radius
-  ),
-   child: 
-   //Text('Email: $email Password: $password'),
-   Text(
-    "Let’s share what going...",
-    style: CustomTextStyles.bodySmallBluegray40003,
-  ),
-);
+      width: 174.h,
+      padding: EdgeInsets.symmetric(
+        horizontal: 10.h,
+        vertical: 9.v,
+      ),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.onErrorContainer,
+        borderRadius:
+            BorderRadius.circular(10), // Set your desired border radius
+      ),
+      child:
+          //Text('Email: $email Password: $password'),
+          Text(
+        "Let’s share what going...",
+        style: CustomTextStyles.bodySmallBluegray40003,
+      ),
+    );
   }
 
   /// Section Widget
@@ -244,13 +257,13 @@ class ForumScreen extends StatelessWidget {
       width: 83.h,
       text: "Create Post",
       onPressed: () {
-      // Add the functionality you want to execute when the button is pressed
-      // For example, you can navigate to a new screen:
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => OwnPostScreen()),
-      );
-    },
+        // Add the functionality you want to execute when the button is pressed
+        // For example, you can navigate to a new screen:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => OwnPostScreen()),
+        );
+      },
     );
   }
 
@@ -288,31 +301,38 @@ class ForumScreen extends StatelessWidget {
 
   /// Section Widget
   Widget _buildPostListComponent(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(right: 2.h),
-      child: ListView.separated(
-        physics: NeverScrollableScrollPhysics(),
-        shrinkWrap: true,
-        separatorBuilder: (
-          context,
-          index,
-        ) {
-          return SizedBox(
-            height: 10.v,
+    return FutureBuilder<List<Map<String, dynamic>>>(
+      future: fetchPosts(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return CircularProgressIndicator(); // Display a loading indicator
+        } else if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          return Text('No posts available');
+        } else {
+          // Display the posts using ListView.builder
+          return ListView.builder(
+            physics: NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemCount: snapshot.data!.length,
+            itemBuilder: (context, index) {
+              return Padding(
+                padding: EdgeInsets.symmetric(
+                    vertical: 8.0), // Adjust the vertical spacing as needed
+                child: PostlistcomponentItemWidget(post: snapshot.data![index]),
+              );
+            },
           );
-        },
-        itemCount: 20,
-        itemBuilder: (context, index) {
-          return PostlistcomponentItemWidget();
-        },
-      ),
+        }
+      },
     );
   }
+}
 
-  /// Section Widget
-  Widget _buildBottomBar(BuildContext context) {
-    return CustomBottomBar(
-      onChanged: (BottomBarEnum type) {},
-    );
-  }
+/// Section Widget
+Widget _buildBottomBar(BuildContext context) {
+  return CustomBottomBar(
+    onChanged: (BottomBarEnum type) {},
+  );
 }
