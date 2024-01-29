@@ -13,3 +13,6 @@ final own_post = baseUrl + "/forum/post";
 
 var cj = new CookieJar();
 var cookies = [];
+
+final forum = baseUrl + "/forum/posts";
+

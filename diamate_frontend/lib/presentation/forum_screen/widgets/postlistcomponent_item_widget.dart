@@ -3,9 +3,13 @@ import 'package:flutter/material.dart';
 import 'tags5_item_widget.dart';
 import 'package:diamate_frontend/presentation/show_post_screen/show_post_screen.dart';
 
+
+
 // ignore: must_be_immutable
 class PostlistcomponentItemWidget extends StatelessWidget {
-  const PostlistcomponentItemWidget({Key? key})
+  final Map<String, dynamic> post;
+
+  const PostlistcomponentItemWidget({required this.post, Key? key})
       : super(
           key: key,
         );
@@ -51,13 +55,13 @@ class PostlistcomponentItemWidget extends StatelessWidget {
                     child: Stack(
                       alignment: Alignment.centerLeft,
                       children: [
-                        Align(
-                          alignment: Alignment.bottomRight,
-                          child: Text(
-                            "56 comments",
-                            style: CustomTextStyles.bodySmallPrimary,
-                          ),
-                        ),
+                        // Align(
+                        //   alignment: Alignment.bottomRight,
+                        //   child: Text(
+                        //     "56 comments",
+                        //     style: CustomTextStyles.bodySmallPrimary,
+                        //   ),
+                        // ),
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Padding(
@@ -70,7 +74,7 @@ class PostlistcomponentItemWidget extends StatelessWidget {
                                 SizedBox(
                                   width: 170.h,
                                   child: Text(
-                                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nisi ligula, sodales at lacinia ...",
+                                    post['title'],
                                     maxLines: 3,
                                     overflow: TextOverflow.ellipsis,
                                     style: CustomTextStyles
@@ -81,12 +85,12 @@ class PostlistcomponentItemWidget extends StatelessWidget {
                                   ),
                                 ),
                                 SizedBox(height: 8.v),
-                                Wrap(
-                                  runSpacing: 10.v,
-                                  spacing: 10.h,
-                                  children: List<Widget>.generate(
-                                      2, (index) => Tags5ItemWidget()),
-                                ),
+                                // Wrap(
+                                //   runSpacing: 10.v,
+                                //   spacing: 10.h,
+                                //   children: List<Widget>.generate(
+                                //       2, (index) => Tags5ItemWidget()),
+                                // ),
                                 SizedBox(height: 21.v),
                                 Row(
                                   children: [
@@ -98,6 +102,15 @@ class PostlistcomponentItemWidget extends StatelessWidget {
                                       padding: EdgeInsets.only(left: 30.h),
                                       child: Text(
                                         "36,6545 Likes",
+                                        style:
+                                            CustomTextStyles.bodySmallPrimary,
+                                      ),
+                                    ),
+
+                                    Padding(
+                                      padding: EdgeInsets.only(left: 30.h),
+                                      child: Text(
+                                        "36,6545 Comments",
                                         style:
                                             CustomTextStyles.bodySmallPrimary,
                                       ),
