@@ -2,9 +2,6 @@ import 'package:diamate_frontend/core/app_export.dart';
 import 'package:diamate_frontend/widgets/base_button.dart';
 import 'package:flutter/material.dart';
 
-
-
-
 class CustomElevatedButton extends BaseButton {
   CustomElevatedButton({
     Key? key,
@@ -49,9 +46,13 @@ class CustomElevatedButton extends BaseButton {
   }
 
   Widget get buildElevatedButtonWidget => Container(
-        height: this.height ?? 46.v,
-        width: this.width ?? double.maxFinite,
-        margin: margin,
+        height: height ?? 46.v,
+        width: width ?? double.maxFinite,
+        margin: margin ??
+            EdgeInsets.only(
+              left: 33.h,
+              right: 34.h,
+            ),
         decoration: decoration,
         child: ElevatedButton(
           style: buttonStyle,
@@ -63,8 +64,8 @@ class CustomElevatedButton extends BaseButton {
               leftIcon ?? const SizedBox.shrink(),
               Text(
                 text,
-                style: buttonTextStyle ??
-                    CustomTextStyles.labelLargeSourceSansProOnErrorContainer,
+                style:
+                    CustomTextStyles.titleMediumPoppinsOnErrorContainerMedium,
               ),
               rightIcon ?? const SizedBox.shrink(),
             ],

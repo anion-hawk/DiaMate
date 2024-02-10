@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 
-import 'package:diamate_frontend/views/auth/login.dart';
+import 'package:diamate_frontend/services/auth/auth_view.dart';
 
 import 'package:diamate_frontend/presentation/register_screen/register_screen.dart';
 import 'package:diamate_frontend/presentation/register_patient_screen/register_patient_screen.dart';
@@ -12,6 +12,7 @@ import 'package:diamate_frontend/presentation/expert_registertwo_screen/expert_r
 import 'package:diamate_frontend/presentation/show_post_screen/show_post_screen.dart';
 
 class AppRoutes {
+  static const String authView = '/auth_view';
   static const String othersProfileScreen = '/others_profile_screen';
 
   static const String mainProfileScreen = '/main_profile_screen';
@@ -116,9 +117,10 @@ class AppRoutes {
   static const String appNavigationScreen = '/app_navigation_screen';
 
   static Map<String, WidgetBuilder> routes = {
+    authView: (context) => const AuthView(),
     // registerScreen: (context) => RegisterScreen(),
     // registerPatientScreen: (context) => RegisterPatientScreen(),
-    loginScreen: (context) => const LoginScreen(),
+    // loginScreen: (context) => const LoginScreen(),
     // forumScreen: (context) {
     //   final arguments =
     //       ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
