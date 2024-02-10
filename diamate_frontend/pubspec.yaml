@@ -41,6 +41,7 @@ dependencies:
   fetch_client: ^1.0.2
   flutter_dotenv: ^5.1.0
   cookie_jar: ^4.0.8
+  firebase_core: ^2.25.4
 
 dev_dependencies:
   flutter_test:
