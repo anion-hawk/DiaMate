@@ -7,7 +7,7 @@ import 'package:diamate_frontend/config.dart';
 
 var globalMessengerKey = GlobalKey<ScaffoldMessengerState>();
 void main() async {
-  await dotenv.dotenv.load();
+  // await dotenv.dotenv.load();
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
