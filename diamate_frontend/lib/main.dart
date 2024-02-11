@@ -14,9 +14,9 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-  ]);
+  // SystemChrome.setPreferredOrientations([
+  //   DeviceOrientation.portraitUp,
+  // ]);
 
   ///Please update theme as per your need if required.
   ThemeHelper().changeTheme('primary');
@@ -30,9 +30,9 @@ class MyApp extends StatelessWidget {
       builder: (context, orientation, deviceType) {
         return MaterialApp(
           theme: theme,
-          title: 'diamate',
+          title: 'DiaMate',
           debugShowCheckedModeBanner: false,
-          initialRoute: AppRoutes.authView,
+          initialRoute: AppRoutes.authGate,
           routes: AppRoutes.routes,
         );
       },
