@@ -108,7 +108,7 @@
 //                         borderRadius: BorderRadiusStyle.roundedBorder49,
 //                       ),
 //                       child: CustomImageView(
-//                         imagePath: ImageConstant.imgSolarCameraAddBold,
+                        // imagePath: ImageConstant.imgSolarCameraAddBold,
 //                         height: 49.adaptSize,
 //                         width: 49.adaptSize,
 //                         alignment: Alignment.center,
@@ -314,8 +314,7 @@
 //     }
 //   }
 
-//   Widget _buildConfirmPasswordEditText(BuildContext context) {
-//     return Padding(
+//   Widget _buildConfirmPasswordEditText(BuildContext context) => Padding(
 //       padding: EdgeInsets.only(
 //         left: 10.h,
 //         right: 9.h,
@@ -352,7 +351,6 @@
 //         ),
 //       ),
 //     );
-//   }
 
 //   /// Section Widget
 //   // Widget _buildEditText(BuildContext context) {

@@ -23,46 +23,14 @@ class _LoginScreenState extends State<LoginScreen> {
 
   String errorMessage = "";
 
-  void logIn() async {
-    // show loading circle
-    showDialog(
-        context: context,
-        builder: (context) => const Center(child: CircularProgressIndicator()));
-
-    try {
-      final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: emailController.text, password: passwordController.text);
-      Navigator.pop(context);
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found' || e.code == 'wrong-password') {
-        Navigator.pop(context);
-        print("Invalid email or password");
-        showError();
-      }
-    }
-  }
-
-  void showError() {
-    showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-                content: const Text("Invalid email or password"),
-                actions: [
-                  TextButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: const Text("OK"))
-                ]));
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: SafeArea(
             child: Center(
                 child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 40),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 20, horizontal: 40),
                     child: ListView(children: [
                       // app logo
 
@@ -73,6 +41,15 @@ class _LoginScreenState extends State<LoginScreen> {
                         width: 400.h,
                       ),
                       const SizedBox(height: 30),
+
+                      const Center(
+                        child: Text(
+                          "Welcome Back!",
+                          style: TextStyle(
+                              fontSize: 30, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
 
                       // email
                       CustomTextFormField(
@@ -102,9 +79,41 @@ class _LoginScreenState extends State<LoginScreen> {
                       CustomElevatedButton(
                           text: "Register",
                           onPressed: () {
-                            print("Register pressed");
                             toggleLogin!();
-                          }),
+                          })
                     ])))));
+  }
+
+  void logIn() async {
+    // show loading circle
+    showDialog(
+        context: context,
+        builder: (context) => const Center(child: CircularProgressIndicator()));
+
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: emailController.text, password: passwordController.text);
+      Navigator.pop(context);
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found' || e.code == 'wrong-password') {
+        Navigator.pop(context);
+        print("Invalid email or password");
+        showError();
+      }
+    }
+  }
+
+  void showError() {
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+                content: const Text("Invalid email or password"),
+                actions: [
+                  TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text("OK"))
+                ]));
   }
 }
