@@ -145,6 +145,7 @@ class CustomTextStyles {
       );
   static get bodySmallPrimary => theme.textTheme.bodySmall!.copyWith(
         color: theme.colorScheme.primary,
+        fontSize: 12.fSize,
       );
   // Headline text style
   static get headlineSmallBlack90001 => theme.textTheme.headlineSmall!.copyWith(
@@ -218,6 +219,7 @@ class CustomTextStyles {
       theme.textTheme.labelLarge!.sourceSansPro.copyWith(
         color: theme.colorScheme.primary,
         fontWeight: FontWeight.w600,
+        fontSize: 20,
       );
   static get labelMediumBlue300 => theme.textTheme.labelMedium!.copyWith(
         color: appTheme.blue300,

@@ -75,39 +75,10 @@ class _OwnPostScreen extends State<OwnPostScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       SizedBox(height: 9.v),
-                      TextField(
-                        controller: titleController,
-                        decoration: InputDecoration(
-                          hintText: "Enter title",
-                          hintStyle: theme.textTheme.headlineLarge,
-                          border: InputBorder.none,
-                          filled: true,
-                          fillColor: Colors.transparent,
-                          labelStyle: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
-                          contentPadding: EdgeInsets.symmetric(
-                              horizontal: 10.0, vertical: 15.0),
-                        ),
-                      ),
+                      _buildPosttitle(context),
                       SizedBox(height: 21.v),
-                      TextField(
-                        controller: contentController,
-                        style: CustomTextStyles.bodyLargePoppinsPrimary,
-                        maxLines:
-                            null, // Set to null or a specific number to allow multiline input
-                        decoration: InputDecoration(
-                          hintText: "Let's share what's going....",
-                          hintStyle: CustomTextStyles.bodyLargePoppinsPrimary
-                              .copyWith(color: Colors.grey),
-                          filled: true,
-                          fillColor: Colors.transparent,
-                          border: InputBorder.none, // Remove the border
-                          contentPadding: EdgeInsets.symmetric(
-                              horizontal: 10.0,
-                              vertical: 15.0), // Adjust padding as needed
-                        ),
-                      ),
+                      //abc
+                      _buildPostContent(context),
                       Spacer(),
                       _buildHealthChipView(context),
                       SizedBox(height: 17.v),
@@ -141,7 +112,8 @@ class _OwnPostScreen extends State<OwnPostScreen> {
             onTap: () {
               savePost(context);
 
-              onTapClose(context);
+              //onTapClose(context);
+              Navigator.pop(context);
             },
           ),
         ],
@@ -155,6 +127,42 @@ class _OwnPostScreen extends State<OwnPostScreen> {
         spacing: 9.49.h,
         children:
             List<Widget>.generate(1, (index) => HealthchipviewItemWidget()));
+  }
+
+  Widget _buildPosttitle(BuildContext context) {
+    return TextField(
+      controller: titleController,
+      decoration: InputDecoration(
+        hintText: "Enter title",
+        hintStyle: theme.textTheme.headlineLarge,
+        border: InputBorder.none,
+        filled: true,
+        fillColor: Colors.transparent,
+        labelStyle: TextStyle(
+          fontWeight: FontWeight.bold,
+        ),
+        contentPadding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 15.0),
+      ),
+    );
+  }
+
+  Widget _buildPostContent(BuildContext context) {
+    return TextField(
+      controller: contentController,
+      style: CustomTextStyles.bodyLargePoppinsPrimary,
+      maxLines:
+          null, // Set to null or a specific number to allow multiline input
+      decoration: InputDecoration(
+        hintText: "Let's share what's going....",
+        hintStyle: CustomTextStyles.bodyLargePoppinsPrimary
+            .copyWith(color: Colors.grey),
+        filled: true,
+        fillColor: Colors.transparent,
+        border: InputBorder.none, // Remove the border
+        contentPadding: EdgeInsets.symmetric(
+            horizontal: 10.0, vertical: 15.0), // Adjust padding as needed
+      ),
+    );
   }
 
   /// Navigates back to the previous screen.

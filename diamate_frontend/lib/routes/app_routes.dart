@@ -11,17 +11,18 @@ import 'package:diamate_frontend/presentation/register_screen/register_screen.da
 import 'package:diamate_frontend/presentation/register_patient_screen/register_patient_screen.dart';
 import 'package:diamate_frontend/presentation/login_screen/login_screen.dart';
 //import 'package:diamate_frontend/presentation/planner_screen/planner_screen.dart';
-// import 'package:diamate_frontend/presentation/add_diet_screen/add_diet_screen.dart';
-// import 'package:diamate_frontend/presentation/show_planner_screen/show_planner_screen.dart';
+ import 'package:diamate_frontend/presentation/show_planner_screen/add_diet_screen.dart';
+ import 'package:diamate_frontend/presentation/show_planner_screen/show_planner_screen.dart';
 // import 'package:diamate_frontend/presentation/medicine_container_screen/medicine_container_screen.dart';
 // import 'package:diamate_frontend/presentation/medicine_edit_screen/medicine_edit_screen.dart';
-import 'package:diamate_frontend/presentation/forum_screen/forum_screen.dart';
+//import 'package:diamate_frontend/presentation/forum_screen/forum_screen.dart';
+import 'package:diamate_frontend/presentation/forum_screen/newforum.dart';
 // import 'package:diamate_frontend/presentation/post_screen/post_screen.dart';
 // import 'package:diamate_frontend/presentation/notifications_screen/notifications_screen.dart';
 // import 'package:diamate_frontend/presentation/own_post_screen/own_post_screen.dart';
 // import 'package:diamate_frontend/presentation/edit_sugar_level_screen/edit_sugar_level_screen.dart';
-// import 'package:diamate_frontend/presentation/tracker_home_screen/tracker_home_screen.dart';
-// import 'package:diamate_frontend/presentation/sugar_tracker_screen/sugar_tracker_screen.dart';
+ import 'package:diamate_frontend/presentation/tracker_home_screen/tracker_home_screen.dart';
+ import 'package:diamate_frontend/presentation/all_tracker_screen/sugar_tracker_screen.dart';
 // import 'package:diamate_frontend/presentation/blood_pressure_show_all_screen/blood_pressure_show_all_screen.dart';
 // import 'package:diamate_frontend/presentation/blood_pressure_edit_screen/blood_pressure_edit_screen.dart';
 // import 'package:diamate_frontend/presentation/selection_screen/selection_screen.dart';
@@ -48,6 +49,9 @@ import 'package:diamate_frontend/presentation/show_post_screen/show_post_screen.
 // import 'package:diamate_frontend/presentation/diet_medicine_screen/diet_medicine_screen.dart';
 // import 'package:diamate_frontend/presentation/app_navigation_screen/app_navigation_screen.dart';
 
+
+
+import 'package:diamate_frontend/presentation/modals/add_sugar_modal.dart';
 class AppRoutes {
   static const String othersProfileScreen = '/others_profile_screen';
 
@@ -76,6 +80,8 @@ class AppRoutes {
   static const String medicineEditScreen = '/medicine_edit_screen';
 
   static const String forumScreen = '/forum_screen';
+
+  static const String newForum = '/newforum';
 
   static const String postScreen = '/post_screen';
 
@@ -152,6 +158,12 @@ class AppRoutes {
 
   static const String appNavigationScreen = '/app_navigation_screen';
 
+
+
+  static const String addSugarScreen = '/add_sugar_modal';
+
+
+  
   static Map<String, WidgetBuilder> routes = {
     // othersProfileScreen: (context) => OthersProfileScreen(),
     // mainProfileScreen: (context) => MainProfileScreen(),
@@ -162,23 +174,18 @@ class AppRoutes {
     loginScreen: (context) => LoginScreen(),
 
     // plannerScreen: (context) => PlannerScreen(),
-    // addDietScreen: (context) => AddDietScreen(),
-    // showPlannerScreen: (context) => ShowPlannerScreen(),
+     addDietScreen: (context) => AddDietScreen(),
+     showPlannerScreen: (context) => ShowPlanner(),
     // medicineContainerScreen: (context) => MedicineContainerScreen(),
     // medicineEditScreen: (context) => MedicineEditScreen(),
-    forumScreen: (context) {
-      final arguments =
-          ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-      final email = arguments['email'];
-      final password = arguments['password'];
-      return ForumScreen(email: email, password: password);
-    },
+   
+    newForum: (context) => NewForum(),
     // postScreen: (context) => PostScreen(),
     // notificationsScreen: (context) => NotificationsScreen(),
     // ownPostScreen: (context) => OwnPostScreen(),
-    // editSugarLevelScreen: (context) => EditSugarLevelScreen(),
-    // trackerHomeScreen: (context) => TrackerHomeScreen(),
-    // sugarTrackerScreen: (context) => SugarTrackerScreen(),
+     //editSugarLevelScreen: (context) => EditSugarLevelScreen(),
+     trackerHomeScreen: (context) => TrackerHomeScreen(),
+     sugarTrackerScreen: (context) => SugarTrackerScreen(),
     // bloodPressureShowAllScreen: (context) => BloodPressureShowAllScreen(),
     // bloodPressureEditScreen: (context) => BloodPressureEditScreen(),
     // selectionScreen: (context) => SelectionScreen(),
@@ -193,6 +200,9 @@ class AppRoutes {
     //     MessegewithpeersTabContainerScreen(),
     expertRegisterScreen: (context) => ExpertRegisterScreen(),
     expertRegistertwoScreen: (context) => ExpertRegistertwoScreen(),
+
+    addSugarScreen: (context) => AddSugarModal(),
+
     // doctorProfileScreen: (context) => DoctorProfileScreen(),
     // doctorEditProfileScreen: (context) => DoctorEditProfileScreen(),
     // doctorEditProfileTwoScreen: (context) => DoctorEditProfileTwoScreen(),

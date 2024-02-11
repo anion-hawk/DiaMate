@@ -180,7 +180,7 @@ class ImageConstant {
 
   static String imgLockBlue300 = '$imagePath/img_lock_blue_300.svg';
 
-  static String imgRectangle4238 = '$imagePath/img_rectangle_4238.png';
+  static String profile = '$imagePath/img_rectangle_4238.png';
 
   static String imgRectangle4252 = '$imagePath/img_rectangle_4252.png';
 

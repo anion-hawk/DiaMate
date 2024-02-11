@@ -2,7 +2,9 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:diamate_frontend/core/app_export.dart';
-import 'package:diamate_frontend/presentation/forum_screen/forum_screen.dart';
+//import 'package:diamate_frontend/presentation/forum_screen/forum_screen.dart';
+
+import 'package:diamate_frontend/presentation/forum_screen/newforum.dart';
 import 'package:diamate_frontend/widgets/custom_elevated_button.dart';
 import 'package:diamate_frontend/widgets/custom_text_form_field.dart';
 import 'package:diamate_frontend/widgets/custom_flat_button.dart';
@@ -61,14 +63,20 @@ class LoginScreen extends StatelessWidget {
           cookies.add(jsonDecode(response.body)['cookie']);
           print(cookies);
           // Navigate to the next screen or perform any other actions
-          Navigator.pushNamed(
-            context,
-            AppRoutes.forumScreen,
-            arguments: {
-              'email': emailController.text,
-              'password': passwordController.text,
-            },
-          );
+
+
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => NewForum()));
+          // Navigator.pushNamed(
+          //   context,
+          //   AppRoutes.forumScreen,
+          //   arguments: {
+          //     'email': emailController.text,
+          //     'password': passwordController.text,
+          //   },
+          // );
         } else {
           // Login unsuccessful
           print("Login failed. Incorrect email or password.");
@@ -169,13 +177,7 @@ class LoginScreen extends StatelessWidget {
                               width: 60.adaptSize,
                               alignment: Alignment.topCenter,
                             ),
-                            // CustomImageView(
-                            //   imagePath: ImageConstant.imgIcon1,
-                            //   height: 42.adaptSize,
-                            //   width: 42.adaptSize,
-                            //   alignment: Alignment.bottomLeft,
-                            //   margin: EdgeInsets.only(left: 3.h),
-                            // ),
+                           
                           ],
                         ),
                       ),

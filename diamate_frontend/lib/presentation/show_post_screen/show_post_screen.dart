@@ -7,15 +7,23 @@ import 'package:diamate_frontend/widgets/app_bar/custom_app_bar.dart';
 import 'package:diamate_frontend/widgets/custom_search_view.dart';
 import 'package:diamate_frontend/widgets/custom_text_form_field.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+
+
+
 
 final int maxVisibleNestedComments = 3;
 bool showReplies = false;
 bool showComment = false;
 bool showLikes = false;
 int likeCount = 0;
+
+Color iconColor = Color.fromARGB(221, 166, 169, 174);
+Color iconColor_de = Color.fromARGB(221, 166, 169, 174);
+
 
 class Comment {
   String content;
@@ -24,21 +32,52 @@ class Comment {
   int likeCount;
   DateTime timestamp;
 
-  Comment(this.content, this.user, this.likeCount, this.timestamp,
-      this.nestedComments);
+  Comment(this.content, this.user, this.likeCount, this.timestamp, this.nestedComments);
+
+  // Add a constructor to create a Comment object from a JSON map
+  Comment.fromJson(Map<String, dynamic> json)
+      : content = json['content'],
+        user = User.fromJson(json['author']['id']),
+        likeCount = json['upvotes'],
+        timestamp = DateTime.parse(json['created']),
+        nestedComments = (json['nestedComments'] as List<dynamic>)
+            .map((nestedJson) => Comment.fromJson(nestedJson))
+            .toList();
+
+  // Add a method to convert Comment object to a JSON map
+  Map<String, dynamic> toJson() => {
+    'content': content,
+    'user': user.toJson(),
+    'likeCount': likeCount,
+    'timestamp': timestamp.toIso8601String(),
+    'nestedComments': nestedComments.map((nestedComment) => nestedComment.toJson()).toList(),
+  };
 }
+
 
 class User {
   String username;
   String profilePicture;
 
   User(this.username, this.profilePicture);
+
+  // Add a constructor to create a User object from a JSON map
+  User.fromJson(Map<String, dynamic> json)
+      : username = json['author']['id'],
+        profilePicture = json['profilePicture'];
+
+  // Add a method to convert User object to a JSON map
+  Map<String, dynamic> toJson() => {
+    'username': username,
+    'profilePicture': profilePicture,
+  };
 }
+
 
 // ignore_for_file: must_be_immutable
 class ShowPostScreen extends StatefulWidget {
   final Map<String, dynamic> post;
-  ShowPostScreen({required this.post,Key? key}) : super(key: key);
+  ShowPostScreen({required this.post, Key? key}) : super(key: key);
 
   @override
   _ShowPostScreenState createState() => _ShowPostScreenState();
@@ -54,32 +93,35 @@ class _ShowPostScreenState extends State<ShowPostScreen> {
 
   TextEditingController textController = TextEditingController();
 
-  List<Comment> comments = [
-    Comment(
-      "This is the first comment.",
-      User("User1", "profile_picture_url1"),
-      12,
-      DateTime.now(),
-      [
-        Comment("Reply to the first comment.",
-            User("User2", "profile_picture_url2"), 10, DateTime.now(), []),
-        Comment("Another reply to the first comment.",
-            User("User3", "profile_picture_url3"), 12, DateTime.now(), []),
-      ],
-    ),
-    Comment("This is the second comment.",
-        User("User4", "profile_picture_url4"), 11, DateTime.now(), []),
-    Comment(
-      "This is the third comment.",
-      User("User5", "profile_picture_url5"),
-      12,
-      DateTime.now(),
-      [
-        Comment("Reply to the third comment.",
-            User("User6", "profile_picture_url6"), 16, DateTime.now(), []),
-      ],
-    ),
-  ];
+  // List<Comment> comments = [
+  //   Comment(
+  //     "This is the first comment.",
+  //     User("User1", "profile_picture_url1"),
+  //     12,
+  //     DateTime.now(),
+  //     [
+  //       Comment("Reply to the first comment.",
+  //           User("User2", "profile_picture_url2"), 10, DateTime.now(), []),
+  //       Comment("Another reply to the first comment.",
+  //           User("User3", "profile_picture_url3"), 12, DateTime.now(), []),
+  //     ],
+  //   ),
+  //   Comment("This is the second comment.",
+  //       User("User4", "profile_picture_url4"), 11, DateTime.now(), []),
+  //   Comment(
+  //     "This is the third comment.",
+  //     User("User5", "profile_picture_url5"),
+  //     12,
+  //     DateTime.now(),
+  //     [
+  //       Comment("Reply to the third comment.",
+  //           User("User6", "profile_picture_url6"), 16, DateTime.now(), []),
+  //     ],
+  //   ),
+  // ];
+
+  List<Comment> comments = [];
+
 
   @override
   void initState() {
@@ -91,18 +133,18 @@ class _ShowPostScreenState extends State<ShowPostScreen> {
   Future<void> fetchData() async {
     try {
       // Replace 'YOUR_BACKEND_URL' with your actual backend API endpoint to get post data
-      final response = await http.get(Uri.parse(show_post),
-      headers: {"token": cookies.join(''),});
+      final response = await http.get(Uri.parse(show_post), headers: {
+        "token": cookies.join(''),
+      });
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
 
         setState(() {
-          // postTime = data["post_time"];
-          // postTitle = data["post_title"];
-          // postContent = data["post_content"];
-          // userName = data["user_name"];
-          // userTimeAgo = data["user_time_ago"];
+          // Parse the comments from the received data
+          comments = (data['comments'] as List<dynamic>)
+              .map((commentJson) => Comment.fromJson(commentJson))
+              .toList();
         });
       } else {
         print("Failed to fetch data. Status code: ${response.statusCode}");
@@ -110,6 +152,18 @@ class _ShowPostScreenState extends State<ShowPostScreen> {
     } catch (e) {
       print("Error: $e");
     }
+  }
+
+  Future<void> postComment(String content) async {
+    // Replace 'YOUR_BACKEND_URL' with your actual backend API endpoint to post a comment
+    final response = await http.post(
+      Uri.parse(post_comment),
+      headers: {"token": cookies.join('')},
+      body: json.encode({
+        'postId': widget.post['id'], // Replace 'id' with the actual key for the post in your data
+        'content': content,
+      }),
+    );
   }
 
   @override
@@ -127,7 +181,8 @@ class _ShowPostScreenState extends State<ShowPostScreen> {
             Padding(
                 padding: EdgeInsets.only(left: 15.h),
                 child: Text(
-                  widget.post['created'],
+                    DateFormat('HH:mm a, dd MMM yyyy')
+                        .format(DateTime.parse(widget.post['created'])),
                     style: CustomTextStyles.bodyMediumPoppinsBlue300)),
             SizedBox(height: 13.v),
             Container(
@@ -170,7 +225,6 @@ class _ShowPostScreenState extends State<ShowPostScreen> {
                     children: [
                       if (showComment)
                         CircleAvatar(
-                          
                           child: Icon(Icons.person),
                           radius: 12.0,
                         ),
@@ -251,40 +305,24 @@ class _ShowPostScreenState extends State<ShowPostScreen> {
         alignment: Alignment.center,
         child: Padding(
             padding: EdgeInsets.only(left: 5.h, right: 15.h),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center, 
-              children: [
+            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               Row(
-      children: [
-        GestureDetector(
-          onTap: () {
-            // Handle increase button tap
-            setState(() {
-              likeCount++;
-            });
-          },
-          child: CustomImageView(
-            imagePath: ImageConstant.imgArrowRightPrimary,
-            height: 20.v,
-            width: 26.h,
-          ),
-        ),
-        Text(likeCount.toString(), style: CustomTextStyles.titleMediumPoppinsBlue300),
-        GestureDetector(
-          onTap: () {
-            // Handle decrease button tap
-            setState(() {
-              likeCount--;
-            });
-          },
-          child: CustomImageView(
-            imagePath: ImageConstant.imgLightBulb,
-            height: 20.v,
-            width: 26.h,
-          ),
-        ),
-      ],
-    ),
+                children: [
+
+                  _buildUpvoteIncrease(context),
+                  // 
+
+                  Padding(
+                      padding: EdgeInsets.only(left: 5.h),
+                      child: Text(widget.post['upvotes'].toString(),
+                       style: CustomTextStyles.bodyLargeIndigo900),
+                    ),
+
+                    Padding(padding: EdgeInsets.only(left: 12.h),
+                    child: _buildUpvoteDecrease(context),),
+                  
+                ],
+              ),
               Spacer(flex: 5),
               GestureDetector(
                 onTap: () {
@@ -302,7 +340,7 @@ class _ShowPostScreenState extends State<ShowPostScreen> {
                     ),
                     Padding(
                       padding: EdgeInsets.only(left: 5.h),
-                      child: Text("4682",
+                      child: Text(widget.post['comments'].toString(),
                           style: CustomTextStyles.titleMediumPoppinsBlue300),
                     ),
                   ],
@@ -466,6 +504,57 @@ class _ShowPostScreenState extends State<ShowPostScreen> {
               ])),
           Text("Delete", style: CustomTextStyles.labelLargeBlue300)
         ]));
+  }
+
+  Widget _buildUpvoteIncrease(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        // Handle increase button tap
+        setState(() {
+          if (iconColor == Color.fromARGB(221, 166, 169, 174)) {
+            widget.post['upvotes']++;
+            iconColor = Color(0xDd6699ff);
+          } else if (iconColor == Color(0xDd6699ff)) {
+            widget.post['upvotes']--;
+            iconColor = Color.fromARGB(221, 166, 169, 174);
+          }
+          // Increase the upvote count or perform any desired action
+        });
+      },
+      child: Icon(
+        Icons.arrow_upward,
+        size: 30.0,
+        color: iconColor, // Change the color to your desired color
+      ),
+    );
+  }
+
+  Widget _buildUpvoteDecrease(BuildContext context) {
+    return GestureDetector(
+       
+      onTap: () {
+        // Handle increase button tap
+        setState(() {
+          if (iconColor_de == Color.fromARGB(221, 166, 169, 174)) {
+            // widget.post['upvotes']++;
+            if(iconColor == Color(0xDd6699ff)){
+              iconColor = Color.fromARGB(221, 166, 169, 174);
+              widget.post['upvotes']--;
+            }
+            iconColor_de = Color(0xDd6699ff);
+          } else if (iconColor_de == Color(0xDd6699ff)) {
+            //widget.post['upvotes']--;
+            iconColor_de = Color.fromARGB(221, 166, 169, 174);
+          }
+          // Increase the upvote count or perform any desired action
+        });
+      },
+      child: Icon(
+        Icons.arrow_downward,
+        size: 30.0,
+        color: iconColor_de, // Change the color to your desired color
+      ),
+    );
   }
 
   /// Navigates back to the previous screen.

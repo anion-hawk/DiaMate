@@ -185,7 +185,7 @@ class PostlistcomponentItemWidget extends StatelessWidget {
                                   8.0), // Adjust the spacing between user details and image
                           // Image
                           CustomImageView(
-                            imagePath: ImageConstant.imgRectangle4238,
+                           // imagePath: ImageConstant.imgRectangle4238,
                             height: 30.adaptSize,
                             width: 30.adaptSize,
                             radius: BorderRadius.circular(10.h),

@@ -1,4 +1,7 @@
 import 'package:diamate_frontend/core/app_export.dart';
+import 'package:diamate_frontend/presentation/tracker_home_screen/tracker_home_screen.dart';
+import 'package:diamate_frontend/presentation/forum_screen/newforum.dart';
+//import 'package:diamate_frontend/presentation/tracker_side_bar_draweritem/tracker_side_bar_draweritem.dart';
 import 'package:flutter/material.dart';
 
 class CustomBottomBar extends StatefulWidget {
@@ -74,9 +77,21 @@ class CustomBottomBarState extends State<CustomBottomBar> {
           );
         }),
         onTap: (index) {
-          selectedIndex = index;
-          widget.onChanged?.call(bottomMenuList[index].type);
-          setState(() {});
+          if (bottomMenuList[index].type == BottomBarEnum.Calendaronerrorcontainer) {
+            // If 'Calendaronerrorcontainer' is tapped, navigate to 'show_sugar_tracker'
+            selectedIndex = index;
+            widget.onChanged?.call(bottomMenuList[index].type);
+            Navigator.push(context, MaterialPageRoute(builder: (context) => TrackerHomeScreen()),);
+            
+          } 
+          else if(bottomMenuList[index].type == BottomBarEnum.Homeblue300){
+            Navigator.push(context, MaterialPageRoute(builder: (context) => NewForum()),);
+          }
+            else {
+            selectedIndex = index;
+            widget.onChanged?.call(bottomMenuList[index].type);
+            setState(() {});
+          }
         },
       ),
     );
