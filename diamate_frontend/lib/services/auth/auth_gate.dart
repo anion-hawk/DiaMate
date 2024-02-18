@@ -1,3 +1,6 @@
+import "dart:async";
+
+import "package:diamate_frontend/config.dart";
 import "package:diamate_frontend/services/auth/auth_view.dart";
 import "package:diamate_frontend/views/home.dart";
 import "package:firebase_auth/firebase_auth.dart";

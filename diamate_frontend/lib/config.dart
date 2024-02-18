@@ -5,8 +5,10 @@ import 'package:diamate_frontend/presentation/register_screen/register_screen.da
 
 String baseUrl = "http://192.168.170.13:3000";
 
+final url_register = baseUrl + '/auth/register';
+final url_cookieCheck = baseUrl + '/user/test';
+
 final login = baseUrl + "/auth/login";
-final url_register = baseUrl + "/auth/register";
 final show_post = baseUrl + "/forum/show";
 final compUserProf = baseUrl + "/user/complete-profile";
 final own_post = baseUrl + "/forum/post";
