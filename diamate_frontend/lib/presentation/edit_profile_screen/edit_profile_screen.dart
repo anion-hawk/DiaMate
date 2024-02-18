@@ -1,271 +1,266 @@
-// import 'package:diamate_frontend/core/app_export.dart';
-// import 'package:diamate_frontend/widgets/custom_drop_down.dart';
-// import 'package:diamate_frontend/widgets/custom_elevated_button.dart';
-// import 'package:diamate_frontend/widgets/form_text.dart';
-// import 'package:flutter/material.dart';
+import 'dart:io';
+import 'package:diamate_frontend/core/app_export.dart';
+import 'package:diamate_frontend/widgets/custom_drop_down.dart';
+//import 'package:diamate_frontend/widgets/custom_elevated_button.dart';
+import 'package:diamate_frontend/widgets/form_text.dart';
+import 'package:flutter/material.dart';
+import 'dart:developer';
 
-// class EditProfileScreen extends StatelessWidget {
-//   EditProfileScreen({Key? key})
-//       : super(
-//           key: key,
-//         );
+import 'package:diamate_frontend/widgets/elevated_button.dart';
+import 'package:diamate_frontend/widgets/form_text.dart';
+import 'package:diamate_frontend/config.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:intl/intl.dart';
+import 'package:requests/requests.dart';
+import 'package:image_picker/image_picker.dart';
 
-//   TextEditingController editProfileNameController = TextEditingController();
+class EditProfileScreen extends StatefulWidget {
+  EditProfileScreen({Key? key})
+      : super(
+          key: key,
+        );
+  @override
+  State<EditProfileScreen> createState() => _EditProfileScreen();
+}
 
-//   TextEditingController editProfileEmailController = TextEditingController();
+class _EditProfileScreen extends State<EditProfileScreen> {
+  final nameController = TextEditingController();
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
+  final dobController = TextEditingController();
+  String selectedRole = "";
 
-//   TextEditingController editProfilePasswordController = TextEditingController();
+  List<String> dropdownItemList = [
+    "Item One",
+    "Item Two",
+    "Item Three",
+  ];
 
-//   List<String> dropdownItemList = [
-//     "Item One",
-//     "Item Two",
-//     "Item Three",
-//   ];
+  List<String> dropdownItemList1 = [
+    "Item One",
+    "Item Two",
+    "Item Three",
+  ];
 
-//   List<String> dropdownItemList1 = [
-//     "Item One",
-//     "Item Two",
-//     "Item Three",
-//   ];
+  TextEditingController editProfileDateController = TextEditingController();
 
-//   TextEditingController editProfileDateController = TextEditingController();
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  //final networkHandler = NetworkHandler();
+  bool circular = false;
+  PickedFile? _imageFile = null;
 
-//   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final ImagePicker _picker = ImagePicker();
+  @override
+  Widget build(BuildContext context) {
+    return  Scaffold(
+        body: SafeArea(
+            child: Center(
+                child: Padding(
+      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 40),
+      child: ListView(children: [
+        const Center(
+          child: Text(
+            "Edit Profile",
+            style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+          ),
+        ),
+        imageProfile(),
+        const SizedBox(height: 20),
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return SafeArea(
-//       child: Scaffold(
-//         resizeToAvoidBottomInset: false,
-//         body: Form(
-//           key: _formKey,
-//           child: SizedBox(
-//             width: double.maxFinite,
-//             child: Column(
-//               children: [
-//                 SizedBox(height: 12.v),
-//                 Expanded(
-//                   child: SingleChildScrollView(
-//                     child: Container(
-//                       margin: EdgeInsets.only(bottom: 11.v),
-//                       padding: EdgeInsets.symmetric(horizontal: 9.h),
-//                       child: Column(
-//                         crossAxisAlignment: CrossAxisAlignment.start,
-//                         children: [
-//                           Row(
-//                             crossAxisAlignment: CrossAxisAlignment.start,
-//                             children: [
-//                               CustomImageView(
-//                                 imagePath: ImageConstant.imgMaterialSymbol,
-//                                 height: 30.adaptSize,
-//                                 width: 30.adaptSize,
-//                                 margin: EdgeInsets.only(bottom: 27.v),
-//                               ),
-//                               Padding(
-//                                 padding: EdgeInsets.only(
-//                                   left: 87.h,
-//                                   top: 27.v,
-//                                 ),
-//                                 child: Text(
-//                                   "Edit Profile",
-//                                   style: CustomTextStyles
-//                                       .titleLargePoppinsBlack90002Bold,
-//                                 ),
-//                               ),
-//                             ],
-//                           ),
-//                           SizedBox(height: 16.v),
-//                           Align(
-//                             alignment: Alignment.center,
-//                             child: SizedBox(
-//                               height: 102.v,
-//                               width: 100.h,
-//                               child: Stack(
-//                                 alignment: Alignment.center,
-//                                 children: [
-//                                   Align(
-//                                     alignment: Alignment.center,
-//                                     child: Container(
-//                                       height: 102.v,
-//                                       width: 100.h,
-//                                       decoration: BoxDecoration(
-//                                         borderRadius: BorderRadius.circular(
-//                                           51.h,
-//                                         ),
-//                                         border: Border.all(
-//                                           color: theme.colorScheme.onError,
-//                                           width: 1.h,
-//                                         ),
-//                                       ),
-//                                     ),
-//                                   ),
-//                                   Align(
-//                                     alignment: Alignment.center,
-//                                     child: SizedBox(
-//                                       height: 99.v,
-//                                       width: 96.h,
-//                                       child: Stack(
-//                                         alignment: Alignment.bottomRight,
-//                                         children: [
-//                                           CustomImageView(
-//                                             imagePath:
-//                                                 ImageConstant.imgEllipse2,
-//                                             height: 99.v,
-//                                             width: 96.h,
-//                                             radius: BorderRadius.circular(
-//                                               49.h,
-//                                             ),
-//                                             alignment: Alignment.center,
-//                                           ),
-//                                           CustomImageView(
-//                                             imagePath:
-//                                                 ImageConstant.imgSolarCameraMi,
-//                                             height: 18.adaptSize,
-//                                             width: 18.adaptSize,
-//                                             alignment: Alignment.bottomRight,
-//                                             margin: EdgeInsets.only(right: 5.h),
-//                                           ),
-//                                         ],
-//                                       ),
-//                                     ),
-//                                   ),
-//                                 ],
-//                               ),
-//                             ),
-//                           ),
-//                           SizedBox(height: 17.v),
-//                           Text(
-//                             "Name",
-//                             style: CustomTextStyles.titleMediumBlack90002,
-//                           ),
-//                           SizedBox(height: 7.v),
-//                           _buildEditProfileName(context),
-//                           SizedBox(height: 18.v),
-//                           Text(
-//                             "Email",
-//                             style: CustomTextStyles.titleMediumBlack90002,
-//                           ),
-//                           SizedBox(height: 7.v),
-//                           _buildEditProfileEmail(context),
-//                           SizedBox(height: 18.v),
-//                           Text(
-//                             "Password",
-//                             style: CustomTextStyles.titleMediumBlack90002,
-//                           ),
-//                           SizedBox(height: 7.v),
-//                           _buildEditProfilePassword(context),
-//                           SizedBox(height: 11.v),
-//                           Text(
-//                             "Date of Birth",
-//                             style: CustomTextStyles.titleMediumBlack90002,
-//                           ),
-//                           SizedBox(height: 7.v),
-//                           CustomDropDown(
-//                             icon: Container(
-//                               margin:
-//                                   EdgeInsets.fromLTRB(30.h, 8.v, 20.h, 16.v),
-//                               child: CustomImageView(
-//                                 imagePath: ImageConstant.imgFavorite,
-//                                 height: 20.adaptSize,
-//                                 width: 20.adaptSize,
-//                               ),
-//                             ),
-//                             hintText: "23/05/1995",
-//                             hintStyle: CustomTextStyles.bodyMediumGray800,
-//                             items: dropdownItemList,
-//                             onChanged: (value) {},
-//                           ),
-//                           SizedBox(height: 20.v),
-//                           Text(
-//                             "Type of Diabetes",
-//                             style: CustomTextStyles.titleMediumBlack90002,
-//                           ),
-//                           SizedBox(height: 5.v),
-//                           CustomDropDown(
-//                             icon: Container(
-//                               margin:
-//                                   EdgeInsets.fromLTRB(30.h, 8.v, 20.h, 16.v),
-//                               child: CustomImageView(
-//                                 imagePath: ImageConstant.imgFavorite,
-//                                 height: 20.adaptSize,
-//                                 width: 20.adaptSize,
-//                               ),
-//                             ),
-//                             hintText: "Type 1",
-//                             hintStyle: CustomTextStyles.bodyMediumGray800,
-//                             items: dropdownItemList1,
-//                             onChanged: (value) {},
-//                           ),
-//                           SizedBox(height: 8.v),
-//                           Text(
-//                             "Date of Diagnosis",
-//                             style: CustomTextStyles.titleMediumBlack90002,
-//                           ),
-//                           SizedBox(height: 5.v),
-//                           _buildEditProfileDate(context),
-//                           SizedBox(height: 73.v),
-//                           _buildSaveChanges(context),
-//                         ],
-//                       ),
-//                     ),
-//                   ),
-//                 ),
-//               ],
-//             ),
-//           ),
-//         ),
-//       ),
-//     );
-//   }
+        // name
+        CustomTextFormField(
+            controller: nameController,
+            hintText: "Name",
+            obscureText: false,
+            icon: const Icon(Icons.person)),
+        const SizedBox(height: 20),
 
-//   /// Section Widget
-//   Widget _buildEditProfileName(BuildContext context) {
-//     return CustomTextFormField(
-//       controller: editProfileNameController,
-//       hintText: "Melissa Peters",
-//       hintStyle: CustomTextStyles.bodyMediumGray800,
-//     );
-//   }
+        // email
+        CustomTextFormField(
+            controller: emailController,
+            hintText: "Email",
+            obscureText: false,
+            icon: const Icon(Icons.mail)),
+        const SizedBox(height: 20),
 
-//   /// Section Widget
-//   Widget _buildEditProfileEmail(BuildContext context) {
-//     return CustomTextFormField(
-//       controller: editProfileEmailController,
-//       hintText: "melpeters@gmail.com",
-//       hintStyle: CustomTextStyles.bodyMediumGray800,
-//       textInputType: TextInputType.emailAddress,
-//     );
-//   }
+        // password
+        CustomTextFormField(
+            controller: passwordController,
+            hintText: "Password",
+            obscureText: true,
+            icon: const Icon(Icons.lock)),
+        const SizedBox(height: 20),
 
-//   /// Section Widget
-//   Widget _buildEditProfilePassword(BuildContext context) {
-//     return CustomTextFormField(
-//       controller: editProfilePasswordController,
-//       hintText: "************",
-//       textInputType: TextInputType.visiblePassword,
-//       obscureText: true,
-//     );
-//   }
+        // confirm password
+        CustomTextFormField(
+            controller: confirmPasswordController,
+            hintText: "Confirm Password",
+            obscureText: true,
+            icon: const Icon(Icons.lock),
+            validator: (value) {
+              if (value != passwordController.text) {
+                return "Passwords do not match";
+              }
+              return null;
+            }),
+        const SizedBox(height: 20),
 
-//   /// Section Widget
-//   Widget _buildEditProfileDate(BuildContext context) {
-//     return CustomTextFormField(
-//       controller: editProfileDateController,
-//       hintText: "dd/mm/yyyy",
-//       hintStyle: CustomTextStyles.bodyMediumGray800,
-//       textInputAction: TextInputAction.done,
-//     );
-//   }
+        // dob
+        InkWell(
+          onTap: () {
+            _selectDate(context);
+          },
+          child: AbsorbPointer(
+            child: CustomTextFormField(
+                controller: dobController,
+                hintText: "Date of Birth",
+                obscureText: false,
+                icon: const Icon(Icons.calendar_today_rounded),
+                textInputType: TextInputType.datetime),
+          ),
+        ),
 
-//   /// Section Widget
-//   Widget _buildSaveChanges(BuildContext context) {
-//     return CustomElevatedButton(
-//       height: 32.v,
-//       width: 165.h,
-//       text: "Save changes",
-//       buttonStyle: CustomButtonStyles.fillOnError,
-//       buttonTextStyle: CustomTextStyles.bodyMediumOnErrorContainer14,
-//       alignment: Alignment.centerRight,
-//     );
-//   }
-// }
+        const SizedBox(height: 20),
+
+        // login button
+        CustomElevatedButton(
+            text: "Register",
+            onPressed: () {
+              // register();
+            }),
+        // register button
+        const SizedBox(height: 40),
+        const Center(child: Text("Already have an account?")),
+      ]),
+    ))));
+  }
+
+  void _selectDate(context) {
+    showDatePicker(
+            context: context,
+            initialDate:
+                DateTime.now().subtract(const Duration(days: 18 * 365)),
+            firstDate: DateTime(1900),
+            lastDate: DateTime.now())
+        .then((value) {
+      if (value != null) {
+        dobController.text = DateFormat('yyyy-MM-dd').format(value);
+      }
+    });
+  }
+
+  Widget bottomSheet() {
+    return Container(
+      height: 100.0,
+      width: MediaQuery.of(context).size.width,
+      margin: const EdgeInsets.symmetric(
+        horizontal: 20,
+        vertical: 20,
+      ),
+      child: Column(
+        children: <Widget>[
+          const Text(
+            "Choose Profile photo",
+            style: TextStyle(
+              fontSize: 20.0,
+            ),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+            Row(
+              children: [
+                ElevatedButton.icon(
+                  icon: const Icon(Icons.camera),
+                  onPressed: () {
+                    takePhoto(ImageSource.camera);
+                  },
+                  label: const Text(
+                    "Camera",
+                    style: TextStyle(
+                      color: Color.fromARGB(255, 121, 163, 167),
+                    ),
+                  ),
+                  style: ButtonStyle(
+                   backgroundColor: MaterialStateProperty.all<Color>(Color.fromARGB(255, 162, 218, 174)),
+                   minimumSize: MaterialStateProperty.all<Size>(Size(150.0, 50.0)), // Set your desired background color
+                   ),
+                ),
+                SizedBox(width: 18.0), // Add horizontal space
+                ElevatedButton.icon(
+                  icon: const Icon(Icons.image),
+                  onPressed: () {
+                    takePhoto(ImageSource.gallery);
+                  },
+                  label: const Text(
+                    "Gallery",
+                    style: TextStyle(
+                      color: Color.fromARGB(255, 121, 163, 167),
+                    ),
+                  ),
+                  style: ButtonStyle(
+                   backgroundColor: MaterialStateProperty.all<Color>(Color.fromARGB(255, 162, 218, 174)),
+                   minimumSize: MaterialStateProperty.all<Size>(Size(150.0, 50.0)), // Set your desired background color
+                   ),
+                ),
+              ],
+            )
+          ])
+        ],
+      ),
+    );
+  }
+
+  void takePhoto(ImageSource source) async {
+    try {
+      XFile? pickedFile = await _picker.pickImage(
+        source: source,
+      );
+
+      if (pickedFile != null) {
+        setState(() {
+          _imageFile = PickedFile(pickedFile.path);
+        });
+      } else {
+        // The user canceled the image selection
+        print('Image selection canceled');
+      }
+    } catch (e) {
+      // Handle any exceptions that might occur during image selection
+      print('Error during image selection: $e');
+    }
+  }
+
+  Widget imageProfile() {
+    return Center(
+      child: Stack(children: <Widget>[
+        CircleAvatar(
+          radius: 80.0,
+          backgroundImage: _imageFile == null
+              ? const AssetImage("assets/images/img_icon_2.png")
+                  as ImageProvider<Object>?
+              : FileImage(File(_imageFile?.path ?? "")),
+        ),
+        Positioned(
+          bottom: 20.0,
+          right: 20.0,
+          child: InkWell(
+            onTap: () {
+              showModalBottomSheet(
+                context: context,
+                builder: ((builder) => bottomSheet()),
+              );
+            },
+            child: const Icon(
+              Icons.camera_alt,
+              color: Color.fromARGB(255, 92, 150, 0),
+              size: 28.0,
+            ),
+          ),
+        ),
+      ]),
+    );
+  }
+}

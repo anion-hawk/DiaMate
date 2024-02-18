@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
           theme: theme,
           title: 'DiaMate',
           debugShowCheckedModeBanner: false,
-          initialRoute: AppRoutes.authGate,
+          initialRoute: AppRoutes.editProfileScreen,
           routes: AppRoutes.routes,
         );
       },

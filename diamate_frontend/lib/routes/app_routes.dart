@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:diamate_frontend/services/auth/auth_view.dart';
 import 'package:diamate_frontend/services/auth/auth_gate.dart';
+import 'package:diamate_frontend/presentation/edit_profile_screen/edit_profile_screen.dart';
 
 class AppRoutes {
   static const String authGate = '/auth_gate';
@@ -114,6 +115,7 @@ class AppRoutes {
   static Map<String, WidgetBuilder> routes = {
     authGate: (context) => const AuthGate(),
     authView: (context) => const AuthView(),
+    editProfileScreen: (context) => EditProfileScreen(),
     // registerScreen: (context) => RegisterScreen(),
     // registerPatientScreen: (context) => RegisterPatientScreen(),
     // loginScreen: (context) => const LoginScreen(),
