@@ -2,7 +2,7 @@ const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
 const app = express();
-const verifyToken = require('./middleware/verify_token');
+const verifyToken = require('./util/verify_token');
 const userRepository = require('./repository/user');
 
 app.use(cors());
@@ -24,6 +24,8 @@ app.get('/status', (req, res) => {
 
 app.use('/auth', require('./routes/auth'));
 app.use(async function (req, res, next) {
+    console.log(req.body);
+    console.log(req.headers);
     const verified = await verifyToken(req, res, next);
     if (verified) {
         next();

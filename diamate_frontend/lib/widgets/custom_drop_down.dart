@@ -141,22 +141,3 @@ class CustomDropDown extends StatelessWidget {
             ),
       );
 }
-
-/// Extension on [CustomDropDown] to facilitate inclusion of all types of border style etc
-extension DropDownStyleHelper on CustomDropDown {
-  static OutlineInputBorder get outlineBlack => OutlineInputBorder(
-        borderRadius: BorderRadius.circular(5.h),
-        borderSide: BorderSide(
-          color: appTheme.black90002,
-          width: 1,
-        ),
-      );
-  static OutlineInputBorder get fillGray => OutlineInputBorder(
-        borderSide: BorderSide.none,
-      );
-  static UnderlineInputBorder get underLineIndigo => UnderlineInputBorder(
-        borderSide: BorderSide(
-          color: appTheme.indigo900,
-        ),
-      );
-}
