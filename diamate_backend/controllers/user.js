@@ -3,6 +3,7 @@ const userRepository = require('../repository/user');
 const patientRepository = require('../repository/patient');
 const followRepository = require('../repository/follow');
 const jwt = require('jsonwebtoken');
+const { getAuth } = require('firebase-admin/auth');
 
 async function loginHandler(queryResult, res) {
     if (queryResult.success) {
@@ -38,14 +39,34 @@ async function logout(req, res) {
 }
 
 async function register(req, res) {
-    const { name, email, password, role } = req.body;
-    let rr = 0;
-    if (role == "Doctor")
+    const { name, email, password, dob, role } = req.body;
+    let date = new Date(dob);
+    console.log(req.body);
+    let rr = 1;
+    if (role == "Expert")
         rr = 2;
-    else if (role == "Patient")
-        rr = 1;
-    const result = await userRepository.register(name, email, password, rr);
-    loginHandler(result, res);
+
+    getAuth().createUser({
+        email: email,
+        password: password,
+    }).then(async (userRecord) => {
+        console.log('User registered on firebase')
+        const result = await userRepository.register(name, email, userRecord.uid, date, rr);
+        if (result.success) {
+            res.status(201).json(result.data[0]);
+        }
+        else {
+            res.status(500).json({ error: "Internal server error" });
+        }
+    })
+        .catch((error) => {
+            console.log('Error creating new user in firebase:', error);
+            res.status(500).json({ error: error.message });
+        });
+    // const result = await userRepository.register(name, email, password, rr);
+
+
+    // loginHandler(result, res);
 }
 
 async function getSelfProfile(req, res) {

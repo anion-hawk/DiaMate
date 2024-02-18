@@ -4,9 +4,11 @@ import 'package:diamate_frontend/core/app_export.dart';
 import 'package:diamate_frontend/widgets/custom_drop_down.dart';
 import 'package:diamate_frontend/widgets/elevated_button.dart';
 import 'package:diamate_frontend/widgets/form_text.dart';
+import 'package:diamate_frontend/config.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:requests/requests.dart';
 
 class Register extends StatefulWidget {
   final void Function()? toggleLogin;
@@ -150,20 +152,65 @@ class _RegisterState extends State<Register> {
   }
 
   void register() async {
+    var data = {
+      "name": nameController.text,
+      "email": emailController.text,
+      "password": passwordController.text,
+      "dob": dobController.text,
+      "role": selectedRole
+    };
+
+    var response =
+        await Requests.post(url_register, body: data, timeoutSeconds: 30);
+    if (response.statusCode == 201) {
+      print("User registered successfully");
+    } else {
+      print("User registration failed");
+    }
+    print(response.statusCode);
+    print(response.body);
+
     try {
-      // if (!_formKey.currentState!.validate()) {
-      //   return;
-      // }
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: emailController.text, password: passwordController.text);
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'weak-password') {
-        log('The password provided is too weak.');
-      } else if (e.code == 'email-already-in-use') {
-        log('The account already exists for that email.');
+      if (e.code == 'user-not-found' || e.code == 'wrong-password') {
+        print("Error registering");
       }
-    } catch (e) {
-      log(e.toString());
     }
   }
+
+  // Future<void> registerFirebase() async {
+  //   try {
+  //     // if (!_formKey.currentState!.validate()) {
+  //     //   return;
+  //     // }
+  //     await FirebaseAuth.instance.createUserWithEmailAndPassword(
+  //         email: emailController.text, password: passwordController.text);
+  //   } on FirebaseAuthException catch (e) {
+  //     if (e.code == 'weak-password') {
+  //       log('The password provided is too weak.');
+  //     } else if (e.code == 'email-already-in-use') {
+  //       log('The account already exists for that email.');
+  //     }
+  //   } catch (e) {
+  //     log(e.toString());
+  //   }
+  // }
+
+  // Future<void> registerBackend() async {
+  //   var data = {
+  //     "name": nameController.text,
+  //     "email": emailController.text,
+  //     "password": passwordController.text,
+  //     "dob": dobController.text,
+  //     "role": selectedRole
+  //   };
+  //   // var response = await Requests.post(register, data);
+  //   // if (response.statusCode == 200) {
+  //   //   log("User registered successfully");
+  //   // } else {
+  //   //   log("User registration failed");
+  //   // }
+  // }
 }
