@@ -14,7 +14,7 @@ class ImageConstant {
   // login images
   static String imgIcon1 = '$imagePath/img_icon_1.png';
 
-  static String img332701 = '$imagePath/img_33270_1.png';
+  static String login = '$imagePath/login.png';
 
   // planner side bar images
   static String imgRectangle4210 = '$imagePath/img_rectangle_4210.png';
