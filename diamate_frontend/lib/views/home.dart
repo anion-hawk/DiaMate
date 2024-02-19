@@ -43,29 +43,38 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return EditProfileScreen();
+    // return EditProfileScreen();
 
-    //   return Scaffold(
-    //     body: Center(
-    //       child: Column(
-    //         mainAxisAlignment: MainAxisAlignment.center,
-    //         children: [
-    //           const Text("Welcome to DiaMate"),
-    //           const Text("You are now logged in"),
-    //           CustomElevatedButton(
-    //               text: "Check Cookie",
-    //               onPressed: () {
-    //                 checkCookie();
-    //               }),
-    //           CustomElevatedButton(
-    //               text: "Log Out",
-    //               onPressed: () {
-    //                 logOut();
-    //               }),
-    //         ],
-    //       ),
-    //     ),
-    //   );
-    // }
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text("Welcome to DiaMate"),
+            const Text("You are now logged in"),
+            CustomElevatedButton(
+                text: "Check Cookie",
+                onPressed: () {
+                  checkCookie();
+                }),CustomElevatedButton(
+                text: "Edit Profile",
+                onPressed: () {
+                  Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => EditProfileScreen(),
+                  ),
+                );
+                }),
+            CustomElevatedButton(
+                text: "Log Out",
+                onPressed: () {
+                  logOut();
+                                  }),
+          ],
+        ),
+      ),
+    );
   }
+
 }
