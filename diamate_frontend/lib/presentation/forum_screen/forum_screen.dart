@@ -1,11 +1,10 @@
+import 'package:diamate_frontend/widgets/elevated_button.dart';
+
 import '../forum_screen/widgets/new.dart';
 import 'package:diamate_frontend/core/app_export.dart';
 import 'package:diamate_frontend/widgets/app_bar/appbar_leading_image.dart';
 import 'package:diamate_frontend/widgets/app_bar/appbar_trailing_image.dart';
 import 'package:diamate_frontend/widgets/app_bar/custom_app_bar.dart';
-import 'package:diamate_frontend/widgets/custom_elevated_button.dart';
-import 'package:diamate_frontend/widgets/custom_text_form_field.dart';
-
 import 'package:diamate_frontend/config.dart';
 import "package:firebase_auth/firebase_auth.dart";
 
@@ -36,10 +35,17 @@ class _ForumScreenState extends State<ForumScreen> {
 
   GlobalKey<NavigatorState> navigatorKey = GlobalKey();
 
+  int _state = 0;
+
+  void reload() {
+    setState(() {
+      _state = 0;
+    });
+  }
 
    @override
   void initState() {
-     super.initState();
+    super.initState();
     User user = FirebaseAuth.instance.currentUser!;
     user.getIdToken(true).then((token) {
       print("Token");
@@ -58,17 +64,17 @@ class _ForumScreenState extends State<ForumScreen> {
   try {
     final response = await Requests.get(forum);
 
-    if (response.statusCode == 200) {
-      final List<dynamic> data = json.decode(response.body);
-      return data.cast<Map<String, dynamic>>();
-    } else {
-      throw Exception('Failed to load posts: ${response.statusCode}');
+      if (response.statusCode == 200) {
+        final List<dynamic> data = json.decode(response.body);
+        return data.cast<Map<String, dynamic>>();
+      } else {
+        throw Exception('Failed to load posts: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error fetching posts: $e');
+      throw Exception('Failed to load posts: $e');
     }
-  } catch (e) {
-    print('Error fetching posts: $e');
-    throw Exception('Failed to load posts: $e');
   }
-}
 
   @override
   Widget build(BuildContext context) {
@@ -91,6 +97,7 @@ class _ForumScreenState extends State<ForumScreen> {
             ],
           ),
         )),
+        //bottomNavigationBar: _buildBottomBar(context),
         //bottomNavigationBar: _buildBottomBar(context),
       ),
     );
@@ -209,6 +216,10 @@ class _ForumScreenState extends State<ForumScreen> {
         // After returning from OwnPostScreen, refresh the post list
         await fetchPosts();
         setState(() {}); // Trigger a rebuild to update the UI
+
+        // After returning from OwnPostScreen, refresh the post list
+        await fetchPosts();
+        setState(() {}); // Trigger a rebuild to update the UI
       },
     );
   }
@@ -277,9 +288,3 @@ class _ForumScreenState extends State<ForumScreen> {
     );
   }
 }
-
-
-
-
-
-
