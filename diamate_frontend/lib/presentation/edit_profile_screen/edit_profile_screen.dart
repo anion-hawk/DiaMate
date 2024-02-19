@@ -28,7 +28,7 @@ class _EditProfileScreen extends State<EditProfileScreen> {
   void initState() {
     super.initState();
     // Fetch data from the backend when the widget is created
-    //getUserProfile();
+    getUserProfile();
   }
 
   final nameController = TextEditingController(text: "abcd");
@@ -294,10 +294,21 @@ class _EditProfileScreen extends State<EditProfileScreen> {
                             onPressed: () {
                               // register();
                             }),
+                          const SizedBox(height: 20), 
+                          CustomElevatedButton(
+                              text: "Log Out",
+                              onPressed: () {
+                                logOut();
+                              }),
+
+                          
+                            
                       ]),
                     )))));
   }
-
+ void logOut() async {
+    await FirebaseAuth.instance.signOut();
+  }
   void _selectDate(context) {
     showDatePicker(
             context: context,
@@ -462,9 +473,9 @@ class _EditProfileScreen extends State<EditProfileScreen> {
   void getUserProfile() async {
     try {
       // Replace 'your_api_endpoint' with the actual API endpoint for fetching user profile
-      var response = await Requests.get('your_api_endpoint');
-
-      if (response.success) {
+      var response = await Requests.get(url_selfProfile);
+      print('User Profile: ${response.json()}');
+      if (response.statusCode == 200) {
         // The response body contains the user profile information
         print('User Profile: ${response.json()}');
       } else {
