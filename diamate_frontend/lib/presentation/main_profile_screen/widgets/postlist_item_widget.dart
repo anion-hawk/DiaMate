@@ -1,4 +1,4 @@
-import 'package:diamate_version2/core/app_export.dart';
+import 'package:diamate_frontend/core/app_export.dart';
 import 'package:flutter/material.dart';
 import 'tags3_item_widget.dart';
 

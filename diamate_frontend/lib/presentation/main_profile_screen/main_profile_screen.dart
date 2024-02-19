@@ -1,11 +1,11 @@
 import '../main_profile_screen/widgets/postlist_item_widget.dart';
-import 'package:diamate_version2/core/app_export.dart';
-import 'package:diamate_version2/widgets/app_bar/appbar_leading_image.dart';
-import 'package:diamate_version2/widgets/app_bar/appbar_subtitle.dart';
-import 'package:diamate_version2/widgets/app_bar/appbar_trailing_image.dart';
-import 'package:diamate_version2/widgets/app_bar/custom_app_bar.dart';
-import 'package:diamate_version2/widgets/custom_elevated_button.dart';
-import 'package:diamate_version2/widgets/custom_text_form_field.dart';
+import 'package:diamate_frontend/core/app_export.dart';
+import 'package:diamate_frontend/widgets/app_bar/appbar_leading_image.dart';
+import 'package:diamate_frontend/widgets/app_bar/appbar_subtitle.dart';
+import 'package:diamate_frontend/widgets/app_bar/appbar_trailing_image.dart';
+import 'package:diamate_frontend/widgets/app_bar/custom_app_bar.dart';
+import 'package:diamate_frontend/widgets/custom_elevated_button.dart';
+import 'package:diamate_frontend/widgets/custom_text_form_field.dart';
 import 'package:flutter/material.dart';
 
 class MainProfileScreen extends StatelessWidget {
