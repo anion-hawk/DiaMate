@@ -5,7 +5,6 @@ import 'package:diamate_frontend/presentation/all_tracker_screen/pressure_tracke
 import 'package:diamate_frontend/widgets/app_bar/appbar_leading_image.dart';
 import 'package:diamate_frontend/widgets/app_bar/appbar_trailing_image.dart';
 import 'package:diamate_frontend/widgets/app_bar/custom_app_bar.dart';
-import 'package:diamate_frontend/presentation/custom_bottom_bar.dart';
 import 'package:diamate_frontend/widgets/custom_drop_down.dart';
 import 'package:diamate_frontend/widgets/custom_floating_button.dart';
 import 'package:diamate_frontend/presentation/show_planner_screen/mealListwidget.dart';

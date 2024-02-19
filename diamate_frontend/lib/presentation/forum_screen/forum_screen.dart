@@ -5,8 +5,12 @@ import 'package:diamate_frontend/widgets/app_bar/appbar_trailing_image.dart';
 import 'package:diamate_frontend/widgets/app_bar/custom_app_bar.dart';
 import 'package:diamate_frontend/widgets/custom_elevated_button.dart';
 import 'package:diamate_frontend/widgets/custom_text_form_field.dart';
+
 import 'package:diamate_frontend/config.dart';
 import "package:firebase_auth/firebase_auth.dart";
+
+
+import 'package:diamate_frontend/presentation/edit_profile_screen/edit_profile_screen.dart';
 
 import "package:requests/requests.dart";
 
@@ -25,8 +29,6 @@ class ForumScreen extends StatefulWidget {
   _ForumScreenState createState() => _ForumScreenState();
 
 }
-
-
 
 class _ForumScreenState extends State<ForumScreen> {
 
@@ -152,6 +154,11 @@ class _ForumScreenState extends State<ForumScreen> {
             setState(() {
               iconColor = Colors.blue; // Change icon color to blue
             });
+
+             Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => EditProfileScreen()),
+        );
             // Add functionality for person action
           },
           icon: Icon(Icons.person),

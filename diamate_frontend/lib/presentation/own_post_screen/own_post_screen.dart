@@ -135,15 +135,24 @@ class _OwnPostScreen extends State<OwnPostScreen> {
         centerTitle: true,
         title: AppbarTitle(text: "Create Post"),
         actions: [
-          AppbarTrailingImage(
-            imagePath: ImageConstant.imgSave,
-            margin: EdgeInsets.fromLTRB(5.h, 13.v, 5.h, 9.v),
-            onTap: () {
-              savePost(context);
+          IconButton(
+            color: Colors.white,
+          onPressed: () {
+            setState(() {
+               // Change icon color to blue
+                 savePost(context);
 
-              onTapClose(context);
-            },
-          ),
+               onTapClose(context);
+            });
+            // Add functionality for search action
+          },
+          icon: Icon(Icons.send),
+
+        ),
+          
+             
+            
+          
         ],
         styleType: Style.bgFill_1);
   }
