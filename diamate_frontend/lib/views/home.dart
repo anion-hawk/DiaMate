@@ -25,14 +25,18 @@ class _HomeScreenState extends State<HomeScreen> {
         Requests.addCookie(Requests.getHostname(baseUrl), "token", token);
       }
     });
-
-    // User user = FirebaseAuth.instance.currentUser!;
-    // String cookie = (await user.getIdToken())!;
-    // Requests.addCookie(Requests.getHostname(baseUrl), "cookie", cookie);
   }
+
+  bool state = false;
 
   void logOut() async {
     await FirebaseAuth.instance.signOut();
+  }
+
+  void toggleState() {
+    setState(() {
+      state = !state;
+    });
   }
 
   void checkCookie() async {
@@ -43,6 +47,32 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return ForumScreen();
+    if (state) return ForumScreen();
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text("Welcome to DiaMate"),
+            const Text("You are now logged in"),
+            CustomElevatedButton(
+                text: "Check Cookie",
+                onPressed: () {
+                  checkCookie();
+                }),
+            CustomElevatedButton(
+                text: "Forum",
+                onPressed: () {
+                  toggleState();
+                }),
+            CustomElevatedButton(
+                text: "Log Out",
+                onPressed: () {
+                  logOut();
+                }),
+          ],
+        ),
+      ),
+    );
   }
 }

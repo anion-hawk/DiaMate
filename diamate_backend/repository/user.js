@@ -55,6 +55,6 @@ module.exports = {
     login,
     register,
     getUserById,
-    getUserByUid
+    getUserByUid,
     getUserDetailsById
 };
