@@ -1,5 +1,7 @@
 require('dotenv').config();
-const jwt = require('jsonwebtoken');
+//const jwt = require('jsonwebtoken');
+const admin = require('./admin');
+const { getAuth } = require('firebase-admin/auth');
 
 const userRepository = require('../repository/user');
 
@@ -11,7 +13,7 @@ async function verifyToken(req, res, next) {
 	}
 	let token = undefined;
 	try {
-		token = req.headers['token'].split('=')[1];
+		token = req.headers['cookie'].split('=')[1];
 	}
 	catch (err) {
 		res.status(401).json({ error: 'Access denied: no auth token' });
@@ -22,11 +24,12 @@ async function verifyToken(req, res, next) {
 		return false;
 	}
 	try {
-		const user = jwt.verify(token, process.env.JWT_ACCESS_TOKEN);
-		const result = await userRepository.getUserById(user.id);
+		decodedToken = await getAuth().verifyIdToken(token);
+		const result = await userRepository.getUserByUid(decodedToken.uid);
 		if (result.success) {
 			if (result.data.length === 0) {
 				res.status(401).json({ error: 'User not found' });
+				return false;
 			}
 			else {
 				console.log('user:');
@@ -34,10 +37,6 @@ async function verifyToken(req, res, next) {
 				req.user = result.data[0];
 				return true;
 			}
-		}
-		else {
-			res.status(500).json({ error: 'Internal server error: could not verify user' });
-			return false;
 		}
 	}
 	catch (err) {
@@ -47,5 +46,7 @@ async function verifyToken(req, res, next) {
 	}
 
 }
+
+
 
 module.exports = verifyToken;
