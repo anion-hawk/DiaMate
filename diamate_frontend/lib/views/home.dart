@@ -15,6 +15,17 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
+  int selectedIndex = 0;
+
+  final List<Widget> _pages = [
+    ForumScreen(),
+    ForumScreen(),
+    ForumScreen(),
+    ForumScreen(),
+    ForumScreen(),
+    //ForumScreen(),
+  ];
   @override
   void initState() {
     super.initState();
@@ -43,6 +54,48 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return ForumScreen();
+    return Scaffold(
+      body: _pages[selectedIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        
+        currentIndex: selectedIndex,
+        onTap: (int newIndex) {
+          setState(() {
+            selectedIndex = newIndex;
+            
+          });
+          // Navigate to the respective page based on the selected index
+          
+        },
+        items: const [
+          BottomNavigationBarItem(
+            backgroundColor: Color(0xFF012b68),
+            label: 'Home',
+            icon: Icon(Icons.home),
+            
+          ),
+          BottomNavigationBarItem(
+            label: 'Planner',
+            icon: Icon(Icons.calendar_month),
+            
+          ),
+          BottomNavigationBarItem(
+            label: 'Tracker',
+            icon: Icon(Icons.calendar_today),
+          ),
+          BottomNavigationBarItem(
+            label: 'Doctor',
+            icon: Icon(Icons.medication),
+          ),
+          BottomNavigationBarItem(
+           label: 'Message',
+            icon: Icon(Icons.message),
+          ),
+        ],
+
+        selectedItemColor: Colors.blue, // Change the selected icon color here
+        unselectedItemColor: Colors.white, // Change the unselected icon color here
+      ),
+    );
   }
 }

@@ -4,11 +4,10 @@ import 'package:flutter/material.dart';
 
 import 'package:diamate_frontend/services/auth/auth_view.dart';
 import 'package:diamate_frontend/services/auth/auth_gate.dart';
-import 'package:diamate_frontend/views/home_with_bottom_bar.dart';
+
 class AppRoutes {
   static const String authGate = '/auth_gate';
   static const String authView = '/auth_view';
-  static const String home ='/home_with_bottom_bar';
   
   static const String othersProfileScreen = '/others_profile_screen';
 
