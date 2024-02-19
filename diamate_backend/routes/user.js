@@ -6,6 +6,7 @@ router.get('/test', (req, res) => {
 });
 
 router.route('/profile').get(userController.getSelfProfile);
+router.route('/profile/details').get(userController.getSelfProfileDetails);
 router.route('/complete-profile').post(userController.completeProfile);
 router.route('/:id').get(userController.getUserById);
 router.route('/:id/follow').post(userController.followUser);
