@@ -1,13 +1,19 @@
 //github::::::::::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
 
+
+
 import 'package:flutter/material.dart';
 
 import 'package:diamate_frontend/services/auth/auth_view.dart';
 import 'package:diamate_frontend/services/auth/auth_gate.dart';
+import 'package:diamate_frontend/presentation/all_tracker_screen/pressure_tracker_screen.dart';
+import 'package:diamate_frontend/presentation/show_planner_screen/show_planner_screen.dart';
+import 'package:diamate_frontend/presentation/tracker_home_screen/tracker_home_screen.dart';
 
 class AppRoutes {
   static const String authGate = '/auth_gate';
   static const String authView = '/auth_view';
+  
   static const String othersProfileScreen = '/others_profile_screen';
 
   static const String mainProfileScreen = '/main_profile_screen';
@@ -114,6 +120,10 @@ class AppRoutes {
   static Map<String, WidgetBuilder> routes = {
     authGate: (context) => const AuthGate(),
     authView: (context) => const AuthView(),
+    //showPlannerScreen: (context) => const ShowPlanner(),
+    //trackerHomeScreen: (context) =>  TrackerHomeScreen(),
+    
+
     // registerScreen: (context) => RegisterScreen(),
     // registerPatientScreen: (context) => RegisterPatientScreen(),
     // loginScreen: (context) => const LoginScreen(),
