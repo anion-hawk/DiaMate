@@ -11,5 +11,8 @@ router.route('/complete-profile').post(userController.completeProfile);
 router.route('/:id').get(userController.getUserById);
 router.route('/:id/follow').post(userController.followUser);
 
+router.get('/test', (req, res) => {
+	res.json({ message: 'in /user/test' });
+});
 
 module.exports = router;
