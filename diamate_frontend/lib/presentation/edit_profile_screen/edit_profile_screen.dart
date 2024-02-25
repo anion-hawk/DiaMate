@@ -368,7 +368,7 @@ class _EditProfileScreen extends State<EditProfileScreen> {
                     "Camera",
                     style: TextStyle(
                       color: Color.fromARGB(255, 25, 12, 108),
-                    ),
+),
                   ),
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all<Color>(
@@ -387,7 +387,7 @@ class _EditProfileScreen extends State<EditProfileScreen> {
                     "Gallery",
                     style: TextStyle(
                       color: Color.fromARGB(255, 25, 12, 108),
-                    ),
+),
                   ),
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all<Color>(

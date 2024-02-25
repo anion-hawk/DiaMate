@@ -10,6 +10,7 @@ import 'package:diamate_frontend/presentation/all_tracker_screen/pressure_tracke
 import 'package:diamate_frontend/presentation/show_planner_screen/show_planner_screen.dart';
 import 'package:diamate_frontend/presentation/tracker_home_screen/tracker_home_screen.dart';
 
+
 class AppRoutes {
   static const String authGate = '/auth_gate';
   static const String authView = '/auth_view';
@@ -120,10 +121,7 @@ class AppRoutes {
   static Map<String, WidgetBuilder> routes = {
     authGate: (context) => const AuthGate(),
     authView: (context) => const AuthView(),
-    //showPlannerScreen: (context) => const ShowPlanner(),
-    //trackerHomeScreen: (context) =>  TrackerHomeScreen(),
-    
-
+    editProfileScreen: (context) => EditProfileScreen(),
     // registerScreen: (context) => RegisterScreen(),
     // registerPatientScreen: (context) => RegisterPatientScreen(),
     // loginScreen: (context) => const LoginScreen(),
