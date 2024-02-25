@@ -2,7 +2,7 @@ const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
 const app = express();
-const verifyToken = require('./middleware/verify_token');
+const verifyToken = require('./util/verify_token');
 const userRepository = require('./repository/user');
 
 app.use(cors());
