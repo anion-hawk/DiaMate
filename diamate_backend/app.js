@@ -24,8 +24,6 @@ app.get('/status', (req, res) => {
 
 app.use('/auth', require('./routes/auth'));
 app.use(async function (req, res, next) {
-    console.log(req.body);
-    console.log(req.headers);
     const verified = await verifyToken(req, res, next);
     if (verified) {
         next();
