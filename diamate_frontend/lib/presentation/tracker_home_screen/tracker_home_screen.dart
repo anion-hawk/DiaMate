@@ -3,7 +3,6 @@ import 'package:diamate_frontend/presentation/all_tracker_screen/pressure_tracke
 import 'package:diamate_frontend/widgets/app_bar/appbar_leading_image.dart';
 import 'package:diamate_frontend/widgets/app_bar/appbar_trailing_image.dart';
 import 'package:diamate_frontend/widgets/app_bar/custom_app_bar.dart';
-import 'package:diamate_frontend/widgets/custom_bottom_bar.dart';
 import 'package:diamate_frontend/widgets/custom_drop_down.dart';
 import 'package:diamate_frontend/widgets/custom_floating_button.dart';
 import 'package:diamate_frontend/presentation/all_tracker_screen/sugar_tracker_screen.dart';
@@ -46,7 +45,7 @@ class _TrackerHomeScreenState extends State<TrackerHomeScreen> {
             ),
           ],
         ),
-        bottomNavigationBar: _buildBottomBar(context),
+        //bottomNavigationBar: _buildBottomBar(context),
         floatingActionButton: _buildFloatingActionButton(context),
         drawer: _buildDrawer(context),
       ),
@@ -89,12 +88,42 @@ class _TrackerHomeScreenState extends State<TrackerHomeScreen> {
     );
   }
 
-  /// Section Widget
-  Widget _buildBottomBar(BuildContext context) {
-    return CustomBottomBar(
-      onChanged: (BottomBarEnum type) {},
-    );
-  }
+  // /// Section Widget
+//   Widget _buildBottomBar(BuildContext context) {
+//   return
+//       //body: Placeholder(), // Replace Placeholder with your desired content
+//       BottomNavigationBar(
+//         currentIndex: 0, // Set the initial index as needed
+//         onTap: (int newIndex) {
+//           // Handle navigation when tabs are tapped
+//           // You can implement navigation logic here
+//         },
+//         items: const [
+//           BottomNavigationBarItem(
+//             label: 'Home',
+//             backgroundColor: Color(0xFF3366ff),
+//             icon: Icon(Icons.home),
+//           ),
+//           BottomNavigationBarItem(
+//             label: 'Planner',
+//             icon: Icon(Icons.calendar_month),
+//           ),
+//           BottomNavigationBarItem(
+//             label: 'Tracker',
+//             icon: Icon(Icons.calendar_today),
+//           ),
+//           BottomNavigationBarItem(
+//             label: 'Doctor',
+//             icon: Icon(Icons.medication),
+//           ),
+//           BottomNavigationBarItem(
+//             label: 'Message',
+//             icon: Icon(Icons.message),
+//           ),
+//         ],
+//       );
+
+// }
 
   /// Section Widget
   Widget _buildFloatingActionButton(BuildContext context) {
@@ -110,49 +139,6 @@ class _TrackerHomeScreenState extends State<TrackerHomeScreen> {
     );
   }
 
-  /// Common widget
-  Widget _buildIconFive(BuildContext context) {
-    return SizedBox(
-      height: 36.v,
-      width: 33.h,
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          CustomImageView(
-            imagePath: ImageConstant.imgIcon2,
-            height: 36.v,
-            width: 33.h,
-            alignment: Alignment.center,
-          ),
-          Align(
-            alignment: Alignment.center,
-            child: SizedBox(
-              height: 36.v,
-              width: 33.h,
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  CustomImageView(
-                    imagePath: ImageConstant.imgIcon2,
-                    height: 36.v,
-                    width: 33.h,
-                    alignment: Alignment.center,
-                  ),
-                  CustomImageView(
-                    imagePath: ImageConstant.imgIcon2,
-                    height: 36.v,
-                    width: 33.h,
-                    alignment: Alignment.center,
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget _buildDrawer(BuildContext context) {
     return Drawer(
       child: Container(
@@ -164,23 +150,17 @@ class _TrackerHomeScreenState extends State<TrackerHomeScreen> {
               imagePath: ImageConstant.imgIcon2,
               height: 60.adaptSize,
               width: 60.adaptSize,
-              margin:  EdgeInsets.only(left: 10.0, top: 13.0),
+              margin: EdgeInsets.only(left: 10.0, top: 13.0),
               alignment: Alignment.topLeft,
             ),
-                DrawerHeader(
-            decoration: BoxDecoration(
-              //color: Colors.black, // Change to the desired color
+            SizedBox(
+              height: 100,
             ),
-            child:null,
-          ),
-              
-            
             ListTile(
               title: Text(
                 'Statistics',
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 20,
                 ),
               ),
               onTap: () {
@@ -197,7 +177,6 @@ class _TrackerHomeScreenState extends State<TrackerHomeScreen> {
                 'Blood Sugar',
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 20,
                 ),
               ),
               onTap: () {
@@ -213,15 +192,15 @@ class _TrackerHomeScreenState extends State<TrackerHomeScreen> {
                 'Blood Pressure',
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 20,
                 ),
               ),
               onTap: () {
                 // Handle menu item 3
-                 Navigator.popUntil(context, (route) => route.isFirst);
+                Navigator.popUntil(context, (route) => route.isFirst);
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => PressureTrackerScreen()),
+                  MaterialPageRoute(
+                      builder: (context) => PressureTrackerScreen()),
                 );
               },
             ),

@@ -36,7 +36,7 @@ class PostlistcomponentItemWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 CustomImageView(
-                  imagePath: ImageConstant.profile,
+                  //imagePath: ImageConstant.profile,
                   height: 40.adaptSize,
                   width: 40.adaptSize,
                   radius: BorderRadius.circular(
@@ -49,29 +49,29 @@ class PostlistcomponentItemWidget extends StatelessWidget {
                   width: 237.h,
                   margin: EdgeInsets.only(left: 14.h),
                   child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // User details (name and time)
-                    _buildNameTime(context),
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // User details (name and time)
+                      _buildNameTime(context),
 
-                    SizedBox(height: 5.v),
+                      SizedBox(height: 5.v),
 
-                    // Post title
-                    _buildTitle(context),
+                      // Post title
+                      _buildTitle(context),
 
-                    SizedBox(height: 12.v),
+                      SizedBox(height: 12.v),
 
-                    // Like and comment information
-                    Row(
-                      children: [
-                        _buildUpvote(context),
-                        _buildUpvoteText(context),
-                        _buildComment(context),
-                        _buildCommentText(context),
-                      ],
-                    ),
-                  ],
-                ),
+                      // Like and comment information
+                      Row(
+                        children: [
+                          _buildUpvote(context),
+                          _buildUpvoteText(context),
+                          _buildComment(context),
+                          _buildCommentText(context),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -94,8 +94,8 @@ class PostlistcomponentItemWidget extends StatelessWidget {
   Widget _buildUpvote(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(left: 1.h),
-      child: Icon(Icons.arrow_upward,weight: 1200,
-          size: 23, color: Color(0xDD6699ff)),
+      child: Icon(Icons.arrow_upward,
+          weight: 1200, size: 23, color: Color(0xDD6699ff)),
     );
   }
 
@@ -112,8 +112,7 @@ class PostlistcomponentItemWidget extends StatelessWidget {
   Widget _buildComment(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(left: 18.h),
-      child: Icon(Icons.comment,
-          size: 23, color: Color(0xDD6699ff)),
+      child: Icon(Icons.comment, size: 23, color: Color(0xDD6699ff)),
     );
   }
 
@@ -172,8 +171,9 @@ class PostlistcomponentItemWidget extends StatelessWidget {
               ),
             ),
             Text(
-              DateFormat('HH:mm a, dd MMM yyyy').format(DateTime.parse(post['created'])),
-  // Replace with the actual time logic
+              DateFormat('HH:mm a, dd MMM yyyy')
+                  .format(DateTime.parse(post['created'])),
+              // Replace with the actual time logic
               style: TextStyle(
                 fontSize: 12.0,
                 color: Colors.grey,

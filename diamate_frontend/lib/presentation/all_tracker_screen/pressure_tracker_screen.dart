@@ -16,12 +16,10 @@ class PressureTrackerScreen extends StatefulWidget {
 }
 
 class _MedicationEntryModalState extends State<PressureTrackerScreen> {
-
   //Widget _show;
   String? dosageUnit = 'mg'; // Default dosage unit
   DateTime selectedDate = DateTime.now();
   TimeOfDay selectedTime = TimeOfDay.now();
-
 
   String selectedOption = '';
   String selectedArm = 'Right';
@@ -29,7 +27,6 @@ class _MedicationEntryModalState extends State<PressureTrackerScreen> {
   TextEditingController _dateController = TextEditingController();
   TextEditingController _timeController = TextEditingController();
 
-  
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -40,8 +37,7 @@ class _MedicationEntryModalState extends State<PressureTrackerScreen> {
     if (picked != null && picked != selectedDate) {
       setState(() {
         selectedDate = picked;
-        _dateController.text =
-            '${picked.day}/${picked.month}/${picked.year}';
+        _dateController.text = '${picked.day}/${picked.month}/${picked.year}';
       });
     }
   }
@@ -59,7 +55,6 @@ class _MedicationEntryModalState extends State<PressureTrackerScreen> {
     }
   }
 
- 
   /// Section Widget
   PreferredSizeWidget _buildAppBar(BuildContext context) {
     return CustomAppBar(
@@ -92,8 +87,8 @@ class _MedicationEntryModalState extends State<PressureTrackerScreen> {
             itemCount: 2,
             itemBuilder: (context, index) {
               return Userprofilepressure(
-                //onTapUserProfile(context);
-              );
+                  //onTapUserProfile(context);
+                  );
             }));
   }
 
@@ -112,19 +107,10 @@ class _MedicationEntryModalState extends State<PressureTrackerScreen> {
       onTap: () {
         _showModal(context);
 
-       // _openAddPressureModal(context);
+        // _openAddPressureModal(context);
       },
-
-      
     );
   }
-  // void _openAddPressureModal(BuildContext context) {
-  //   AddPressureModal add  = new AddPressureModal();
-  //   setState(() {
-  //     _show = add._showaModal(context);
-  //   });
-  // }
-
 
   void _showModal(BuildContext context) {
     showModalBottomSheet(
@@ -137,7 +123,6 @@ class _MedicationEntryModalState extends State<PressureTrackerScreen> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                
                 Row(
                   children: [
                     Expanded(
@@ -183,55 +168,53 @@ class _MedicationEntryModalState extends State<PressureTrackerScreen> {
                     ),
                   ],
                 ),
-                SizedBox(height: 16,),
+                SizedBox(
+                  height: 16,
+                ),
                 _buildMeasured(context),
                 SizedBox(height: 8),
                 _buildDateTime(context),
-
                 SizedBox(height: 8),
                 TextField(
-                        decoration: InputDecoration(
-                          labelText: 'Notes',
-                          focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.indigo[900]!,
-                              width: 2.0, // Set the desired width
-                            ),
-                          ),
-                        ),
+                  decoration: InputDecoration(
+                    labelText: 'Notes',
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.indigo[900]!,
+                        width: 2.0, // Set the desired width
                       ),
-                    SizedBox(height: 8),
-    Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        Container(
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: Colors.indigo[900]!,
-          ),
-          child: IconButton(
-            icon: Icon(Icons.check, color: Colors.white),
-            onPressed: () {
-              print("print");
-              Navigator.pop(context);
-              // Add your logic here when the tick button is pressed
-            },
-          ),
-        ),
-      ],
-    ),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 8),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.indigo[900]!,
+                      ),
+                      child: IconButton(
+                        icon: Icon(Icons.check, color: Colors.white),
+                        onPressed: () {
+                          print("print");
+                          Navigator.pop(context);
+                          // Add your logic here when the tick button is pressed
+                        },
+                      ),
+                    ),
+                  ],
+                ),
               ],
-                
-              
             ),
-            ),
+          ),
         );
       },
     );
   }
-  
 
-  Widget _buildMeasured(BuildContext context){
+  Widget _buildMeasured(BuildContext context) {
     return Row(
       children: [
         Expanded(
@@ -249,11 +232,11 @@ class _MedicationEntryModalState extends State<PressureTrackerScreen> {
                         selectedArm = newValue!;
                       });
                     },
-                    items: <String>['Right', 'Left'].map<DropdownMenuItem<String>>(
+                    items:
+                        <String>['Right', 'Left'].map<DropdownMenuItem<String>>(
                       (String value) {
                         return DropdownMenuItem<String>(
                           value: value,
-                         
                           child: Text(value),
                         );
                       },
@@ -280,9 +263,9 @@ class _MedicationEntryModalState extends State<PressureTrackerScreen> {
         ),
       ],
     );
-  
   }
-  Widget _buildDateTime(BuildContext context){
+
+  Widget _buildDateTime(BuildContext context) {
     return Row(
       children: [
         Expanded(
@@ -325,7 +308,6 @@ class _MedicationEntryModalState extends State<PressureTrackerScreen> {
       ],
     );
   }
-
 
   @override
   Widget build(BuildContext context) {

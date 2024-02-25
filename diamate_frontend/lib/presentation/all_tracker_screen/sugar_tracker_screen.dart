@@ -6,8 +6,6 @@ import 'package:diamate_frontend/widgets/app_bar/custom_app_bar.dart';
 import 'package:diamate_frontend/widgets/custom_floating_button.dart';
 import 'package:flutter/material.dart';
 
-import 'package:diamate_frontend/presentation/modals/add_sugar_modal.dart';
-
 class SugarTrackerScreen extends StatefulWidget {
   const SugarTrackerScreen({Key? key}) : super(key: key);
 
@@ -16,22 +14,15 @@ class SugarTrackerScreen extends StatefulWidget {
 }
 
 class _MedicationEntryModalState extends State<SugarTrackerScreen> {
-
   //Widget _show;
   String? dosageUnit = 'mg'; // Default dosage unit
   DateTime selectedDate = DateTime.now();
   TimeOfDay selectedTime = TimeOfDay.now();
 
-
   String selectedOption = '';
 
   TextEditingController _dateController = TextEditingController();
   TextEditingController _timeController = TextEditingController();
-
-  /// Navigates to the editSugarLevelScreen when the action is triggered.
-  // onTapUserProfile(BuildContext context) {
-  //   Navigator.pushNamed(context, AppRoutes.editSugarLevelScreen);
-  // }
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -43,8 +34,7 @@ class _MedicationEntryModalState extends State<SugarTrackerScreen> {
     if (picked != null && picked != selectedDate) {
       setState(() {
         selectedDate = picked;
-        _dateController.text =
-            '${picked.day}/${picked.month}/${picked.year}';
+        _dateController.text = '${picked.day}/${picked.month}/${picked.year}';
       });
     }
   }
@@ -62,42 +52,34 @@ class _MedicationEntryModalState extends State<SugarTrackerScreen> {
     }
   }
 
- 
   /// Section Widget
   PreferredSizeWidget _buildAppBar(BuildContext context) {
     return CustomAppBar(
       height: 56.v,
-      leading: IconButton(
-        icon: Icon(Icons.arrow_back),
-        onPressed: () {
-          // Handle the 'back' button press here
-          // Typically, you would use Navigator to navigate back
-          Navigator.pop(context);
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => TrackerHomeScreen()),
-          );
-        },
-      ),
     );
   }
 
   /// Section Widget
   Widget _buildUserProfileList(BuildContext context) {
-    return Padding(
+    return SingleChildScrollView(
+      child: Container(
+        height: MediaQuery.of(context).size.height *
+            0.7, // Adjust the height as needed
         padding: EdgeInsets.only(left: 7.h, right: 4.h),
         child: ListView.separated(
-            physics: NeverScrollableScrollPhysics(),
-            shrinkWrap: true,
-            separatorBuilder: (context, index) {
-              return SizedBox(height: 21.v);
-            },
-            itemCount: 2,
-            itemBuilder: (context, index) {
-              return UserprofilelistItemWidget(
-                //onTapUserProfile(context);
-              );
-            }));
+          shrinkWrap: true,
+          separatorBuilder: (context, index) {
+            return SizedBox(height: 21.v);
+          },
+          itemCount: 100,
+          itemBuilder: (context, index) {
+            return UserprofilelistItemWidget(
+                // Pass any necessary data to UserMeallistItemWidget
+                );
+          },
+        ),
+      ),
+    );
   }
 
   /// Section Widget
@@ -109,25 +91,13 @@ class _MedicationEntryModalState extends State<SugarTrackerScreen> {
       child: Icon(
         Icons.add_circle_outlined,
         color: Colors.white,
-        size: 25.0,
+        //size: 25.0,
       ),
-
       onTap: () {
         _showModal(context);
-
-       // _openAddSugarModal(context);
       },
-
-      
     );
   }
-  // void _openAddSugarModal(BuildContext context) {
-  //   AddSugarModal add  = new AddSugarModal();
-  //   setState(() {
-  //     _show = add._showaModal(context);
-  //   });
-  // }
-
 
   void _showModal(BuildContext context) {
     showModalBottomSheet(
@@ -140,7 +110,6 @@ class _MedicationEntryModalState extends State<SugarTrackerScreen> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                
                 Row(
                   children: [
                     Expanded(
@@ -149,7 +118,6 @@ class _MedicationEntryModalState extends State<SugarTrackerScreen> {
                           labelText: 'Sugar Concentration',
                           focusedBorder: UnderlineInputBorder(
                             borderSide: BorderSide(
-                              color: Colors.indigo[900]!,
                               width: 2.0, // Set the desired width
                             ),
                           ),
@@ -159,7 +127,6 @@ class _MedicationEntryModalState extends State<SugarTrackerScreen> {
                     SizedBox(width: 16),
                     Text(
                       'mmol/L',
-                      style: TextStyle(fontSize: 16, color: Colors.indigo[900]),
                     ),
                   ],
                 ),
@@ -167,51 +134,46 @@ class _MedicationEntryModalState extends State<SugarTrackerScreen> {
                 _buildMeasured(context),
                 SizedBox(height: 8),
                 _buildDateTime(context),
-
                 SizedBox(height: 8),
                 TextField(
-                        decoration: InputDecoration(
-                          labelText: 'Notes',
-                          focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.indigo[900]!,
-                              width: 2.0, // Set the desired width
-                            ),
-                          ),
-                        ),
+                  decoration: InputDecoration(
+                    labelText: 'Notes',
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                        width: 2.0, // Set the desired width
                       ),
-                    SizedBox(height: 8),
-    Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        Container(
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: Colors.indigo[900]!,
-          ),
-          child: IconButton(
-            icon: Icon(Icons.check, color: Colors.white),
-            onPressed: () {
-              print("print");
-              Navigator.pop(context);
-              // Add your logic here when the tick button is pressed
-            },
-          ),
-        ),
-      ],
-    ),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 8),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.indigo[900]!,
+                      ),
+                      child: IconButton(
+                        icon: Icon(Icons.check, color: Colors.white),
+                        onPressed: () {
+                          print("print");
+                          Navigator.pop(context);
+                          // Add your logic here when the tick button is pressed
+                        },
+                      ),
+                    ),
+                  ],
+                ),
               ],
-                
-              
             ),
-            ),
+          ),
         );
       },
     );
   }
-  
 
-  Widget _buildMeasured(BuildContext context){
+  Widget _buildMeasured(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -227,7 +189,6 @@ class _MedicationEntryModalState extends State<SugarTrackerScreen> {
             ),
             child: Text(
               selectedOption.isNotEmpty ? selectedOption : 'None',
-              
               style: TextStyle(
                 color: selectedOption.isNotEmpty ? Colors.black : Colors.grey,
               ),
@@ -237,7 +198,6 @@ class _MedicationEntryModalState extends State<SugarTrackerScreen> {
       ],
     );
   }
-
 
   void _showOptionsModal(BuildContext context) async {
     final result = await showModalBottomSheet<String>(
@@ -251,7 +211,6 @@ class _MedicationEntryModalState extends State<SugarTrackerScreen> {
             children: [
               Text(
                 'Select Meal Time',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 20),
               _buildOptionTile(context, 'Before Breakfast'),
@@ -262,7 +221,6 @@ class _MedicationEntryModalState extends State<SugarTrackerScreen> {
               _buildOptionTile(context, 'After Dinner'),
               _buildOptionTile(context, 'Before Sleep'),
               _buildOptionTile(context, 'Fasting'),
-              
             ],
           ),
         );
@@ -287,14 +245,13 @@ class _MedicationEntryModalState extends State<SugarTrackerScreen> {
     );
   }
 
-  Widget _buildDateTime(BuildContext context){
+  Widget _buildDateTime(BuildContext context) {
     return Row(
       children: [
         Expanded(
           child: TextField(
             decoration: InputDecoration(
               labelText: 'Date',
-              hintText: 'Select Date',
               suffixIcon: Icon(Icons.calendar_today),
               focusedBorder: UnderlineInputBorder(
                 borderSide: BorderSide(
@@ -313,7 +270,6 @@ class _MedicationEntryModalState extends State<SugarTrackerScreen> {
           child: TextField(
             decoration: InputDecoration(
               labelText: 'Time',
-              hintText: 'Select Time',
               suffixIcon: Icon(Icons.access_time),
               focusedBorder: UnderlineInputBorder(
                 borderSide: BorderSide(
@@ -330,7 +286,6 @@ class _MedicationEntryModalState extends State<SugarTrackerScreen> {
       ],
     );
   }
-
 
   @override
   Widget build(BuildContext context) {

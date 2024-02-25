@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "317088921173",
+    "project_id": "diamate-ff8c0",
+    "storage_bucket": "diamate-ff8c0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:317088921173:android:1e5cd285398e99c0a2c6dc",
+        "android_client_info": {
+          "package_name": "com.frontend.DiaMate"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBOzs-uP4IvVHAqKmyhlNBiW2TE4vSLYPY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

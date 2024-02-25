@@ -5,17 +5,14 @@ import 'package:diamate_frontend/widgets/app_bar/appbar_subtitle_one.dart';
 import 'package:diamate_frontend/widgets/app_bar/appbar_trailing_image.dart';
 import 'package:diamate_frontend/widgets/app_bar/custom_app_bar.dart';
 import 'package:diamate_frontend/widgets/custom_search_view.dart';
-import 'package:diamate_frontend/widgets/custom_text_form_field.dart';
+import 'package:diamate_frontend/widgets/form_text.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:requests/requests.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-
-
-
-final int maxVisibleNestedComments = 3;
+const maxVisibleNestedComments = 3;
 bool showReplies = false;
 bool showComment = false;
 bool showLikes = false;
@@ -24,7 +21,6 @@ int likeCount = 0;
 Color iconColor = Color.fromARGB(221, 166, 169, 174);
 Color iconColor_de = Color.fromARGB(221, 166, 169, 174);
 
-
 class Comment {
   String content;
   User user;
@@ -32,7 +28,8 @@ class Comment {
   int likeCount;
   DateTime timestamp;
 
-  Comment(this.content, this.user, this.likeCount, this.timestamp, this.nestedComments);
+  Comment(this.content, this.user, this.likeCount, this.timestamp,
+      this.nestedComments);
 
   // Add a constructor to create a Comment object from a JSON map
   Comment.fromJson(Map<String, dynamic> json)
@@ -46,14 +43,15 @@ class Comment {
 
   // Add a method to convert Comment object to a JSON map
   Map<String, dynamic> toJson() => {
-    'content': content,
-    'user': user.toJson(),
-    'likeCount': likeCount,
-    'timestamp': timestamp.toIso8601String(),
-    'nestedComments': nestedComments.map((nestedComment) => nestedComment.toJson()).toList(),
-  };
+        'content': content,
+        'user': user.toJson(),
+        'likeCount': likeCount,
+        'timestamp': timestamp.toIso8601String(),
+        'nestedComments': nestedComments
+            .map((nestedComment) => nestedComment.toJson())
+            .toList(),
+      };
 }
-
 
 class User {
   String username;
@@ -68,11 +66,10 @@ class User {
 
   // Add a method to convert User object to a JSON map
   Map<String, dynamic> toJson() => {
-    'username': username,
-    'profilePicture': profilePicture,
-  };
+        'username': username,
+        'profilePicture': profilePicture,
+      };
 }
-
 
 // ignore_for_file: must_be_immutable
 class ShowPostScreen extends StatefulWidget {
@@ -122,7 +119,6 @@ class _ShowPostScreenState extends State<ShowPostScreen> {
 
   List<Comment> comments = [];
 
-
   @override
   void initState() {
     super.initState();
@@ -133,9 +129,7 @@ class _ShowPostScreenState extends State<ShowPostScreen> {
   Future<void> fetchData() async {
     try {
       // Replace 'YOUR_BACKEND_URL' with your actual backend API endpoint to get post data
-      final response = await http.get(Uri.parse(show_post), headers: {
-        "token": cookies.join(''),
-      });
+      final response = await Requests.get(show_post);
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
@@ -160,7 +154,8 @@ class _ShowPostScreenState extends State<ShowPostScreen> {
       Uri.parse(post_comment),
       headers: {"token": cookies.join('')},
       body: json.encode({
-        'postId': widget.post['id'], // Replace 'id' with the actual key for the post in your data
+        'postId': widget.post[
+            'id'], // Replace 'id' with the actual key for the post in your data
         'content': content,
       }),
     );
@@ -180,9 +175,7 @@ class _ShowPostScreenState extends State<ShowPostScreen> {
             SizedBox(height: 11.v),
             Padding(
                 padding: EdgeInsets.only(left: 15.h),
-                child: Text(
-                    DateFormat('HH:mm a, dd MMM yyyy')
-                        .format(DateTime.parse(widget.post['created'])),
+                child: Text(widget.post['created'],
                     style: CustomTextStyles.bodyMediumPoppinsBlue300)),
             SizedBox(height: 13.v),
             Container(
@@ -224,34 +217,29 @@ class _ShowPostScreenState extends State<ShowPostScreen> {
                   child: Row(
                     children: [
                       if (showComment)
-                        CircleAvatar(
-                          child: Icon(Icons.person),
+                        const CircleAvatar(
                           radius: 12.0,
+                          child: Icon(Icons.person),
                         ),
-                      if (showComment) SizedBox(width: 5.0),
+                      if (showComment) const SizedBox(width: 5.0),
                       if (showComment)
                         Expanded(
                           child: CustomTextFormField(
                             controller: textController,
                             hintText: "Write a Comment",
-                            hintColor: appTheme.gray500,
-                            alignment: Alignment.center,
-                            borderDecoration: InputBorder.none,
+                            obscureText: false,
                           ),
                         ),
-                      if (showComment)
-                        SizedBox(
-                          width: 8.0,
-                        ),
+                      if (showComment) const SizedBox(width: 8.0),
                       if (showComment)
                         InkWell(
                           onTap: () {},
-                          child: Icon(Icons.send),
+                          child: const Icon(Icons.send),
                         ),
                     ],
                   )),
             ),
-            SizedBox(
+            const SizedBox(
                 height:
                     3.5), // Adjust the spacing between the text field and button
 
@@ -308,22 +296,37 @@ class _ShowPostScreenState extends State<ShowPostScreen> {
             child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               Row(
                 children: [
-
-                  _buildUpvoteIncrease(context),
-                  // 
-
-                  Padding(
-                      padding: EdgeInsets.only(left: 5.h),
-                      child: Text(widget.post['upvotes'].toString(),
-                       style: CustomTextStyles.bodyLargeIndigo900),
+                  GestureDetector(
+                    onTap: () {
+                      // Handle increase button tap
+                      setState(() {
+                        likeCount++;
+                      });
+                    },
+                    child: CustomImageView(
+                      imagePath: ImageConstant.imgArrowRightPrimary,
+                      height: 20.v,
+                      width: 26.h,
                     ),
-
-                    Padding(padding: EdgeInsets.only(left: 12.h),
-                    child: _buildUpvoteDecrease(context),),
-                  
+                  ),
+                  Text(likeCount.toString(),
+                      style: CustomTextStyles.titleMediumPoppinsBlue300),
+                  GestureDetector(
+                    onTap: () {
+                      // Handle decrease button tap
+                      setState(() {
+                        likeCount--;
+                      });
+                    },
+                    child: CustomImageView(
+                      imagePath: ImageConstant.imgLightBulb,
+                      height: 20.v,
+                      width: 26.h,
+                    ),
+                  ),
                 ],
               ),
-              Spacer(flex: 5),
+              const Spacer(flex: 5),
               GestureDetector(
                 onTap: () {
                   setState(() {
@@ -365,7 +368,7 @@ class _ShowPostScreenState extends State<ShowPostScreen> {
               padding: EdgeInsets.only(left: 3.h, top: 2.v),
               child: Text("User",
                   style: CustomTextStyles.titleSmallPoppinsBlue300)),
-          Spacer(),
+          const Spacer(),
           Padding(
               padding: EdgeInsets.only(top: 7.v),
               child: Text("30 minutes ago",
@@ -374,7 +377,7 @@ class _ShowPostScreenState extends State<ShowPostScreen> {
   }
 
   Widget _buildCommentWidget(Comment comment, {int indent = 1}) {
-    final double indentWidth = 25.0;
+    const indentWidth = 25.0;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -390,24 +393,24 @@ class _ShowPostScreenState extends State<ShowPostScreen> {
                     backgroundImage: NetworkImage(comment.user.profilePicture),
                     radius: 20.0,
                     child: Align(
-                      alignment: Alignment(0, 0),
+                      alignment: const Alignment(0, 0),
                       child: Container(),
                     ),
                   ),
-                  SizedBox(width: 8.0),
+                  const SizedBox(width: 8.0),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         comment.user.username,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16.0,
                         ),
                       ),
                       Text(
                         timeago.format(comment.timestamp, locale: 'en_short'),
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 12.0,
                           color: Colors.grey,
                         ),
@@ -416,14 +419,14 @@ class _ShowPostScreenState extends State<ShowPostScreen> {
                   ),
                 ],
               ),
-              SizedBox(height: 5.0),
+              const SizedBox(height: 5.0),
               Text(comment.content),
             ],
           ),
           subtitle: Row(
             children: [
               IconButton(
-                icon: Icon(Icons.arrow_upward, size: 20.0),
+                icon: const Icon(Icons.arrow_upward, size: 20.0),
                 onPressed: () {
                   // Handle like/upvote button press
                   setState(() {
@@ -433,7 +436,7 @@ class _ShowPostScreenState extends State<ShowPostScreen> {
               ),
               Text(comment.likeCount.toString()),
               IconButton(
-                icon: Icon(Icons.arrow_downward, size: 20.0),
+                icon: const Icon(Icons.arrow_downward, size: 20.0),
                 onPressed: () {
                   // Handle dislike/downvote button press
                   setState(() {
@@ -442,13 +445,13 @@ class _ShowPostScreenState extends State<ShowPostScreen> {
                 },
               ),
               IconButton(
-                icon: Icon(Icons.reply, size: 20.0),
+                icon: const Icon(Icons.reply, size: 20.0),
                 onPressed: () {
                   // Handle reply button press
                 },
               ),
               IconButton(
-                icon: Icon(Icons.delete, size: 20.0),
+                icon: const Icon(Icons.delete, size: 20.0),
                 onPressed: () {
                   // Handle delete button press
                 },
@@ -496,7 +499,7 @@ class _ShowPostScreenState extends State<ShowPostScreen> {
                     height: 20.adaptSize,
                     width: 20.adaptSize,
                     margin: EdgeInsets.only(left: 2.h)),
-                Spacer(),
+                const Spacer(),
                 Padding(
                     padding: EdgeInsets.only(top: 2.v),
                     child: Text("Reply",
@@ -531,13 +534,12 @@ class _ShowPostScreenState extends State<ShowPostScreen> {
 
   Widget _buildUpvoteDecrease(BuildContext context) {
     return GestureDetector(
-       
       onTap: () {
         // Handle increase button tap
         setState(() {
           if (iconColor_de == Color.fromARGB(221, 166, 169, 174)) {
             // widget.post['upvotes']++;
-            if(iconColor == Color(0xDd6699ff)){
+            if (iconColor == Color(0xDd6699ff)) {
               iconColor = Color.fromARGB(221, 166, 169, 174);
               widget.post['upvotes']--;
             }

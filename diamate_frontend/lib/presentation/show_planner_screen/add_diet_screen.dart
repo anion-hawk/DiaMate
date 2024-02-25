@@ -42,9 +42,7 @@ class _AddDietScreenState extends State<AddDietScreen> {
     if (picked_start != null && picked_start != selectedTime_start) {
       setState(() {
         selectedTime_start = picked_start;
-        //selectedTime_last = picked_start;
         _starttimeController.text = '${picked_start.format(context)}';
-        //_lasttimeController.text = '${picked.format(context)}';
       });
     }
   }
@@ -56,7 +54,6 @@ class _AddDietScreenState extends State<AddDietScreen> {
     );
     if (picked_last != null && picked_last != selectedTime_last) {
       setState(() {
-        selectedTime_last = picked_last;
         selectedTime_last = picked_last;
         _lasttimeController.text = '${picked_last.format(context)}';
         //_lasttimeController.text = '${picked.format(context)}';
@@ -70,7 +67,7 @@ class _AddDietScreenState extends State<AddDietScreen> {
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         body: Container(
-          width: double.maxFinite,
+          //width: double.maxFinite,
           padding: EdgeInsets.only(
             left: 9.h,
             top: 71.v,
@@ -81,20 +78,11 @@ class _AddDietScreenState extends State<AddDietScreen> {
             children: [
               Text(
                 "Plan Type",
-                style: CustomTextStyles.titleMediumBlack90002,
+                //style: CustomTextStyles.titleMediumBlack90002,
               ),
               SizedBox(height: 5.v),
               CustomDropDown(
-                icon: Container(
-                  margin: EdgeInsets.fromLTRB(30.h, 12.v, 13.h, 22.v),
-                  child: CustomImageView(
-                    imagePath: ImageConstant.imgCheckmark,
-                    height: 10.adaptSize,
-                    width: 10.adaptSize,
-                  ),
-                ),
                 hintText: "Breakfast",
-                hintStyle: CustomTextStyles.titleSmallInterGray50001,
                 items: dropdownItemList,
                 onChanged: (value) {},
               ),
@@ -136,9 +124,6 @@ class _AddDietScreenState extends State<AddDietScreen> {
             horizontal: 0.h,
             vertical: 0.v,
           ),
-          // decoration: AppDecoration.outlineGray.copyWith(
-          //   borderRadius: BorderRadiusStyle.roundedBorder4,
-          // ),
           child: TextField(
             controller: _starttimeController,
             readOnly: true,
@@ -163,13 +148,6 @@ class _AddDietScreenState extends State<AddDietScreen> {
           SizedBox(height: 4.v),
           Container(
             width: 139.h,
-            padding: EdgeInsets.symmetric(
-              horizontal: 0.h,
-              vertical: 0.v,
-            ),
-            // decoration: AppDecoration.outlineGray.copyWith(
-            //   borderRadius: BorderRadiusStyle.roundedBorder4,
-            // ),
             child: TextField(
               controller: _lasttimeController,
               readOnly: true,
@@ -219,15 +197,19 @@ class _AddDietScreenState extends State<AddDietScreen> {
           bottom: 29.v,
         ),
         decoration: BoxDecoration(
-          color: isHovering ? Colors.white : Color(0xff3366ff), // Change color based on tap
-      borderRadius: BorderRadius.circular(10),
+          color: isHovering
+              ? Colors.white
+              : Color.fromARGB(255, 22, 56, 85), // Change color based on tap
+          borderRadius: BorderRadius.circular(10),
         ),
         child: Center(
           child: Text(
             "Set Schedule",
             style: TextStyle(
-              color: isHovering ? Color(0xff3366ff) : Colors.white, // Change text color based on tap
-          
+              color: isHovering
+                  ? Color.fromARGB(255, 22, 56, 85)
+                  : Colors.white, // Change text color based on tap
+
               fontSize: 16,
               fontWeight: FontWeight.bold,
             ),

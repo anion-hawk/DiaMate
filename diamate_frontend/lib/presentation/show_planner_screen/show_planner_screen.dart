@@ -5,9 +5,9 @@ import 'package:diamate_frontend/presentation/all_tracker_screen/pressure_tracke
 import 'package:diamate_frontend/widgets/app_bar/appbar_leading_image.dart';
 import 'package:diamate_frontend/widgets/app_bar/appbar_trailing_image.dart';
 import 'package:diamate_frontend/widgets/app_bar/custom_app_bar.dart';
-import 'package:diamate_frontend/widgets/custom_bottom_bar.dart';
 import 'package:diamate_frontend/widgets/custom_drop_down.dart';
 import 'package:diamate_frontend/widgets/custom_floating_button.dart';
+import 'package:diamate_frontend/presentation/show_planner_screen/mealListwidget.dart';
 
 import 'package:diamate_frontend/presentation/show_planner_screen/add_diet_screen.dart';
 
@@ -26,10 +26,14 @@ class ShowPlanner extends StatefulWidget {
 }
 
 class _ShowPlannerState extends State<ShowPlanner> {
+  DateTime? selectedDay =
+      DateTime.now(); // Define a variable to store the selected day
+
   bool isHovering = false;
   void _ondaySelected(DateTime day, DateTime focused) {
     setState(() {
       today = day;
+      selectedDay = day;
     });
   }
 
@@ -64,7 +68,7 @@ class _ShowPlannerState extends State<ShowPlanner> {
             ),
           ],
         ),
-        bottomNavigationBar: _buildBottomBar(context),
+        // bottomNavigationBar: _buildBottomBar(context),
         drawer: _buildDrawer(context),
       ),
     );
@@ -74,7 +78,7 @@ class _ShowPlannerState extends State<ShowPlanner> {
     return Container(
       width: 200, // Adjust the width as needed
       decoration: BoxDecoration(
-        color: Colors.blue, // Change the color of the sidebar
+        color: Color(0xff012b68), // Change the color of the sidebar
       ),
       child: ListView.builder(
         itemCount: menuItems.length,
@@ -82,7 +86,7 @@ class _ShowPlannerState extends State<ShowPlanner> {
           title: Text(
             menuItems[index],
             style: TextStyle(
-              color: index == selectedIndex ? Color(0xdd6699ff) : Colors.white,
+              color: index == selectedIndex ? Color(0xff012b68) : Colors.white,
             ),
           ),
           onTap: () {
@@ -107,54 +111,6 @@ class _ShowPlannerState extends State<ShowPlanner> {
   }
 
   /// Section Widget
-  Widget _buildBottomBar(BuildContext context) {
-    return CustomBottomBar(
-      onChanged: (BottomBarEnum type) {},
-    );
-  }
-
-  /// Common widget
-  Widget _buildIconFive(BuildContext context) {
-    return SizedBox(
-      height: 36.v,
-      width: 33.h,
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          CustomImageView(
-            imagePath: ImageConstant.imgIcon2,
-            height: 36.v,
-            width: 33.h,
-            alignment: Alignment.center,
-          ),
-          Align(
-            alignment: Alignment.center,
-            child: SizedBox(
-              height: 36.v,
-              width: 33.h,
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  CustomImageView(
-                    imagePath: ImageConstant.imgIcon2,
-                    height: 36.v,
-                    width: 33.h,
-                    alignment: Alignment.center,
-                  ),
-                  CustomImageView(
-                    imagePath: ImageConstant.imgIcon2,
-                    height: 36.v,
-                    width: 33.h,
-                    alignment: Alignment.center,
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 
   Widget _buildDrawer(BuildContext context) {
     return Drawer(
@@ -170,18 +126,12 @@ class _ShowPlannerState extends State<ShowPlanner> {
               margin: EdgeInsets.only(left: 10.0, top: 13.0),
               alignment: Alignment.topLeft,
             ),
-            DrawerHeader(
-              decoration: BoxDecoration(
-                  //color: Colors.black, // Change to the desired color
-                  ),
-              child: null,
-            ),
+            SizedBox(height: 200),
             ListTile(
               title: Text(
                 'Diet Planner',
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 20,
                 ),
               ),
               onTap: () {
@@ -197,7 +147,6 @@ class _ShowPlannerState extends State<ShowPlanner> {
                 'Medicine Planner',
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 20,
                 ),
               ),
               onTap: () {
@@ -229,56 +178,86 @@ class _ShowPlannerState extends State<ShowPlanner> {
             selectedDayPredicate: (day) => isSameDay(day, today),
             focusedDay: today,
             firstDay: DateTime.utc(2010, 10, 16),
-            lastDay: DateTime(2024, 02, 11),
+            lastDay: DateTime.now(),
             onDaySelected: _ondaySelected,
           ),
         ),
         SizedBox(
             height: 20), // Add some space between the calendar and the button
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            GestureDetector(
-              onTap: () {
-                // Implement your logic for setting schedule here
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => AddDietScreen()),
-                );
-              },
-              onTapUp: (_) {
-                setState(() {
-                  isHovering = true;
-                });
-              },
-              onTapDown: (_) {
-                setState(() {
-                  isHovering = false;
-                });
-              },
-              child: Container(
-                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                decoration: BoxDecoration(
-                  color: isHovering
-                      ? Color.fromARGB(255, 22, 56, 85)
-                      : Color(0xff3366ff),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Text(
-                  'Set Schedule',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+        selectedDay != null ? _buildSetScedule(context) : SizedBox(),
+
+        // Render _buildSetSchedule only if a day is selected
+        SizedBox(height: 36.v),
+        selectedDay != null ? _buildUserMealList(context) : SizedBox(),
+      ],
+    );
+  }
+
+  Widget _buildSetScedule(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        GestureDetector(
+          onTap: () {
+            // Implement your logic for setting schedule here
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => AddDietScreen()),
+            );
+          },
+          onTapUp: (_) {
+            setState(() {
+              isHovering = true;
+            });
+          },
+          onTapDown: (_) {
+            setState(() {
+              isHovering = false;
+            });
+          },
+          child: Container(
+            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+            decoration: BoxDecoration(
+              color: isHovering
+                  ? Color.fromARGB(255, 22, 56, 85)
+                  : Color(0xff3366ff),
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Text(
+              'Set Schedule',
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(
-                width:
-                    20), // Add some space between the button and the edge of the screen
-          ],
+          ),
         ),
+        SizedBox(
+            width:
+                20), // Add some space between the button and the edge of the screen
       ],
+    );
+  }
+
+  Widget _buildUserMealList(BuildContext context) {
+    return SingleChildScrollView(
+      child: Container(
+        height: MediaQuery.of(context).size.height *
+            0.41, // Adjust the height as needed
+        padding: EdgeInsets.only(left: 7.h, right: 4.h),
+        child: ListView.separated(
+          shrinkWrap: true,
+          separatorBuilder: (context, index) {
+            return SizedBox(height: 21.v);
+          },
+          itemCount: 100,
+          itemBuilder: (context, index) {
+            return UserMeallistItemWidget(
+                // Pass any necessary data to UserMeallistItemWidget
+                );
+          },
+        ),
+      ),
     );
   }
 }
