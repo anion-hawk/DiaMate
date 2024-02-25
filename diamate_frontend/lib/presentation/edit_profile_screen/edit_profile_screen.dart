@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:diamate_frontend/core/app_export.dart';
 import 'package:diamate_frontend/widgets/custom_drop_down.dart';
-import 'package:diamate_frontend/widgets/coeliacdiseasechipview_item_widget.dart';
+import "package:diamate_frontend/presentation/register_patient_screen/widgets/coeliacdiseasechipview_item_widget.dart";
 import 'package:diamate_frontend/widgets/form_text.dart';
 import 'package:flutter/material.dart';
 import 'dart:developer';
@@ -367,12 +367,12 @@ class _EditProfileScreen extends State<EditProfileScreen> {
                   label: const Text(
                     "Camera",
                     style: TextStyle(
-                      color: Color.fromARGB(255, 121, 163, 167),
-                    ),
+                      color: Color.fromARGB(255, 25, 12, 108),
+),
                   ),
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all<Color>(
-                        Color.fromARGB(255, 162, 218, 174)),
+                        Color.fromARGB(255, 250, 250, 250)),
                     minimumSize: MaterialStateProperty.all<Size>(
                         Size(150.0, 50.0)), // Set your desired background color
                   ),
@@ -386,12 +386,12 @@ class _EditProfileScreen extends State<EditProfileScreen> {
                   label: const Text(
                     "Gallery",
                     style: TextStyle(
-                      color: Color.fromARGB(255, 121, 163, 167),
-                    ),
+                      color: Color.fromARGB(255, 25, 12, 108),
+),
                   ),
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all<Color>(
-                        Color.fromARGB(255, 162, 218, 174)),
+                        Color.fromARGB(255, 250, 250, 250)),
                     minimumSize: MaterialStateProperty.all<Size>(
                         Size(150.0, 50.0)), // Set your desired background color
                   ),
@@ -446,7 +446,7 @@ class _EditProfileScreen extends State<EditProfileScreen> {
             },
             child: const Icon(
               Icons.camera_alt,
-              color: Color.fromARGB(255, 92, 150, 0),
+              color: Color.fromARGB(255, 255, 255, 255),
               size: 28.0,
             ),
           ),
@@ -471,19 +471,19 @@ class _EditProfileScreen extends State<EditProfileScreen> {
   }
 
   void getUserProfile() async {
-    try {
-      // Replace 'your_api_endpoint' with the actual API endpoint for fetching user profile
-      var response = await Requests.get(url_selfProfile);
-      print('User Profile: ${response.json()}');
-      if (response.statusCode == 200) {
-        // The response body contains the user profile information
-        print('User Profile: ${response.json()}');
-      } else {
-        print(
-            'Failed to fetch user profile. Status Code: ${response.statusCode}');
-      }
-    } catch (e) {
-      print('Error during GET request: $e');
-    }
-  }
+  //   try {
+  //     // Replace 'your_api_endpoint' with the actual API endpoint for fetching user profile
+  //     var response = await Requests.get(url_selfProfile);
+  //     print('User Profile: ${response.json()}');
+  //     if (response.statusCode == 200) {
+  //       // The response body contains the user profile information
+  //       print('User Profile: ${response.json()}');
+  //     } else {
+  //       print(
+  //           'Failed to fetch user profile. Status Code: ${response.statusCode}');
+  //     }
+  //   } catch (e) {
+  //     print('Error during GET request: $e');
+  //   }
+   }
 }

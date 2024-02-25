@@ -3,8 +3,6 @@ const userRepository = require('../repository/user');
 const patientRepository = require('../repository/patient');
 const followRepository = require('../repository/follow');
 
-
-
 async function getSelfProfile(req, res) {
     const { id } = req.user;
     const result = await userRepository.getUserById(id);
@@ -15,6 +13,31 @@ async function getSelfProfile(req, res) {
     res.status(200).json(result.data[0]);
     return;
 }
+async function getSelfProfileDetails(req, res) {
+    const { id } = req.user;
+    const result = await userRepository.getUserDetailsById(id);
+    if (!result.success) {
+        res.status(500).json({ error: "Internal server error" });
+        return;
+    }
+    if (result.data.length === 0) {
+        res.status(404).json({ error: "User not found" });
+        return;
+    }
+    user = result.data[0];
+    if (user.role === 1) {
+        const patientDetails = await patientRepository.getPatientDetails(id);
+        if (!patientDetails.success) {
+            res.status(500).json({ error: "Internal server error" });
+            return;
+        }
+        res.status(200).json({ user, patientDetails: patientDetails.data[0] });
+        return;
+    }
+    res.status(500).json({ error: "Internal server error" });
+    return;
+}
+
 
 async function getUserById(req, res) {
     const { id } = req.params;
@@ -156,6 +179,7 @@ async function followUser(req, res) {
 
 module.exports = {
     getSelfProfile,
+    getSelfProfileDetails,
     getUserById,
     completeProfile,
     followUser
