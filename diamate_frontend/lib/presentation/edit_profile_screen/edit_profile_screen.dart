@@ -257,7 +257,7 @@ class _EditProfileScreen extends State<EditProfileScreen> {
                         //emergency contacts
                         const SizedBox(height: 20),
                         const SizedBox(height: 50),
-                        
+
                         const Row(
                           children: [
                             Text(
@@ -294,21 +294,21 @@ class _EditProfileScreen extends State<EditProfileScreen> {
                             onPressed: () {
                               // register();
                             }),
-                          const SizedBox(height: 20), 
-                          CustomElevatedButton(
-                              text: "Log Out",
-                              onPressed: () {
-                                logOut();
-                              }),
-
-                          
-                            
+                        const SizedBox(height: 20),
+                        CustomElevatedButton(
+                            text: "Log Out",
+                            onPressed: () {
+                              logOut();
+                              Navigator.pop(context);
+                            }),
                       ]),
                     )))));
   }
- void logOut() async {
+
+  void logOut() async {
     await FirebaseAuth.instance.signOut();
   }
+
   void _selectDate(context) {
     showDatePicker(
             context: context,

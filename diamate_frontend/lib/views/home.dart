@@ -62,7 +62,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     if (state) return ForumScreen();
+
     return Scaffold(
       body: Center(
         child: Column(
@@ -79,15 +81,19 @@ class _HomeScreenState extends State<HomeScreen> {
                 text: "Forum",
                 onPressed: () {
                   toggleState();
+
                 }),
             CustomElevatedButton(
                 text: "Log Out",
                 onPressed: () {
                   logOut();
+
                 }),
+
           ],
         ),
       ),
     );
   }
+
 }
