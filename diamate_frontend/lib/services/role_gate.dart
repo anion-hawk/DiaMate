@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:diamate_frontend/config.dart';
+import 'package:diamate_frontend/views/profile/patient_complete_profile.dart';
 import 'package:diamate_frontend/widgets/custom_elevated_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -41,7 +42,7 @@ class _RoleGateState extends State<RoleGate> {
         if (accountComplete) {
           return _buildRoleView('Patient Page');
         } else {
-          return _buildRoleView('Patient Complete Profile Page');
+          return PatientCompleteProfile();
         }
       case 2:
         if (accountComplete) {
