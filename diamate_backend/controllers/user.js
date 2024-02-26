@@ -37,7 +37,34 @@ async function getSelfProfileDetails(req, res) {
     res.status(500).json({ error: "Internal server error" });
     return;
 }
-
+async function getSelfFollowingDetails(req, res) {
+    const { id } = req.user;
+    console.log(id);
+    const result = await userRepository.getUserDetailsById(id);
+    if (!result.success) {
+        res.status(500).json({ error: "Internal server errorr" });
+        return;
+    }
+    if (result.data.length === 0) {
+        res.status(404).json({ error: "User not found" });
+        return;
+    }
+    user = result.data[0];
+    if (user.role === 2 || user.role === 1) {
+        const followerDetails = await followRepository.getFollower(id);
+        console.log(followerDetails.data[0]);
+        const followingDetails = await followRepository.getFollowing(id);
+        console.log(followingDetails.data[0]);
+        if (!followerDetails.success || !followingDetails.success ) {
+            res.status(500).json({ error: "Internal server error" });
+            return;
+        }
+        res.status(200).json({ user, followerDetails: followerDetails.data[0], followingDetails: followingDetails.data[0] });
+        return;
+    }
+    res.status(500).json({ error: "Internal server error" });
+    return;
+}
 
 async function getUserById(req, res) {
     const { id } = req.params;
@@ -182,5 +209,6 @@ module.exports = {
     getSelfProfileDetails,
     getUserById,
     completeProfile,
-    followUser
+    followUser,
+    getSelfFollowingDetails
 };

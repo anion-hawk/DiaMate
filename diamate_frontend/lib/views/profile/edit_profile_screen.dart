@@ -291,12 +291,14 @@ class _EditProfileScreen extends State<EditProfileScreen> {
                         // login button
                         CustomElevatedButton(
                             text: "Save Changes",
+                            buttonStyle: CustomButtonStyles.fillIndigo ,
                             onPressed: () {
                               // register();
                             }),
                         const SizedBox(height: 20),
                         CustomElevatedButton(
                             text: "Log Out",
+                            buttonStyle: CustomButtonStyles.fillIndigo,
                             onPressed: () {
                               logOut();
                               Navigator.pop(context);
@@ -471,19 +473,19 @@ class _EditProfileScreen extends State<EditProfileScreen> {
   }
 
   void getUserProfile() async {
-  //   try {
-  //     // Replace 'your_api_endpoint' with the actual API endpoint for fetching user profile
-  //     var response = await Requests.get(url_selfProfile);
-  //     print('User Profile: ${response.json()}');
-  //     if (response.statusCode == 200) {
-  //       // The response body contains the user profile information
-  //       print('User Profile: ${response.json()}');
-  //     } else {
-  //       print(
-  //           'Failed to fetch user profile. Status Code: ${response.statusCode}');
-  //     }
-  //   } catch (e) {
-  //     print('Error during GET request: $e');
-  //   }
+    try {
+      // Replace 'your_api_endpoint' with the actual API endpoint for fetching user profile
+      var response = await Requests.get(url_selfProfile);
+      print('User Profile: ${response.json()}');
+      if (response.statusCode == 200) {
+        // The response body contains the user profile information
+        print('User Profile: ${response.json()}');
+      } else {
+        print(
+            'Failed to fetch user profile. Status Code: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error during GET request: $e');
+    }
    }
 }

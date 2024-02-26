@@ -10,6 +10,6 @@ router.route('/profile/details').get(userController.getSelfProfileDetails);
 router.route('/complete-profile').post(userController.completeProfile);
 router.route('/:id').get(userController.getUserById);
 router.route('/:id/follow').post(userController.followUser);
-
+router.route('/self-follow-details').post(userController.getSelfFollowingDetails);
 
 module.exports = router;

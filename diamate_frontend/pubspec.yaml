@@ -44,6 +44,7 @@ dependencies:
   firebase_core: ^2.25.4
   firebase_auth: ^4.17.4
   requests: ^4.7.0
+  table_calendar: ^3.0.9
 
 dev_dependencies:
   flutter_test:

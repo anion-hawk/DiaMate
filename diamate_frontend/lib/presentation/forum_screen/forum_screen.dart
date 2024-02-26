@@ -9,7 +9,7 @@ import 'package:diamate_frontend/config.dart';
 import "package:firebase_auth/firebase_auth.dart";
 
 
-import 'package:diamate_frontend/presentation/edit_profile_screen/edit_profile_screen.dart';
+import 'package:diamate_frontend/views/profile/main_profile_screen.dart';
 
 import "package:requests/requests.dart";
 
@@ -62,7 +62,7 @@ class _ForumScreenState extends State<ForumScreen> {
 
  Future<List<Map<String, dynamic>>> fetchPosts() async {
   try {
-    final response = await Requests.get(forum);
+    final response = await Requests.get(forum,timeoutSeconds: 300);
 
       if (response.statusCode == 200) {
         final List<dynamic> data = json.decode(response.body);
@@ -111,7 +111,7 @@ class _ForumScreenState extends State<ForumScreen> {
       width: 450,
       child: Row(
         children: [
-          Expanded(child: ElevatedButton(onPressed: (){print('New');}, child: const Text('Newest'),
+          Expanded(child: ElevatedButton(onPressed: (){print('New');}, child: const Text('Newest',selectionColor: Color.fromARGB(255,255,255,255),),
             style: ElevatedButton.styleFrom(
               textStyle: TextStyle(color: Colors.white),
             ),)),
@@ -164,7 +164,7 @@ class _ForumScreenState extends State<ForumScreen> {
 
              Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => EditProfileScreen()),
+          MaterialPageRoute(builder: (context) => MainProfileScreen()),
         );
             // Add functionality for person action
           },

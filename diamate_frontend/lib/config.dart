@@ -3,7 +3,7 @@ import 'package:cookie_jar/cookie_jar.dart';
 import 'package:diamate_frontend/presentation/register_screen/register_screen.dart'
     as reg;
 
-String baseUrl = "http://192.168.97.46:3000";
+String baseUrl = "http://10.13.55.131:3000";
 
 final url_register = baseUrl + '/auth/register';
 final url_cookieCheck = baseUrl + '/user/test';
@@ -14,6 +14,7 @@ final compUserProf = baseUrl + "/user/complete-profile";
 final own_post = baseUrl + "/forum/post";
 final forum = baseUrl + "/forum/posts";
 final url_selfProfile = baseUrl + "/user/profile";
+final selffollowdetails = baseUrl + "/user/self-follow-details";
 // Cookie Management
 
 var cj = new CookieJar();
