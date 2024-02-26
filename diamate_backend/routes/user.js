@@ -1,10 +1,8 @@
 const router = require('express').Router();
 const userController = require('../controllers/user');
 
-router.get('/test', (req, res) => {
-	res.json({ message: 'in /user/test' });
-});
 
+router.route('/status').get(userController.getProfileStatus);
 router.route('/profile').get(userController.getSelfProfile);
 router.route('/profile/details').get(userController.getSelfProfileDetails);
 router.route('/complete-profile').post(userController.completeProfile);
