@@ -300,6 +300,7 @@ class _EditProfileScreen extends State<EditProfileScreen> {
                             onPressed: () {
                               logOut();
                               Navigator.pop(context);
+
                             }),
                       ]),
                     )))));
@@ -368,7 +369,7 @@ class _EditProfileScreen extends State<EditProfileScreen> {
                     "Camera",
                     style: TextStyle(
                       color: Color.fromARGB(255, 25, 12, 108),
-),
+                    ),
                   ),
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all<Color>(
@@ -387,7 +388,7 @@ class _EditProfileScreen extends State<EditProfileScreen> {
                     "Gallery",
                     style: TextStyle(
                       color: Color.fromARGB(255, 25, 12, 108),
-),
+                    ),
                   ),
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all<Color>(
@@ -471,19 +472,19 @@ class _EditProfileScreen extends State<EditProfileScreen> {
   }
 
   void getUserProfile() async {
-  //   try {
-  //     // Replace 'your_api_endpoint' with the actual API endpoint for fetching user profile
-  //     var response = await Requests.get(url_selfProfile);
-  //     print('User Profile: ${response.json()}');
-  //     if (response.statusCode == 200) {
-  //       // The response body contains the user profile information
-  //       print('User Profile: ${response.json()}');
-  //     } else {
-  //       print(
-  //           'Failed to fetch user profile. Status Code: ${response.statusCode}');
-  //     }
-  //   } catch (e) {
-  //     print('Error during GET request: $e');
-  //   }
-   }
+    //   try {
+    //     // Replace 'your_api_endpoint' with the actual API endpoint for fetching user profile
+    //     var response = await Requests.get(url_selfProfile);
+    //     print('User Profile: ${response.json()}');
+    //     if (response.statusCode == 200) {
+    //       // The response body contains the user profile information
+    //       print('User Profile: ${response.json()}');
+    //     } else {
+    //       print(
+    //           'Failed to fetch user profile. Status Code: ${response.statusCode}');
+    //     }
+    //   } catch (e) {
+    //     print('Error during GET request: $e');
+    //   }
+  }
 }

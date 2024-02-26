@@ -10,8 +10,6 @@ import "package:firebase_auth/firebase_auth.dart";
 import "package:flutter/material.dart";
 import "package:requests/requests.dart";
 
-
-
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -20,7 +18,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
   int selectedIndex = 0;
 
   final List<Widget> _pages = [
@@ -33,13 +30,14 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    User user = FirebaseAuth.instance.currentUser!;
-    user.getIdToken(true).then((token) {
-      print(token);
-      if (token != null) {
-        Requests.addCookie(Requests.getHostname(baseUrl), "token", token);
-      }
-    });
+    // var response = Requests.get
+    // User user = FirebaseAuth.instance.currentUser!;
+    // user.getIdToken(true).then((token) {
+    //   print(token);
+    //   if (token != null) {
+    //     Requests.addCookie(Requests.getHostname(baseUrl), "token", token);
+    //   }
+    // });
   }
 
   bool state = false;
