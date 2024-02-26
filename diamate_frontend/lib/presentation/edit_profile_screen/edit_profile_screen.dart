@@ -299,6 +299,8 @@ class _EditProfileScreen extends State<EditProfileScreen> {
                             text: "Log Out",
                             onPressed: () {
                               logOut();
+                              Navigator.pop(context);
+
                             }),
                       ]),
                     )))));
