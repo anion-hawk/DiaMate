@@ -1,15 +1,16 @@
+import "package:diamate_frontend/view_widgets/medicine_tracker/medicine_tracker.dart";
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:diamate_frontend/core/app_export.dart';
-import 'package:diamate_frontend/presentation/all_tracker_screen/pressure_tracker_screen.dart';
+//import 'package:diamate_frontend/presentation/all_tracker_screen/pressure_tracker_screen.dart';
 import 'package:diamate_frontend/widgets/app_bar/appbar_leading_image.dart';
 import 'package:diamate_frontend/widgets/app_bar/appbar_trailing_image.dart';
 import 'package:diamate_frontend/widgets/app_bar/custom_app_bar.dart';
 import 'package:diamate_frontend/widgets/custom_drop_down.dart';
 import 'package:diamate_frontend/widgets/custom_floating_button.dart';
-import 'package:diamate_frontend/presentation/show_planner_screen/mealListwidget.dart';
+import 'package:diamate_frontend/view_widgets/diet_planner/add_diet_screen.dart';
 
-import 'package:diamate_frontend/presentation/show_planner_screen/add_diet_screen.dart';
+import 'package:diamate_frontend/view_widgets/diet_planner/mealListwidget.dart';
 
 void main() {
   runApp(MaterialApp(
@@ -26,15 +27,14 @@ class ShowPlanner extends StatefulWidget {
 }
 
 class _ShowPlannerState extends State<ShowPlanner> {
-  DateTime? selectedDay = DateTime.now(); // Define a variable to store the selected day
-
-  
+  DateTime? selectedDay =
+      DateTime.now(); // Define a variable to store the selected day
 
   bool isHovering = false;
   void _ondaySelected(DateTime day, DateTime focused) {
     setState(() {
       today = day;
-      selectedDay = day; 
+      selectedDay = day;
     });
   }
 
@@ -61,7 +61,8 @@ class _ShowPlannerState extends State<ShowPlanner> {
             },
           ),
         ),
-        body: Row(
+        body: SingleChildScrollView( 
+          child: Row(
           children: [
             //_buildNavigationSidebar(context),
             Expanded(
@@ -69,6 +70,7 @@ class _ShowPlannerState extends State<ShowPlanner> {
             ),
           ],
         ),
+      ),
         // bottomNavigationBar: _buildBottomBar(context),
         drawer: _buildDrawer(context),
       ),
@@ -156,7 +158,7 @@ class _ShowPlannerState extends State<ShowPlanner> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => PressureTrackerScreen()),
+                      builder: (context) => MedicineTrackerScreen()),
                 );
               },
             ),
@@ -166,7 +168,6 @@ class _ShowPlannerState extends State<ShowPlanner> {
     );
   }
 
-  
   Widget content() {
     return Column(
       children: [
@@ -186,10 +187,10 @@ class _ShowPlannerState extends State<ShowPlanner> {
         ),
         SizedBox(
             height: 20), // Add some space between the calendar and the button
-         selectedDay != null ? _buildSetScedule(context) : SizedBox(),
-     
-         // Render _buildSetSchedule only if a day is selected
-        SizedBox(height: 36.v),
+        selectedDay != null ? _buildSetScedule(context) : SizedBox(),
+
+        // Render _buildSetSchedule only if a day is selected
+        SizedBox(height: 20.v),
         selectedDay != null ? _buildUserMealList(context) : SizedBox(),
       ],
     );
@@ -242,23 +243,19 @@ class _ShowPlannerState extends State<ShowPlanner> {
   }
 
   Widget _buildUserMealList(BuildContext context) {
-    return SingleChildScrollView(
-      child: Container(
-        height: MediaQuery.of(context).size.height *
-            0.41, // Adjust the height as needed
-        padding: EdgeInsets.only(left: 7.h, right: 4.h),
-        child: ListView.separated(
-          shrinkWrap: true,
-          separatorBuilder: (context, index) {
-            return SizedBox(height: 21.v);
-          },
-          itemCount: 100,
-          itemBuilder: (context, index) {
-            return UserMeallistItemWidget(
-                // Pass any necessary data to UserMeallistItemWidget
-                );
-          },
-        ),
+    return  Container(
+      child: ListView.separated(
+        physics: NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        separatorBuilder: (context, index) {
+          return SizedBox(height: 10.v);
+        },
+        itemCount: 50,
+        itemBuilder: (context, index) {
+          return UserMeallistItemWidget(
+              // Pass any necessary data to UserMeallistItemWidget
+              );
+        },
       ),
     );
   }

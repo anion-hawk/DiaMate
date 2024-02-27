@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:diamate_frontend/core/app_export.dart';
-import 'package:diamate_frontend/presentation/all_tracker_screen/sugar_tracker_screen.dart';
-
 
  //UserprofilelistItemWidget
  class UserprofilelistItemWidget extends StatefulWidget {
