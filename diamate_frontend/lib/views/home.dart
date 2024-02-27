@@ -3,9 +3,8 @@ import "dart:async";
 import "package:diamate_frontend/config.dart";
 import "package:diamate_frontend/presentation/forum_screen/forum_screen.dart";
 import "package:diamate_frontend/widgets/elevated_button.dart";
-import "package:diamate_frontend/presentation/all_tracker_screen/sugar_tracker_screen.dart";
-import "package:diamate_frontend/presentation/tracker_home_screen/tracker_home_screen.dart";
-import "package:diamate_frontend/presentation/show_planner_screen/show_planner_screen.dart";
+import "package:diamate_frontend/views/tracker.dart";
+import "package:diamate_frontend/views/planner.dart";
 import "package:firebase_auth/firebase_auth.dart";
 import "package:flutter/material.dart";
 import "package:requests/requests.dart";
@@ -33,17 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    User user = FirebaseAuth.instance.currentUser!;
-    user.getIdToken(true).then((token) {
-      print(token);
-      if (token != null) {
-        Requests.addCookie(Requests.getHostname(baseUrl), "token", token);
-      }
-    });
-
-    // User user = FirebaseAuth.instance.currentUser!;
-    // String cookie = (await user.getIdToken())!;
-    // Requests.addCookie(Requests.getHostname(baseUrl), "cookie", cookie);
+    
   }
 
   void logOut() async {
