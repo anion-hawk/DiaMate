@@ -9,6 +9,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:requests/requests.dart';
+import 'package:image_picker/image_picker.dart';
 
 class Register extends StatefulWidget {
   final void Function()? toggleLogin;
