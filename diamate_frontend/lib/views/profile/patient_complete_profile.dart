@@ -1,5 +1,7 @@
 import 'package:diamate_frontend/routes/app_routes.dart';
+import 'package:diamate_frontend/widgets/choice_chips.dart';
 import 'package:diamate_frontend/widgets/custom_drop_down.dart';
+import 'package:diamate_frontend/widgets/custom_elevated_button.dart';
 import 'package:diamate_frontend/widgets/form_text.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -8,8 +10,19 @@ class PatientCompleteProfile extends StatelessWidget {
   PatientCompleteProfile({super.key});
 
   final List<String> diabetesTypes = ["Type 1", "Type 2", "None"];
+  final List<String> diseases = [
+    'Hypertension',
+    'Cataract',
+    'PCOS',
+    'Coeliac disease',
+    'Diabetes insipidus',
+    'Thyroid disease',
+    'Insulin resistance',
+  ];
+
   String diabetesType = "None";
   final diagnosisDateController = TextEditingController();
+  List<String> selectedOptions = [];
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +65,15 @@ class PatientCompleteProfile extends StatelessWidget {
                           alignment: Alignment.centerLeft,
                           child: Text("Other Diseases",
                               style: TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold)))
+                                  fontSize: 20, fontWeight: FontWeight.bold))),
+                      const SizedBox(height: 10),
+                      _diseaseChoiceChips(),
+                      const SizedBox(height: 30),
+                      CustomElevatedButton(
+                          text: "Save Profile",
+                          onPressed: () {
+                            saveDetails();
+                          })
                     ])))));
   }
 
@@ -77,6 +98,15 @@ class PatientCompleteProfile extends StatelessWidget {
     ]);
   }
 
+  Widget _diseaseChoiceChips() {
+    return ChoiceChips(
+        onOptionsChanged: (options) {
+          selectedOptions = options;
+          print("Selected Diseases: $selectedOptions");
+        },
+        options: diseases);
+  }
+
   void _selectDate(context, controller) {
     showDatePicker(
             context: context,
@@ -89,5 +119,11 @@ class PatientCompleteProfile extends StatelessWidget {
         controller.text = DateFormat('yyyy-MM-dd').format(value);
       }
     });
+  }
+
+  void saveDetails() {
+    print("Diabetes Type: $diabetesType");
+    print("Diagnosis Date: ${diagnosisDateController.text}");
+    print("Selected Diseases: $selectedOptions");
   }
 }
