@@ -81,7 +81,7 @@ class PatientCompleteProfile extends StatelessWidget {
     return AppBar(actions: [
       InkWell(
           onTap: () {
-            Navigator.pushReplacementNamed(context, AppRoutes.forumScreen);
+            Navigator.pushReplacementNamed(context, AppRoutes.homeScreen);
           },
           child: const Row(
             children: [

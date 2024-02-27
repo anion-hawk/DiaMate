@@ -1,5 +1,3 @@
-import "dart:async";
-
 import "package:diamate_frontend/config.dart";
 import "package:diamate_frontend/presentation/forum_screen/forum_screen.dart";
 import "package:diamate_frontend/widgets/elevated_button.dart";
@@ -31,16 +29,8 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
   }
 
-  bool state = false;
-
   void logOut() async {
     await FirebaseAuth.instance.signOut();
-  }
-
-  void toggleState() {
-    setState(() {
-      state = !state;
-    });
   }
 
   void checkCookie() async {
@@ -51,32 +41,43 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (state) return ForumScreen();
-
     return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text("Welcome to DiaMate"),
-            const Text("You are now logged in"),
-            CustomElevatedButton(
-                text: "Check Cookie",
-                onPressed: () {
-                  checkCookie();
-                }),
-            CustomElevatedButton(
-                text: "Forum",
-                onPressed: () {
-                  toggleState();
-                }),
-            CustomElevatedButton(
-                text: "Log Out",
-                onPressed: () {
-                  logOut();
-                }),
-          ],
-        ),
+      body: _pages[selectedIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: selectedIndex,
+        onTap: (int newIndex) {
+          setState(() {
+            selectedIndex = newIndex;
+          });
+          // Navigate to the respective page based on the selected index
+        },
+        items: const [
+          BottomNavigationBarItem(
+            backgroundColor: Color(0xFF012b68),
+            label: 'Home',
+            icon: Icon(Icons.home),
+          ),
+          BottomNavigationBarItem(
+            label: 'Planner',
+            icon: Icon(Icons.calendar_month),
+          ),
+          BottomNavigationBarItem(
+            label: 'Tracker',
+            icon: Icon(Icons.calendar_today),
+          ),
+          BottomNavigationBarItem(
+            label: 'Doctor',
+            icon: Icon(Icons.medication),
+          ),
+          BottomNavigationBarItem(
+            label: 'Message',
+            icon: Icon(Icons.message),
+          ),
+        ],
+
+        selectedItemColor: Colors.blue, // Change the selected icon color here
+        unselectedItemColor:
+            Colors.white, // Change the unselected icon color here
       ),
     );
   }
