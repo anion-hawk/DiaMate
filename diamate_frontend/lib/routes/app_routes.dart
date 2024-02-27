@@ -1,5 +1,6 @@
 //github::::::::::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
 
+import 'package:diamate_frontend/presentation/forum_screen/forum_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'package:diamate_frontend/services/auth/auth_view.dart';
@@ -118,6 +119,7 @@ class AppRoutes {
   static Map<String, WidgetBuilder> routes = {
     authGate: (context) => const AuthGate(),
     authView: (context) => const AuthView(),
+    forumScreen: (context) => ForumScreen(),
     // editProfileScreen: (context) => EditProfileScreen(),
     // registerScreen: (context) => RegisterScreen(),
     // registerPatientScreen: (context) => RegisterPatientScreen(),
