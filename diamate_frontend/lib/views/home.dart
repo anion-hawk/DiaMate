@@ -1,5 +1,3 @@
-import "dart:async";
-
 import "package:diamate_frontend/config.dart";
 import "package:diamate_frontend/presentation/forum_screen/forum_screen.dart";
 import "package:diamate_frontend/widgets/elevated_button.dart";
@@ -11,8 +9,6 @@ import "package:firebase_auth/firebase_auth.dart";
 import "package:flutter/material.dart";
 import "package:requests/requests.dart";
 
-
-
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -21,7 +17,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
   int selectedIndex = 0;
 
   final List<Widget> _pages = [
@@ -34,7 +29,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    
   }
 
   void logOut() async {
@@ -52,27 +46,22 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       body: _pages[selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
-        
         currentIndex: selectedIndex,
         onTap: (int newIndex) {
           setState(() {
             selectedIndex = newIndex;
-            
           });
           // Navigate to the respective page based on the selected index
-          
         },
         items: const [
           BottomNavigationBarItem(
             backgroundColor: Color(0xFF012b68),
             label: 'Home',
             icon: Icon(Icons.home),
-            
           ),
           BottomNavigationBarItem(
             label: 'Planner',
             icon: Icon(Icons.calendar_month),
-            
           ),
           BottomNavigationBarItem(
             label: 'Tracker',
@@ -83,13 +72,14 @@ class _HomeScreenState extends State<HomeScreen> {
             icon: Icon(Icons.medication),
           ),
           BottomNavigationBarItem(
-           label: 'Message',
+            label: 'Message',
             icon: Icon(Icons.message),
           ),
         ],
 
         selectedItemColor: Colors.blue, // Change the selected icon color here
-        unselectedItemColor: Colors.white, // Change the unselected icon color here
+        unselectedItemColor:
+            Colors.white, // Change the unselected icon color here
       ),
     );
   }

@@ -1,14 +1,12 @@
+import 'package:diamate_frontend/widgets/elevated_button.dart';
+
 import '../forum_screen/widgets/new.dart';
 import 'package:diamate_frontend/core/app_export.dart';
 import 'package:diamate_frontend/widgets/app_bar/appbar_leading_image.dart';
 import 'package:diamate_frontend/widgets/app_bar/appbar_trailing_image.dart';
 import 'package:diamate_frontend/widgets/app_bar/custom_app_bar.dart';
-import 'package:diamate_frontend/widgets/custom_elevated_button.dart';
-import 'package:diamate_frontend/widgets/custom_text_form_field.dart';
-
 import 'package:diamate_frontend/config.dart';
 import "package:firebase_auth/firebase_auth.dart";
-
 
 import 'package:diamate_frontend/presentation/edit_profile_screen/edit_profile_screen.dart';
 
@@ -21,54 +19,55 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 
 class ForumScreen extends StatefulWidget {
-  
-  ForumScreen({Key? key})
-      : super(key: key);
-  
+  ForumScreen({Key? key}) : super(key: key);
+
   @override
   _ForumScreenState createState() => _ForumScreenState();
-
 }
 
 class _ForumScreenState extends State<ForumScreen> {
-
   TextEditingController inputDataController = TextEditingController();
 
   GlobalKey<NavigatorState> navigatorKey = GlobalKey();
 
+  int _state = 0;
 
-   @override
-  void initState() {
-     super.initState();
-    User user = FirebaseAuth.instance.currentUser!;
-    user.getIdToken(true).then((token) {
-      print("Token");
-      print(token);
-      if (token != null) {
-        Requests.addCookie(Requests.getHostname(baseUrl), "token", token);
-      }
+  void reload() {
+    setState(() {
+      _state = 0;
     });
-    // Fetch data from the backend when the widget is created
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // User user = FirebaseAuth.instance.currentUser!;
+    // user.getIdToken(true).then((token) {
+    //   print("Token");
+    //   print(token);
+    //   if (token != null) {
+    //     Requests.addCookie(Requests.getHostname(baseUrl), "token", token);
+    //   }
+    // });
+    // // Fetch data from the backend when the widget is created
     fetchPosts();
   }
 
-  
+  Future<List<Map<String, dynamic>>> fetchPosts() async {
+    try {
+      final response = await Requests.get(forum, timeoutSeconds: 120);
 
- Future<List<Map<String, dynamic>>> fetchPosts() async {
-  try {
-    final response = await Requests.get(forum);
-
-    if (response.statusCode == 200) {
-      final List<dynamic> data = json.decode(response.body);
-      return data.cast<Map<String, dynamic>>();
-    } else {
-      throw Exception('Failed to load posts: ${response.statusCode}');
+      if (response.statusCode == 200) {
+        final List<dynamic> data = json.decode(response.body);
+        return data.cast<Map<String, dynamic>>();
+      } else {
+        throw Exception('Failed to load posts: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error fetching posts: $e');
+      throw Exception('Failed to load posts: $e');
     }
-  } catch (e) {
-    print('Error fetching posts: $e');
-    throw Exception('Failed to load posts: $e');
   }
-}
 
   @override
   Widget build(BuildContext context) {
@@ -92,43 +91,63 @@ class _ForumScreenState extends State<ForumScreen> {
           ),
         )),
         //bottomNavigationBar: _buildBottomBar(context),
+        //bottomNavigationBar: _buildBottomBar(context),
       ),
     );
   }
 
-
-   Widget _buildRowBar(BuildContext context){
-    return SizedBox( 
-      child:SizedBox(
-      height:100,
-      width: 450,
-      child: Row(
-        children: [
-          Expanded(child: ElevatedButton(onPressed: (){print('New');}, child: const Text('Newest'),
-            style: ElevatedButton.styleFrom(
-              textStyle: TextStyle(color: Colors.white),
-            ),)),
-          SizedBox(width: 10),
-          Expanded(child: ElevatedButton(onPressed: (){print('Popular');}, child: const Text('Popular'),
-            style: ElevatedButton.styleFrom(
-              textStyle: TextStyle(color: Colors.white),
-            ),)),
-          SizedBox(width: 10),
-          Expanded(child: ElevatedButton(onPressed: (){print('following');}, child: const Text('Following'),
-            style: ElevatedButton.styleFrom(
-              textStyle: TextStyle(color: Colors.white),
-            ),)),      
-        ],
+  Widget _buildRowBar(BuildContext context) {
+    return SizedBox(
+      child: SizedBox(
+        height: 100,
+        width: 450,
+        child: Row(
+          children: [
+            Expanded(
+                child: ElevatedButton(
+              onPressed: () {
+                print('New');
+              },
+              child: const Text('Newest'),
+              style: ElevatedButton.styleFrom(
+                textStyle: TextStyle(color: Colors.white),
+              ),
+            )),
+            SizedBox(width: 10),
+            Expanded(
+                child: ElevatedButton(
+              onPressed: () {
+                print('Popular');
+              },
+              child: const Text('Popular'),
+              style: ElevatedButton.styleFrom(
+                textStyle: TextStyle(color: Colors.white),
+              ),
+            )),
+            SizedBox(width: 10),
+            Expanded(
+                child: ElevatedButton(
+              onPressed: () {
+                print('following');
+              },
+              child: const Text('Following'),
+              style: ElevatedButton.styleFrom(
+                textStyle: TextStyle(color: Colors.white),
+              ),
+            )),
+          ],
+        ),
       ),
-      ),);
+    );
   }
 
   Color iconColor = Colors.white;
+
   /// Section Widget
   PreferredSizeWidget _buildAppBar(BuildContext context) {
-    return  AppBar(
-         title: const Text('DiaMate'),
-         actions: [
+    return AppBar(
+      title: const Text('DiaMate'),
+      actions: [
         IconButton(
           onPressed: () {
             setState(() {
@@ -155,21 +174,20 @@ class _ForumScreenState extends State<ForumScreen> {
               iconColor = Colors.blue; // Change icon color to blue
             });
 
-             Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => EditProfileScreen()),
-        );
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => EditProfileScreen()),
+            );
             // Add functionality for person action
           },
           icon: Icon(Icons.person),
           color: iconColor,
         ),
       ],
-         backgroundColor: Color(0xFF042142),
-        );
+      backgroundColor: Color(0xFF042142),
+    );
   }
 
-  
   /// Section Widget
   Widget _buildInputData(BuildContext context) {
     return Container(
@@ -209,11 +227,13 @@ class _ForumScreenState extends State<ForumScreen> {
         // After returning from OwnPostScreen, refresh the post list
         await fetchPosts();
         setState(() {}); // Trigger a rebuild to update the UI
+
+        // After returning from OwnPostScreen, refresh the post list
+        await fetchPosts();
+        setState(() {}); // Trigger a rebuild to update the UI
       },
     );
   }
-
- 
 
   /// Section Widget
   Widget _buildCreatPost(BuildContext context) {
@@ -277,9 +297,3 @@ class _ForumScreenState extends State<ForumScreen> {
     );
   }
 }
-
-
-
-
-
-

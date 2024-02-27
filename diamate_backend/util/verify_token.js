@@ -25,8 +25,19 @@ async function verifyToken(req, res, next) {
 	}
 	try {
 		decodedToken = await getAuth().verifyIdToken(token);
-		console.log(decodedToken);
-		return true;
+		const result = await userRepository.getUserByUid(decodedToken.uid);
+		if (result.success) {
+			if (result.data.length === 0) {
+				res.status(401).json({ error: 'User not found' });
+				return false;
+			}
+			else {
+				console.log('user:');
+				console.log(result.data[0]);
+				req.user = result.data[0];
+				return true;
+			}
+		}
 	}
 	catch (err) {
 		console.log(err)

@@ -257,7 +257,7 @@ class _EditProfileScreen extends State<EditProfileScreen> {
                         //emergency contacts
                         const SizedBox(height: 20),
                         const SizedBox(height: 50),
-                        
+
                         const Row(
                           children: [
                             Text(
@@ -294,21 +294,22 @@ class _EditProfileScreen extends State<EditProfileScreen> {
                             onPressed: () {
                               // register();
                             }),
-                          const SizedBox(height: 20), 
-                          CustomElevatedButton(
-                              text: "Log Out",
-                              onPressed: () {
-                                logOut();
-                              }),
+                        const SizedBox(height: 20),
+                        CustomElevatedButton(
+                            text: "Log Out",
+                            onPressed: () {
+                              logOut();
+                              Navigator.pop(context);
 
-                          
-                            
+                            }),
                       ]),
                     )))));
   }
- void logOut() async {
+
+  void logOut() async {
     await FirebaseAuth.instance.signOut();
   }
+
   void _selectDate(context) {
     showDatePicker(
             context: context,
@@ -471,19 +472,19 @@ class _EditProfileScreen extends State<EditProfileScreen> {
   }
 
   void getUserProfile() async {
-  //   try {
-  //     // Replace 'your_api_endpoint' with the actual API endpoint for fetching user profile
-  //     var response = await Requests.get(url_selfProfile);
-  //     print('User Profile: ${response.json()}');
-  //     if (response.statusCode == 200) {
-  //       // The response body contains the user profile information
-  //       print('User Profile: ${response.json()}');
-  //     } else {
-  //       print(
-  //           'Failed to fetch user profile. Status Code: ${response.statusCode}');
-  //     }
-  //   } catch (e) {
-  //     print('Error during GET request: $e');
-  //   }
-   }
+    //   try {
+    //     // Replace 'your_api_endpoint' with the actual API endpoint for fetching user profile
+    //     var response = await Requests.get(url_selfProfile);
+    //     print('User Profile: ${response.json()}');
+    //     if (response.statusCode == 200) {
+    //       // The response body contains the user profile information
+    //       print('User Profile: ${response.json()}');
+    //     } else {
+    //       print(
+    //           'Failed to fetch user profile. Status Code: ${response.statusCode}');
+    //     }
+    //   } catch (e) {
+    //     print('Error during GET request: $e');
+    //   }
+  }
 }

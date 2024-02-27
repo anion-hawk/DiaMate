@@ -1,5 +1,6 @@
 import 'package:diamate_frontend/config.dart';
 import 'package:diamate_frontend/widgets/app_bar/app_bar_trailing_button.dart';
+import 'package:requests/requests.dart';
 
 import '../own_post_screen/widgets/healthchipview_item_widget.dart';
 import 'package:diamate_frontend/core/app_export.dart';
@@ -44,11 +45,7 @@ class _OwnPostScreen extends State<OwnPostScreen> {
         "content": contentController.text
       };
       print(reqbody);
-      var response = await http.post(Uri.parse(own_post),
-          headers: {
-            "token": cookies.join(''),
-          },
-          body: reqbody);
+      var response = await Requests.post(own_post, body: reqbody);
       print(response.body);
       print(response.statusCode);
 
@@ -136,23 +133,13 @@ class _OwnPostScreen extends State<OwnPostScreen> {
         title: AppbarTitle(text: "Create Post"),
         actions: [
           IconButton(
-            color: Colors.white,
-          onPressed: () {
-            setState(() {
-               // Change icon color to blue
-                 savePost(context);
+              color: Colors.white,
+              onPressed: () {
+                savePost(context);
 
-               onTapClose(context);
-            });
-            // Add functionality for search action
-          },
-          icon: Icon(Icons.send),
-
-        ),
-          
-             
-            
-          
+                onTapClose(context);
+              },
+              icon: const Icon(Icons.send))
         ],
         styleType: Style.bgFill_1);
   }
