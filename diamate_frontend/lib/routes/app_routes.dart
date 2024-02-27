@@ -6,9 +6,9 @@ import 'package:flutter/material.dart';
 
 import 'package:diamate_frontend/services/auth/auth_view.dart';
 import 'package:diamate_frontend/services/auth/auth_gate.dart';
-import 'package:diamate_frontend/presentation/all_tracker_screen/pressure_tracker_screen.dart';
-import 'package:diamate_frontend/presentation/show_planner_screen/show_planner_screen.dart';
-import 'package:diamate_frontend/presentation/tracker_home_screen/tracker_home_screen.dart';
+// import 'package:diamate_frontend/presentation/all_tracker_screen/pressure_tracker_screen.dart';
+// import 'package:diamate_frontend/presentation/show_planner_screen/show_planner_screen.dart';
+// import 'package:diamate_frontend/presentation/tracker_home_screen/tracker_home_screen.dart';
 import 'package:diamate_frontend/views/profile/edit_profile_screen.dart';
 import 'package:diamate_frontend/views/profile/main_profile_screen.dart';
 
