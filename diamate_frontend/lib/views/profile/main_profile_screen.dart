@@ -32,14 +32,6 @@ class _MainProfileScreen extends State<MainProfileScreen> {
   @override
   void initState() {
     super.initState();
-    User user = FirebaseAuth.instance.currentUser!;
-    user.getIdToken(true).then((token) {
-      print("Token");
-      print(token);
-      if (token != null) {
-        Requests.addCookie(Requests.getHostname(baseUrl), "token", token);
-      }
-    });
     getUserFollowDetails();
     fetchPosts();
   }
@@ -229,11 +221,11 @@ class _MainProfileScreen extends State<MainProfileScreen> {
               radius: BorderRadius.circular(
                 15.h,
               ),
-            ), _buildInputData(context),
+            ),
+            _buildInputData(context),
             Expanded(
-                child:
-              _buildCreatePostButton(context),
-           ),
+              child: _buildCreatePostButton(context),
+            ),
           ],
         ),
       ),
@@ -273,13 +265,13 @@ class _MainProfileScreen extends State<MainProfileScreen> {
     try {
       // Replace 'your_api_endpoint' with the actual API endpoint for fetching user profile
       var response = await Requests.get(selffollowdetails, timeoutSeconds: 120);
-      print('follow Profile: ${response.json()}');
       if (response.statusCode == 200) {
         // The response body contains the user profile information
         print('follow Profile: ${response.json()}');
       } else {
         print(
             'Failed to fetch follow profile. Status Code: ${response.statusCode}');
+        print(response.body);
       }
     } catch (e) {
       print('Error during GET request: $e');

@@ -42,7 +42,8 @@ async function getSelfFollowingDetails(req, res) {
     console.log(id);
     const result = await userRepository.getUserDetailsById(id);
     if (!result.success) {
-        res.status(500).json({ error: "Internal server errorr" });
+        res.status(500).json({ error: "Internal server error: query failed" });
+        console.log(res);
         return;
     }
     if (result.data.length === 0) {
@@ -55,14 +56,16 @@ async function getSelfFollowingDetails(req, res) {
         console.log(followerDetails.data[0]);
         const followingDetails = await followRepository.getFollowing(id);
         console.log(followingDetails.data[0]);
-        if (!followerDetails.success || !followingDetails.success ) {
-            res.status(500).json({ error: "Internal server error" });
+        if (!followerDetails.success || !followingDetails.success) {
+            res.status(500).json({ error: "Internal server error: follow query failed" });
+            console.log(res);
             return;
         }
         res.status(200).json({ user, followerDetails: followerDetails.data[0], followingDetails: followingDetails.data[0] });
         return;
     }
     res.status(500).json({ error: "Internal server error" });
+    console.log(res);
     return;
 }
 
