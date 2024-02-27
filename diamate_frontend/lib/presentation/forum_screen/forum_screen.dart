@@ -20,17 +20,13 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 
 class ForumScreen extends StatefulWidget {
-  
-  ForumScreen({Key? key})
-      : super(key: key);
-  
+  ForumScreen({Key? key}) : super(key: key);
+
   @override
   _ForumScreenState createState() => _ForumScreenState();
-
 }
 
 class _ForumScreenState extends State<ForumScreen> {
-
   TextEditingController inputDataController = TextEditingController();
 
   GlobalKey<NavigatorState> navigatorKey = GlobalKey();
@@ -43,18 +39,18 @@ class _ForumScreenState extends State<ForumScreen> {
     });
   }
 
-   @override
+  @override
   void initState() {
     super.initState();
-    User user = FirebaseAuth.instance.currentUser!;
-    user.getIdToken(true).then((token) {
-      print("Token");
-      print(token);
-      if (token != null) {
-        Requests.addCookie(Requests.getHostname(baseUrl), "token", token);
-      }
-    });
-    // Fetch data from the backend when the widget is created
+    // User user = FirebaseAuth.instance.currentUser!;
+    // user.getIdToken(true).then((token) {
+    //   print("Token");
+    //   print(token);
+    //   if (token != null) {
+    //     Requests.addCookie(Requests.getHostname(baseUrl), "token", token);
+    //   }
+    // });
+    // // Fetch data from the backend when the widget is created
     fetchPosts();
   }
 
@@ -127,15 +123,16 @@ class _ForumScreenState extends State<ForumScreen> {
             ),)),      
         ],
       ),
-      ),);
+    );
   }
 
   Color iconColor = Colors.white;
+
   /// Section Widget
   PreferredSizeWidget _buildAppBar(BuildContext context) {
-    return  AppBar(
-         title: const Text('DiaMate'),
-         actions: [
+    return AppBar(
+      title: const Text('DiaMate'),
+      actions: [
         IconButton(
           onPressed: () {
             setState(() {
@@ -172,11 +169,10 @@ class _ForumScreenState extends State<ForumScreen> {
           color: iconColor,
         ),
       ],
-         backgroundColor: Color(0xFF042142),
-        );
+      backgroundColor: Color(0xFF042142),
+    );
   }
 
-  
   /// Section Widget
   Widget _buildInputData(BuildContext context) {
     return Container(
@@ -223,8 +219,6 @@ class _ForumScreenState extends State<ForumScreen> {
       },
     );
   }
-
- 
 
   /// Section Widget
   Widget _buildCreatPost(BuildContext context) {

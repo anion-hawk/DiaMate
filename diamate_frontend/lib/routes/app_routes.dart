@@ -1,5 +1,7 @@
 //github::::::::::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
 
+import 'package:diamate_frontend/presentation/forum_screen/forum_screen.dart';
+import 'package:diamate_frontend/views/home.dart';
 import 'package:flutter/material.dart';
 
 import 'package:diamate_frontend/services/auth/auth_view.dart';
@@ -13,6 +15,7 @@ import 'package:diamate_frontend/views/profile/main_profile_screen.dart';
 class AppRoutes {
   static const String authGate = '/auth_gate';
   static const String authView = '/auth_view';
+  static const String homeScreen = '/home_screen';
 
   static const String othersProfileScreen = '/others_profile_screen';
 
@@ -120,6 +123,9 @@ class AppRoutes {
   static Map<String, WidgetBuilder> routes = {
     authGate: (context) => const AuthGate(),
     authView: (context) => const AuthView(),
+    forumScreen: (context) => ForumScreen(),
+    homeScreen: (context) => HomeScreen(),
+    // editProfileScreen: (context) => EditProfileScreen(),
     editProfileScreen: (context) => EditProfileScreen(),
     mainProfileScreen: (context) => MainProfileScreen(),
     // registerScreen: (context) => RegisterScreen(),

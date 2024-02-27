@@ -5,20 +5,20 @@ import 'package:diamate_frontend/presentation/register_screen/register_screen.da
 
 String baseUrl = "http://192.168.25.56:3000";
 
-final url_register = baseUrl + '/auth/register';
-final url_cookieCheck = baseUrl + '/user/test';
+final url_register = '$baseUrl/auth/register';
+final url_cookieCheck = '$baseUrl/user/test';
+final url_selfProfile = '$baseUrl/user/profile';
+final url_profileStatus = '$baseUrl/user/status';
 
-final login = baseUrl + "/auth/login";
-final show_post = baseUrl + "/forum/show";
-final compUserProf = baseUrl + "/user/complete-profile";
-final own_post = baseUrl + "/forum/post";
-final forum = baseUrl + "/forum/posts";
-final url_selfProfile = baseUrl + "/user/profile";
+final show_post = "$baseUrl/forum/show";
+final compUserProf = "$baseUrl/user/complete-profile";
+final own_post = "$baseUrl/forum/post";
+final forum = "$baseUrl/forum/posts";
 final selffollowdetails = baseUrl + "/user/self-follow-details";
-// Cookie Management
 
-var cj = new CookieJar();
-var cookies = [];
+// // Cookie Management
+// var cj = new CookieJar();
+// var cookies = [];
 
-var usaved;
-var psaved;
+// var usaved;
+// var psaved;

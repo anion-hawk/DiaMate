@@ -291,7 +291,7 @@ class _EditProfileScreen extends State<EditProfileScreen> {
                         // login button
                         CustomElevatedButton(
                             text: "Save Changes",
-                            buttonStyle: CustomButtonStyles.fillIndigo ,
+                            buttonStyle: CustomButtonStyles.fillIndigo,
                             onPressed: () {
                               // register();
                             }),
@@ -370,7 +370,7 @@ class _EditProfileScreen extends State<EditProfileScreen> {
                     "Camera",
                     style: TextStyle(
                       color: Color.fromARGB(255, 25, 12, 108),
-),
+                    ),
                   ),
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all<Color>(
@@ -389,7 +389,7 @@ class _EditProfileScreen extends State<EditProfileScreen> {
                     "Gallery",
                     style: TextStyle(
                       color: Color.fromARGB(255, 25, 12, 108),
-),
+                    ),
                   ),
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all<Color>(
@@ -487,5 +487,5 @@ class _EditProfileScreen extends State<EditProfileScreen> {
     } catch (e) {
       print('Error during GET request: $e');
     }
-   }
+  }
 }
