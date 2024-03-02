@@ -123,13 +123,14 @@ async function getPost(req, res) {
 }
 
 async function getSelfPosts(req, res) {
-	const { author } = req.params;
-	console.log(id);
+	//const { author } = req.params;
+	uid = req.user.id;
+	console.log(uid);
 	let param = { page: 1, limit: 20 };
 	const page = param.page;
 	const limit = param.limit;
 	const offset = (page - 1) * limit;
-	const result = await forumRepository.getSelfPosts(offset, limit, author);
+	const result = await forumRepository.getSelfPosts(offset, limit, uid);
 	if (result.success) {
 		let posts = result.data;
 		let postDetailsFound = await getPostsDetails(posts, req, res);

@@ -47,7 +47,7 @@ class _MainProfileScreen extends State<MainProfileScreen> {
   String author = "";
   Future<List<Map<String, dynamic>>> fetchPosts() async {
     try {
-       final response = await Requests.get(forum, timeoutSeconds: 300);
+       final response = await Requests.get(selfPosts, timeoutSeconds: 300);
       // var response = await Requests.get(
       //   '$selfPosts?id=$author',
       //   headers: {'Content-Type': 'application/json'},

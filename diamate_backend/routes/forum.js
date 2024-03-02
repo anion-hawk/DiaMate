@@ -4,7 +4,7 @@ const commentController = require('../controllers/comment');
 
 router.route('/post').post(forumController.createPost);
 router.route('/posts').get(forumController.getPosts);
-router.route('/:author/selfposts').get(forumController.getSelfPosts);
+router.route('/selfposts').get(forumController.getSelfPosts);
 router.route('/:id').get(forumController.getPost);
 router.route('/:id').post(forumController.setUpvote);
 

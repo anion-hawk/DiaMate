@@ -191,9 +191,9 @@ class _ForumScreenState extends State<ForumScreen> {
   }
 
   /// Section Widget
-  Widget _buildInputData(BuildContext context) {
+   Widget _buildInputData(BuildContext context) {
     return Container(
-      width: 174.h,
+      width: 120.h,
       padding: EdgeInsets.symmetric(
         horizontal: 10.h,
         vertical: 9.v,
@@ -216,8 +216,12 @@ class _ForumScreenState extends State<ForumScreen> {
   Widget _buildCreatePostButton(BuildContext context) {
     return CustomElevatedButton(
       height: 34.v,
-      width: 83.h,
+      width: 100.h,
       text: "Create Post",
+      buttonTextStyle: const TextStyle(
+        color: Color.fromARGB(255, 250, 254, 255), // Set the desired text color
+      ),
+      buttonStyle: CustomButtonStyles.fillIndigo,
       onPressed: () async {
         // Add the functionality you want to execute when the button is pressed
         // For example, you can navigate to a new screen:
@@ -237,41 +241,7 @@ class _ForumScreenState extends State<ForumScreen> {
     );
   }
 
-  /// Section Widget
-  // Widget _buildCreatPost(BuildContext context) {
-  //   return Container(
-  //     margin: EdgeInsets.only(
-  //       left: 1.h,
-  //       right: 2.h,
-  //     ),
-  //     padding: EdgeInsets.all(14.h),
-  //     decoration: AppDecoration.fillBlue.copyWith(
-  //       borderRadius: BorderRadiusStyle.roundedBorder10,
-  //     ),
-  //     child: Container(
-  //       decoration: AppDecoration.outlineBlack,
-  //       child: Row(
-  //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //         children: [
-  //           CustomImageView(
-  //             imagePath: ImageConstant.imgEllipse230x30,
-  //             height: 30.adaptSize,
-  //             width: 30.adaptSize,
-  //             radius: BorderRadius.circular(
-  //               15.h,
-  //             ),
-  //           ),
-  //           _buildInputData(context),
-  //           Expanded(
-  //             child: _buildCreatePostButton(context),
-  //           ),
-  //           //_buildCreatePostButton(context),
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
-   Widget _buildCreatPost(BuildContext context) {
+  Widget _buildCreatPost(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(
         left: 1.h,
