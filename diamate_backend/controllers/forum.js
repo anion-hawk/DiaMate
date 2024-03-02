@@ -122,6 +122,26 @@ async function getPost(req, res) {
 	}
 }
 
+async function getSelfPosts(req, res) {
+	const { author } = req.params;
+	console.log(id);
+	let param = { page: 1, limit: 20 };
+	const page = param.page;
+	const limit = param.limit;
+	const offset = (page - 1) * limit;
+	const result = await forumRepository.getSelfPosts(offset, limit, author);
+	if (result.success) {
+		let posts = result.data;
+		let postDetailsFound = await getPostsDetails(posts, req, res);
+		if (!postDetailsFound) {
+			return;
+		}
+		res.status(200).json(posts);
+	}
+	else {
+		res.status(500).json({ error: 'Internal server error: query failed' });
+	}
+}
 async function isValidPost(postId, res) {
 	const postQuery = await forumRepository.getPostById(postId);
 	if (!postQuery.success) {
@@ -175,5 +195,6 @@ module.exports = {
 	getPosts,
 	getPost,
 	setUpvote,
-	isValidPost
+	isValidPost,
+	getSelfPosts
 };

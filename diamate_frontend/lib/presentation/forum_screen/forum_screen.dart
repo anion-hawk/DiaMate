@@ -238,7 +238,40 @@ class _ForumScreenState extends State<ForumScreen> {
   }
 
   /// Section Widget
-  Widget _buildCreatPost(BuildContext context) {
+  // Widget _buildCreatPost(BuildContext context) {
+  //   return Container(
+  //     margin: EdgeInsets.only(
+  //       left: 1.h,
+  //       right: 2.h,
+  //     ),
+  //     padding: EdgeInsets.all(14.h),
+  //     decoration: AppDecoration.fillBlue.copyWith(
+  //       borderRadius: BorderRadiusStyle.roundedBorder10,
+  //     ),
+  //     child: Container(
+  //       decoration: AppDecoration.outlineBlack,
+  //       child: Row(
+  //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //         children: [
+  //           CustomImageView(
+  //             imagePath: ImageConstant.imgEllipse230x30,
+  //             height: 30.adaptSize,
+  //             width: 30.adaptSize,
+  //             radius: BorderRadius.circular(
+  //               15.h,
+  //             ),
+  //           ),
+  //           _buildInputData(context),
+  //           Expanded(
+  //             child: _buildCreatePostButton(context),
+  //           ),
+  //           //_buildCreatePostButton(context),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
+   Widget _buildCreatPost(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(
         left: 1.h,
@@ -262,7 +295,9 @@ class _ForumScreenState extends State<ForumScreen> {
               ),
             ),
             _buildInputData(context),
-            _buildCreatePostButton(context),
+            Expanded(
+              child: _buildCreatePostButton(context),
+            ),
           ],
         ),
       ),
