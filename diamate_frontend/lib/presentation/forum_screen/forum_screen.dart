@@ -104,13 +104,15 @@ class _ForumScreenState extends State<ForumScreen> {
       child: Row(
         children: [
           Expanded(
-              child: ElevatedButton(
+              child: 
+              ElevatedButton(
             onPressed: () {
               print('New');
             },
             child: const Text(
               'Newest',
               selectionColor: Color.fromARGB(255, 255, 255, 255),
+              style: TextStyle(color:Colors.white),
             ),
             style: ElevatedButton.styleFrom(
               textStyle: TextStyle(color: Colors.white),
@@ -122,7 +124,7 @@ class _ForumScreenState extends State<ForumScreen> {
             onPressed: () {
               print('Popular');
             },
-            child: const Text('Popular'),
+            child: const Text('Popular', style: TextStyle(color:Colors.white),),
             style: ElevatedButton.styleFrom(
               textStyle: TextStyle(color: Colors.white),
             ),
@@ -133,7 +135,7 @@ class _ForumScreenState extends State<ForumScreen> {
             onPressed: () {
               print('following');
             },
-            child: const Text('Following'),
+            child: const Text('Following',style: TextStyle(color:Colors.white),),
             style: ElevatedButton.styleFrom(
               textStyle: TextStyle(color: Colors.white),
             ),
