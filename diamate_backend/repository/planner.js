@@ -33,9 +33,36 @@ async function getMedicineDetailsById(id) {
 	}
 	return { success, error };
 }
+//DIEEETTTTTT
+
+async function insertDietPlan (userid, type, title, date, stime, etime){
+	const query = 'INSERT INTO dietplanner (userid, type, title, date, stime, etime) VALUES($1, $2, $3, $4, $5,$6) RETURNING (id, userid, type, title, date, stime, etime) ';
+	const params = [userid, type, title, date, stime, etime ];
+	console.log(params);
+	const { success, data, error } = await repository.query(query, params);
+	console.log(data);
+	if (success) {
+		return { success, data };
+	}
+	return { success, error };
+}
+
+async function getDietList(userId) {
+	const query = 'SELECT * FROM public.dietplanner WHERE userid = $1 ORDER BY stime ASC';
+	const params = [userId];
+	
+	const { success, data, error } = await repository.query(query,params);
+	console.log(userId+" "+ data);
+	if (success) {
+		return { success, data };
+	}
+	return { success, error };
+}
 
 module.exports = {
 	insertMedicineDosage,
     getMedicineDetailsById,
-    getMedicineList
+    getMedicineList,
+	insertDietPlan,
+	getDietList
 };

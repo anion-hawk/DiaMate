@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:diamate_frontend/core/app_export.dart';
 //UserprofilelistItemWidget
 class UserMeallistItemWidget extends StatefulWidget {
-  const UserMeallistItemWidget({Key? key}) : super(key: key);
+  final Map<String, dynamic> data;
+  const UserMeallistItemWidget({required this.data, Key? key}) : super(key: key);
 
   @override
   _MedicationModalState createState() => _MedicationModalState();
@@ -19,12 +20,20 @@ class _MedicationModalState extends State<UserMeallistItemWidget> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                '08:00 AM - 09:10 AM', // Time range text
+                widget.data['sformatted_time']+' - '+widget.data['sformatted_time'],
+                //'08:00 AM - 09:10 AM', // Time range text
                 style: TextStyle(
                   color: Color(0xFF012b68),
                 ),
               ),
-              SizedBox(height: 20.0),
+              SizedBox(height: 5.0),
+              Text(
+                widget.data['formatted_date'],
+                //'08:00 AM - 09:10 AM', // Time range text
+                style: TextStyle(
+                  color: Color(0xFF012b68),
+                ),
+              ), SizedBox(height:10)
             ],
           ),
           SizedBox(width: 10.0), // Add some space between time range and box
@@ -40,7 +49,7 @@ class _MedicationModalState extends State<UserMeallistItemWidget> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Breakfast', // Text inside the box
+                  widget.data['type'], // Text inside the box
                   style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
@@ -48,7 +57,7 @@ class _MedicationModalState extends State<UserMeallistItemWidget> {
                 ),
                 SizedBox(height: 10.0),
                 Text(
-                  'Mixed Vegetables Salad', // Text inside the box
+                  widget.data['title'], // Text inside the box
                   style: TextStyle(
                     color: Colors.white,
                   ),

@@ -20,6 +20,9 @@ final selfPosts = "$baseUrl/forum/selfposts";
 
 final medlist = "$baseUrl/planner/medicinelist";
 final insertmed = "$baseUrl/planner/insert-medicine";
+
+final dietlist = "$baseUrl/planner/dietlist";
+final insertdiet = "$baseUrl/planner/insert-diet";
 // // Cookie Management
 // var cj = new CookieJar();
 // var cookies = [];

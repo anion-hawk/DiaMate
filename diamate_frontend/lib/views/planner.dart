@@ -1,5 +1,9 @@
+import 'dart:convert';
+
+import 'package:diamate_frontend/config.dart';
 import "package:diamate_frontend/view_widgets/medicine_tracker/medicine_tracker.dart";
 import 'package:flutter/material.dart';
+import 'package:requests/requests.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:diamate_frontend/core/app_export.dart';
 //import 'package:diamate_frontend/presentation/all_tracker_screen/pressure_tracker_screen.dart';
@@ -37,7 +41,37 @@ class _ShowPlannerState extends State<ShowPlanner> {
       selectedDay = day;
     });
   }
+  @override
+  void initState() {
+    super.initState();
+    // User user = FirebaseAuth.instance.currentUser!;
+    // user.getIdToken(true).then((token) {
+    //   print("Token");
+    //   print(token);
+    //   if (token != null) {
+    //     Requests.addCookie(Requests.getHostname(baseUrl), "token", token);
+    //   }
+    // });
+    // // Fetch data from the backend when the widget is created
+    fetchDietList();
+  }
 
+   Future<List<Map<String, dynamic>>> fetchDietList() async {
+    try {
+      final response = await Requests.get(dietlist, timeoutSeconds: 120);
+
+      if (response.statusCode == 200) {
+        final List<dynamic> data = json.decode(response.body);
+        print(data);
+        return data.cast<Map<String, dynamic>>();
+      } else {
+        throw Exception('Failed to load diet list: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error fetching diets: $e');
+      throw Exception('Failed to load dietlists: $e');
+    }
+  }
   DateTime today = DateTime.now();
   @override
   int selectedIndex = 0; // Default selected index
@@ -242,21 +276,54 @@ class _ShowPlannerState extends State<ShowPlanner> {
     );
   }
 
+  // Widget _buildUserMealList(BuildContext context) {
+  //   return  Container(
+  //     child: ListView.separated(
+  //       physics: NeverScrollableScrollPhysics(),
+  //       shrinkWrap: true,
+  //       separatorBuilder: (context, index) {
+  //         return SizedBox(height: 10.v);
+  //       },
+  //       itemCount: 50,
+  //       itemBuilder: (context, index) {
+  //         return UserMeallistItemWidget(
+  //             // Pass any necessary data to UserMeallistItemWidget
+  //             );
+  //       },
+  //     ),
+  //   );
+  // }
   Widget _buildUserMealList(BuildContext context) {
-    return  Container(
-      child: ListView.separated(
-        physics: NeverScrollableScrollPhysics(),
-        shrinkWrap: true,
-        separatorBuilder: (context, index) {
-          return SizedBox(height: 10.v);
-        },
-        itemCount: 50,
-        itemBuilder: (context, index) {
-          return UserMeallistItemWidget(
-              // Pass any necessary data to UserMeallistItemWidget
-              );
-        },
-      ),
+    return FutureBuilder<List<Map<String, dynamic>>>(
+      future: fetchDietList(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          // If the Future is still running, show a loading indicator
+          return CircularProgressIndicator();
+        } else if (snapshot.hasError) {
+          // If there's an error in fetching the data, display an error message
+          return Text('Error: ${snapshot.error}');
+        } else {
+          // If the data has been successfully fetched, build the UI using the data
+          List<Map<String, dynamic>> meds = snapshot.data ?? [];
+          return Padding(
+            padding: EdgeInsets.only(left: 7.h, right: 4.h),
+            child: ListView.separated(
+              physics: NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              separatorBuilder: (context, index) {
+                return SizedBox(height: 21.v);
+              },
+              itemCount: meds.length,
+              itemBuilder: (context, index) {
+                return UserMeallistItemWidget(data: meds[index]);
+              },
+            ),
+          );
+        }
+      },
     );
   }
+  
+  
 }
