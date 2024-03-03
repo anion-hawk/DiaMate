@@ -4,7 +4,7 @@ import "package:diamate_frontend/widgets/elevated_button.dart";
 import "package:diamate_frontend/views/tracker.dart";
 import "package:diamate_frontend/views/planner.dart";
 
-import 'package:diamate_frontend/views/chat/chat_list.dart';
+import 'package:diamate_frontend/views/chat/conversation_list.dart';
 import "package:firebase_auth/firebase_auth.dart";
 import "package:flutter/material.dart";
 import "package:requests/requests.dart";
@@ -24,7 +24,7 @@ class _HomeScreenState extends State<HomeScreen> {
     ShowPlanner(),
     TrackerHomeScreen(),
     ForumScreen(),
-    ChatListScreen(),
+    ConversationList(),
   ];
   @override
   void initState() {

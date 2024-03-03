@@ -94,7 +94,7 @@ class _ChatScreenState extends State<ChatScreen> {
           padding: const EdgeInsets.all(8.0),
           color: data['senderId'] == widget.receiverId
               ? Colors.blue[100]
-              : Colors.grey,
+              : Colors.grey[300],
           child: Text(data['message']),
         ),
       ),
