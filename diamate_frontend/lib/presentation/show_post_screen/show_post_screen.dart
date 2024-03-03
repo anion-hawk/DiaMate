@@ -4,6 +4,7 @@ import 'package:diamate_frontend/widgets/app_bar/appbar_leading_image.dart';
 import 'package:diamate_frontend/widgets/app_bar/appbar_subtitle_one.dart';
 import 'package:diamate_frontend/widgets/app_bar/appbar_trailing_image.dart';
 import 'package:diamate_frontend/widgets/app_bar/custom_app_bar.dart';
+import 'package:diamate_frontend/widgets/choice_chips_static.dart';
 import 'package:diamate_frontend/widgets/custom_search_view.dart';
 import 'package:diamate_frontend/widgets/form_text.dart';
 import 'package:flutter/material.dart';
@@ -40,6 +41,7 @@ class User {
 class ShowPostScreen extends StatefulWidget {
   final Map<String, dynamic> post;
   ShowPostScreen({required this.post, Key? key}) : super(key: key);
+  List<String> tags = [];
 
   @override
   _ShowPostScreenState createState() => _ShowPostScreenState();
@@ -85,6 +87,10 @@ class _ShowPostScreenState extends State<ShowPostScreen> {
   @override
   void initState() {
     super.initState();
+    print(widget.post['tags']);
+    // widget.tags =
+    //     widget.post['tags'].replaceAll('[', '').replaceAll(']', '').split(', ');
+    // print(widget.tags);
     // Fetch data from the backend when the widget is created
     fetchData();
   }
@@ -153,7 +159,14 @@ class _ShowPostScreenState extends State<ShowPostScreen> {
                         maxLines: 6,
                         overflow: TextOverflow.ellipsis,
                         style: CustomTextStyles.bodyMediumPoppinsBlack90002))),
-            SizedBox(height: 10.v),
+            const SizedBox(height: 20),
+            // StaticChoiceChips(options: widget.post["tags"]),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text('Tags: ' + widget.post["tags"],
+                  style: CustomTextStyles.bodyMediumPoppinsBlack90002),
+            ),
+            const SizedBox(height: 20),
             CustomImageView(
                 imagePath: ImageConstant.imgRectangle22474,
                 height: 240.v,

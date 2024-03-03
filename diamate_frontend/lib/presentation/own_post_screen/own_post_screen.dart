@@ -1,5 +1,6 @@
 import 'package:diamate_frontend/config.dart';
 import 'package:diamate_frontend/widgets/app_bar/app_bar_trailing_button.dart';
+import 'package:diamate_frontend/widgets/choice_chips.dart';
 import 'package:requests/requests.dart';
 
 import '../own_post_screen/widgets/healthchipview_item_widget.dart';
@@ -34,15 +35,25 @@ class _OwnPostScreen extends State<OwnPostScreen> {
     });
   }
 
-  TextEditingController titleController = TextEditingController();
+  final List<String> availableTags = [
+    'health',
+    'medicine',
+    'lifestyle',
+    'exercise',
+    'motivation'
+  ];
 
+  TextEditingController titleController = TextEditingController();
   TextEditingController contentController = TextEditingController();
+  List<String> selectedTags = [];
+
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   void savePost(BuildContext context) async {
     if (titleController.text.isNotEmpty && contentController.text.isNotEmpty) {
       var reqbody = {
         "title": titleController.text,
-        "content": contentController.text
+        "content": contentController.text,
+        "tags": selectedTags
       };
       print(reqbody);
       var response = await Requests.post(own_post, body: reqbody);
@@ -106,17 +117,27 @@ class _OwnPostScreen extends State<OwnPostScreen> {
                         ),
                       ),
                       const Spacer(),
-                      _buildHealthChipView(context),
-                      SizedBox(height: 17.v),
-                      Row(children: [
-                        CustomIconButton(
-                            height: 40.adaptSize,
-                            width: 40.adaptSize,
-                            //onPressed: _pickImage,
-                            child: CustomImageView(
-                                imagePath: ImageConstant.imgUserPrimary40x40)),
-                      ])
+                      _buildTags(),
+                      // _buildHealthChipView(context),
+                      // SizedBox(height: 17.v),
+                      // Row(children: [
+                      //   CustomIconButton(
+                      //       height: 40.adaptSize,
+                      //       width: 40.adaptSize,
+                      //       //onPressed: _pickImage,
+                      //       child: CustomImageView(
+                      //           imagePath: ImageConstant.imgUserPrimary40x40)),
+                      // ])
                     ]))));
+  }
+
+  Widget _buildTags() {
+    return ChoiceChips(
+        onOptionsChanged: (options) {
+          selectedTags = options;
+          print("Selected Diseases: $selectedTags");
+        },
+        options: availableTags);
   }
 
   /// Section Widget
