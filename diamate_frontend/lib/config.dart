@@ -10,3 +10,7 @@ final show_post = "$baseUrl/forum/show";
 final own_post = "$baseUrl/forum/post";
 final forum = "$baseUrl/forum/posts";
 final selffollowdetails = baseUrl + "/user/self-follow-details";
+final selfPosts = "$baseUrl/forum/selfposts";
+
+final medlist = "$baseUrl/planner/medicinelist";
+final insertmed = "$baseUrl/planner/insert-medicine";

@@ -111,6 +111,7 @@ class _ForumScreenState extends State<ForumScreen> {
             child: const Text(
               'Newest',
               selectionColor: Color.fromARGB(255, 255, 255, 255),
+              style: TextStyle(color: Colors.white),
             ),
             style: ElevatedButton.styleFrom(
               textStyle: TextStyle(color: Colors.white),
@@ -122,7 +123,10 @@ class _ForumScreenState extends State<ForumScreen> {
             onPressed: () {
               print('Popular');
             },
-            child: const Text('Popular'),
+            child: const Text(
+              'Popular',
+              style: TextStyle(color: Colors.white),
+            ),
             style: ElevatedButton.styleFrom(
               textStyle: TextStyle(color: Colors.white),
             ),
@@ -133,7 +137,10 @@ class _ForumScreenState extends State<ForumScreen> {
             onPressed: () {
               print('following');
             },
-            child: const Text('Following'),
+            child: const Text(
+              'Following',
+              style: TextStyle(color: Colors.white),
+            ),
             style: ElevatedButton.styleFrom(
               textStyle: TextStyle(color: Colors.white),
             ),
@@ -165,16 +172,6 @@ class _ForumScreenState extends State<ForumScreen> {
             setState(() {
               iconColor = Colors.blue; // Change icon color to blue
             });
-            // Add functionality for notifications action
-          },
-          icon: Icon(Icons.notifications),
-          color: iconColor,
-        ),
-        IconButton(
-          onPressed: () {
-            setState(() {
-              iconColor = Colors.blue; // Change icon color to blue
-            });
 
             Navigator.push(
               context,
@@ -185,15 +182,31 @@ class _ForumScreenState extends State<ForumScreen> {
           icon: Icon(Icons.person),
           color: iconColor,
         ),
+        IconButton(
+          onPressed: () {
+            setState(() {
+              iconColor = Colors.blue; // Change icon color to blue
+            });
+            logOut();
+            // Add functionality for notifications action
+          },
+          icon: Icon(Icons.logout),
+          color: iconColor,
+        ),
+        
       ],
       backgroundColor: Color(0xFF042142),
     );
   }
 
+  void logOut() async {
+    await FirebaseAuth.instance.signOut();
+  }
+
   /// Section Widget
   Widget _buildInputData(BuildContext context) {
     return Container(
-      width: 174.h,
+      width: 120.h,
       padding: EdgeInsets.symmetric(
         horizontal: 10.h,
         vertical: 9.v,
@@ -216,8 +229,12 @@ class _ForumScreenState extends State<ForumScreen> {
   Widget _buildCreatePostButton(BuildContext context) {
     return CustomElevatedButton(
       height: 34.v,
-      width: 83.h,
+      width: 100.h,
       text: "Create Post",
+      buttonTextStyle: const TextStyle(
+        color: Color.fromARGB(255, 250, 254, 255), // Set the desired text color
+      ),
+      buttonStyle: CustomButtonStyles.fillIndigo,
       onPressed: () async {
         // Add the functionality you want to execute when the button is pressed
         // For example, you can navigate to a new screen:
@@ -237,7 +254,6 @@ class _ForumScreenState extends State<ForumScreen> {
     );
   }
 
-  /// Section Widget
   Widget _buildCreatPost(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(
@@ -262,7 +278,9 @@ class _ForumScreenState extends State<ForumScreen> {
               ),
             ),
             _buildInputData(context),
-            _buildCreatePostButton(context),
+            Expanded(
+              child: _buildCreatePostButton(context),
+            ),
           ],
         ),
       ),

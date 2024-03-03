@@ -6,6 +6,11 @@ import 'package:diamate_frontend/views/tracker.dart';
 import 'package:diamate_frontend/widgets/app_bar/custom_app_bar.dart';
 import 'package:diamate_frontend/widgets/custom_floating_button.dart';
 import 'package:flutter/material.dart';
+import "package:requests/requests.dart";
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:diamate_frontend/config.dart';
+import 'package:flutter/material.dart';
 
 //import 'package:diamate_frontend/presentation/modals/add_Pressure_modal.dart';
 
@@ -23,17 +28,47 @@ class _MedicationEntryModalState extends State<MedicineTrackerScreen> {
   TimeOfDay selectedTime = TimeOfDay.now();
   TextEditingController _dateController = TextEditingController();
   TextEditingController _timeController = TextEditingController();
+  TextEditingController _medicinecontroller = TextEditingController();
+  TextEditingController _dosagecontroller = TextEditingController();
 
-
+  String rpt = '';
   List<String> dropdownItemList = [
     "Does not repeat",
     "Every Day",
     "Every week",
     "Every Month",
   ];
+  @override
+  void initState() {
+    super.initState();
+    // User user = FirebaseAuth.instance.currentUser!;
+    // user.getIdToken(true).then((token) {
+    //   print("Token");
+    //   print(token);
+    //   if (token != null) {
+    //     Requests.addCookie(Requests.getHostname(baseUrl), "token", token);
+    //   }
+    // });
+    // // Fetch data from the backend when the widget is created
+    fetchMedicineList();
+  }
 
+  Future<List<Map<String, dynamic>>> fetchMedicineList() async {
+    try {
+      final response = await Requests.get(medlist, timeoutSeconds: 120);
 
-
+      if (response.statusCode == 200) {
+        final List<dynamic> data = json.decode(response.body);
+       //print(data);
+        return data.cast<Map<String, dynamic>>();
+      } else {
+        throw Exception('Failed to load medlist: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error fetching posts: $e');
+      throw Exception('Failed to load medlists: $e');
+    }
+  }
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -62,6 +97,7 @@ class _MedicationEntryModalState extends State<MedicineTrackerScreen> {
       });
     }
   }
+
   /// Section Widget
   PreferredSizeWidget _buildAppBar(BuildContext context) {
     return CustomAppBar(
@@ -81,21 +117,54 @@ class _MedicationEntryModalState extends State<MedicineTrackerScreen> {
     );
   }
 
-  /// Section Widget
-  Widget _buildUserProfileList(BuildContext context) {
-    return Padding(
-        padding: EdgeInsets.only(left: 7.h, right: 4.h),
-        child: ListView.separated(
-            physics: NeverScrollableScrollPhysics(),
-            shrinkWrap: true,
-            separatorBuilder: (context, index) {
-              return SizedBox(height: 21.v);
-            },
-            itemCount: 30,
-            itemBuilder: (context, index) {
-              return Userprofilepressure(
-                  );
-            }));
+  // Section Widget
+  // Widget _buildMedicineInfo(BuildContext context) {
+
+  //   return Padding(
+
+  //       padding: EdgeInsets.only(left: 7.h, right: 4.h),
+  //       child: ListView.separated(
+  //           physics: NeverScrollableScrollPhysics(),
+  //           shrinkWrap: true,
+  //           separatorBuilder: (context, index) {
+  //             return SizedBox(height: 21.v);
+  //           },
+  //           itemCount: 30,
+  //           itemBuilder: (context, index) {
+  //             return UserMedicine(
+  //                 );
+  //           }));
+  // }
+  Widget _buildMedicineInfo(BuildContext context) {
+    return FutureBuilder<List<Map<String, dynamic>>>(
+      future: fetchMedicineList(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          // If the Future is still running, show a loading indicator
+          return CircularProgressIndicator();
+        } else if (snapshot.hasError) {
+          // If there's an error in fetching the data, display an error message
+          return Text('Error: ${snapshot.error}');
+        } else {
+          // If the data has been successfully fetched, build the UI using the data
+          List<Map<String, dynamic>> meds = snapshot.data ?? [];
+          return Padding(
+            padding: EdgeInsets.only(left: 7.h, right: 4.h),
+            child: ListView.separated(
+              physics: NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              separatorBuilder: (context, index) {
+                return SizedBox(height: 21.v);
+              },
+              itemCount: meds.length,
+              itemBuilder: (context, index) {
+                return UserMedicine(data: meds[index]);
+              },
+            ),
+          );
+        }
+      },
+    );
   }
 
   /// Section Widget
@@ -131,6 +200,7 @@ class _MedicationEntryModalState extends State<MedicineTrackerScreen> {
                   children: [
                     Expanded(
                       child: TextField(
+                        controller: _medicinecontroller,
                         decoration: InputDecoration(
                           labelText: 'Medication',
                           focusedBorder: UnderlineInputBorder(
@@ -143,7 +213,6 @@ class _MedicationEntryModalState extends State<MedicineTrackerScreen> {
                       ),
                     ),
                     SizedBox(width: 16),
-                    
                   ],
                 ),
                 SizedBox(height: 16),
@@ -151,6 +220,7 @@ class _MedicationEntryModalState extends State<MedicineTrackerScreen> {
                   children: [
                     Expanded(
                       child: TextField(
+                        controller: _dosagecontroller,
                         decoration: InputDecoration(
                           labelText: 'Dosage',
                           focusedBorder: UnderlineInputBorder(
@@ -177,15 +247,17 @@ class _MedicationEntryModalState extends State<MedicineTrackerScreen> {
                 _buildDateTime(context),
                 SizedBox(height: 8),
                 Text(
-                "Add Reminder",
-                style: CustomTextStyles.titleMediumBlack90002,
-              ),
-              SizedBox(height: 5.v),
-              CustomDropDown(
-                hintText: "Does not Repeat",
-                items: dropdownItemList,
-                onChanged: (value) {},
-              ),
+                  "Add Reminder",
+                  style: CustomTextStyles.titleMediumBlack90002,
+                ),
+                SizedBox(height: 5.v),
+                CustomDropDown(
+                  hintText: "Does not Repeat",
+                  items: dropdownItemList,
+                  onChanged: (value) {
+                    rpt = value;
+                  },
+                ),
                 SizedBox(height: 8),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
@@ -197,9 +269,15 @@ class _MedicationEntryModalState extends State<MedicineTrackerScreen> {
                       ),
                       child: IconButton(
                         icon: Icon(Icons.check, color: Colors.white),
-                        onPressed: () {
-                          print("print");
+                        onPressed: () async {
+                          //print("print");
+                          insertMed();
+                          //fetchMedicineList();
+                          
+
                           Navigator.pop(context);
+
+                      
                           // Add your logic here when the tick button is pressed
                         },
                       ),
@@ -264,23 +342,44 @@ class _MedicationEntryModalState extends State<MedicineTrackerScreen> {
         child: Scaffold(
             appBar: _buildAppBar(context),
             body: SingleChildScrollView(
-            child: Container(
-                width: double.maxFinite,
-                padding: EdgeInsets.symmetric(vertical: 3.v),
-                child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(height: 22.v),
-                      Padding(
-                          padding: EdgeInsets.only(left: 11.h),
-                          child: Text("Medicine Planner",
-                              style: theme.textTheme.headlineSmall)),
-                      SizedBox(height: 26.v),
-                      _buildUserProfileList(context),
-                      SizedBox(height: 26.v)
-                    ])),
-        ),
+              child: Container(
+                  width: double.maxFinite,
+                  padding: EdgeInsets.symmetric(vertical: 3.v),
+                  child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(height: 22.v),
+                        Padding(
+                            padding: EdgeInsets.only(left: 11.h),
+                            child: Text("Medicine Planner",
+                                style: theme.textTheme.headlineSmall)),
+                        SizedBox(height: 26.v),
+                        _buildMedicineInfo(context),
+                        SizedBox(height: 26.v)
+                      ])),
+            ),
             floatingActionButton: _buildFloatingActionButton(context)));
+  }
+
+  void insertMed() async {
+    var data = {
+      "medication": _medicinecontroller.text,
+      "dosage": _dosagecontroller.text,
+      "date": _dateController.text,
+      "time": _timeController.text,
+      "repeat": rpt
+    };
+    print(data);
+
+    var response =
+        await Requests.post(insertmed, body: data, timeoutSeconds: 60);
+    if (response.statusCode == 200) {
+      print("Med Added Successfully");
+    } else {
+      print("Med Adding failed");
+    }
+    print(response.statusCode);
+    print(response.body);
   }
 }

@@ -301,7 +301,7 @@ class _EditProfileScreen extends State<EditProfileScreen> {
                             buttonStyle: CustomButtonStyles.fillIndigo,
                             onPressed: () {
                               logOut();
-                              Navigator.pop(context);
+                              
                             }),
                       ]),
                     )))));
