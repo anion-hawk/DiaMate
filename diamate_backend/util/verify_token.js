@@ -32,8 +32,7 @@ async function verifyToken(req, res, next) {
 				return false;
 			}
 			else {
-				console.log('user:');
-				console.log(result.data[0]);
+				console.log('user:' + result.data[0].name);
 				req.user = result.data[0];
 				return true;
 			}

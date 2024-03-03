@@ -180,38 +180,4 @@ class _RegisterState extends State<Register> {
       }
     }
   }
-
-  // Future<void> registerFirebase() async {
-  //   try {
-  //     // if (!_formKey.currentState!.validate()) {
-  //     //   return;
-  //     // }
-  //     await FirebaseAuth.instance.createUserWithEmailAndPassword(
-  //         email: emailController.text, password: passwordController.text);
-  //   } on FirebaseAuthException catch (e) {
-  //     if (e.code == 'weak-password') {
-  //       log('The password provided is too weak.');
-  //     } else if (e.code == 'email-already-in-use') {
-  //       log('The account already exists for that email.');
-  //     }
-  //   } catch (e) {
-  //     log(e.toString());
-  //   }
-  // }
-
-  // Future<void> registerBackend() async {
-  //   var data = {
-  //     "name": nameController.text,
-  //     "email": emailController.text,
-  //     "password": passwordController.text,
-  //     "dob": dobController.text,
-  //     "role": selectedRole
-  //   };
-  //   // var response = await Requests.post(register, data);
-  //   // if (response.statusCode == 200) {
-  //   //   log("User registered successfully");
-  //   // } else {
-  //   //   log("User registration failed");
-  //   // }
-  // }
 }
