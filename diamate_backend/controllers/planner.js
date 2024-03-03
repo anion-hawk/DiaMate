@@ -10,13 +10,22 @@ async function insertMedicineDosage(req, res) {
     const { medication, dosage, date, time, repeat } = req.body;
     const userId = req.user.id;
     let  k = 0;
-    if(repeat.toLowerCase() === "Does not repeat") k = int(0);
+	console.log("ejfrfr" + repeat);
+    if(repeat.toLowerCase() === "Does not repeat".toLowerCase()) k = 0;
          
-    else if(repeat.toLowerCase() === "Every Day") k = int(1);
+    else if(repeat.toLowerCase() === "Every Day".toLowerCase()) k = 1;
            
-    else if(repeat.toLowerCase() === "Every week") k = int(2);
+    else if(repeat.toLowerCase() === "Every week".toLowerCase()) k = 2;
           
-    else if(repeat.toLowerCase() === "Every Month") k = int(3);
+    else if(repeat.toLowerCase() === "Every Month".toLowerCase()) k = 3;
+    console.log(k);
+	const parts = date.split('/'); // Split the input date
+    const day = parts[0];
+    const month = parts[1];
+    const year = parts[2];
+
+    // Rearrange the parts to form the new date string
+    const newDate = `${year}-${month}-${day}`;
     
     try {
         // Use the to_timestamp function to convert AM/PM time to timestamp
@@ -24,7 +33,7 @@ async function insertMedicineDosage(req, res) {
             userId,
             medication,
             dosage,
-            date,
+            newDate,
 			time,
             k
         );

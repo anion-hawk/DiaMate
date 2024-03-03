@@ -1,10 +1,11 @@
 const repository = require('./repository');
 
 async function insertMedicineDosage(userid, medication, dosage,date, time, repeat) {
-	const query = 'INSERT INTO medicineplanner(userid, medication, dosage,date, time, repeat) VALUES($1, $2, $3, $4, $5,$6) RETURNING id';
+	const query = 'INSERT INTO medicineplanner(userid, medication, dosage,date, time, repeat) VALUES($1, $2, $3, $4, $5,$6) RETURNING (id, userid, medication, dosage,date, time, repeat) ';
 	const params = [userid, medication, dosage,date, time, repeat ];
 	console.log(params);
 	const { success, data, error } = await repository.query(query, params);
+	console.log(data);
 	if (success) {
 		return { success, data };
 	}

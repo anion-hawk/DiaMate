@@ -269,12 +269,15 @@ class _MedicationEntryModalState extends State<MedicineTrackerScreen> {
                       ),
                       child: IconButton(
                         icon: Icon(Icons.check, color: Colors.white),
-                        onPressed: () {
+                        onPressed: () async {
                           //print("print");
                           insertMed();
                           //fetchMedicineList();
+                          
 
                           Navigator.pop(context);
+
+                      
                           // Add your logic here when the tick button is pressed
                         },
                       ),
@@ -370,7 +373,7 @@ class _MedicationEntryModalState extends State<MedicineTrackerScreen> {
     print(data);
 
     var response =
-        await Requests.post(insertmed, body: data, timeoutSeconds: 30);
+        await Requests.post(insertmed, body: data, timeoutSeconds: 60);
     if (response.statusCode == 200) {
       print("Med Added Successfully");
     } else {
