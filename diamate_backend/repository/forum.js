@@ -19,7 +19,15 @@ async function getPosts(offset, limit) {
 	}
 	return { success, error };
 }
-
+async function getSelfPosts(offset, limit, author) {
+	const query = 'SELECT * FROM posts WHERE author = $3 ORDER BY created DESC OFFSET $1 LIMIT $2';
+	const params = [offset, limit, author];
+	const { success, data, error } = await repository.query(query, params);
+	if (success) {
+		return { success, data };
+	}
+	return { success, error };
+}
 async function getPostById(id) {
 	const query = 'SELECT * FROM posts WHERE id = $1';
 	const params = [id];
@@ -33,5 +41,6 @@ async function getPostById(id) {
 module.exports = {
 	createPost,
 	getPosts,
-	getPostById
+	getPostById,
+	getSelfPosts
 };

@@ -44,9 +44,15 @@ class _MainProfileScreen extends State<MainProfileScreen> {
     });
   }
 
+  String author = "";
   Future<List<Map<String, dynamic>>> fetchPosts() async {
     try {
-      final response = await Requests.get(forum, timeoutSeconds: 300);
+       final response = await Requests.get(selfPosts, timeoutSeconds: 300);
+      // var response = await Requests.get(
+      //   '$selfPosts?id=$author',
+      //   headers: {'Content-Type': 'application/json'},
+      //   timeoutSeconds: 120,
+      // );
 
       if (response.statusCode == 200) {
         final List<dynamic> data = json.decode(response.body);
@@ -78,6 +84,7 @@ class _MainProfileScreen extends State<MainProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    //getUserFollowDetails();
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
@@ -109,43 +116,51 @@ class _MainProfileScreen extends State<MainProfileScreen> {
   }
 
   Widget _buildTopPart(BuildContext context) {
-    return Row(
-      children: <Widget>[
-        const CircleAvatar(
-            radius: 40,
-            backgroundColor: Color.fromARGB(255, 19, 81, 153),
-            child: Icon(Icons.person, color: Colors.white, size: 40)),
-        SizedBox(height: 20.v),
-        SizedBox(width: 10.h),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(name,
-                style:
-                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                selectionColor: const Color.fromARGB(0, 37, 37, 163)),
-            SizedBox(width: 15.h),
-            Row(
-              children: <Widget>[
-                Text('$followers\n followers',
-                    style: const TextStyle(
-                        fontSize: 15, fontWeight: FontWeight.bold),
-                    selectionColor: Color.fromARGB(167, 52, 52, 167)),
-                SizedBox(width: 15.h),
-                Text('$followee\n followee',
-                    style: const TextStyle(
-                        fontSize: 15, fontWeight: FontWeight.bold),
-                    selectionColor: const Color.fromARGB(167, 52, 52, 167)),
-                SizedBox(width: 15.h),
-                Text('$likes\nlikes',
-                    style: const TextStyle(
-                        fontSize: 15, fontWeight: FontWeight.bold),
-                    selectionColor: const Color.fromARGB(167, 52, 52, 167)),
-              ],
-            ),
-          ],
-        ),
-      ],
+    return FutureBuilder(
+      future: getUserFollowDetails(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return CircularProgressIndicator(); // Show a loading indicator while fetching data
+        } else if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        } else {
+          // Data has been successfully fetched, update UI
+          return Row(
+            children: <Widget>[
+              const CircleAvatar(
+                  radius: 40,
+                  backgroundColor: Color.fromARGB(255, 19, 81, 153),
+                  child: Icon(Icons.person, color: Colors.white, size: 40)),
+              SizedBox(height: 20.v),
+              SizedBox(width: 10.h),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(name,
+                      style: const TextStyle(
+                          fontSize: 18, fontWeight: FontWeight.bold),
+                      selectionColor: const Color.fromARGB(0, 37, 37, 163)),
+                  SizedBox(width: 15.h),
+                  Row(
+                    children: <Widget>[
+                      Text('$followers\n followers',
+                          style: const TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.bold),
+                          selectionColor: Color.fromARGB(167, 52, 52, 167)),
+                      SizedBox(width: 15.h),
+                      Text('$followee\n followee',
+                          style: const TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.bold),
+                          selectionColor:
+                              const Color.fromARGB(167, 52, 52, 167)),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          );
+        }
+      },
     );
   }
 
@@ -261,20 +276,31 @@ class _MainProfileScreen extends State<MainProfileScreen> {
     );
   }
 
-  void getUserFollowDetails() async {
+  Future<Map<String, dynamic>> getUserFollowDetails() async {
     try {
       // Replace 'your_api_endpoint' with the actual API endpoint for fetching user profile
       var response = await Requests.get(selffollowdetails, timeoutSeconds: 120);
       if (response.statusCode == 200) {
         // The response body contains the user profile information
         print('follow Profile: ${response.json()}');
+        Map<String, dynamic> responseBody = response.json();
+
+        // Extract values
+        name = responseBody['user']['name'].toString();
+        followers = responseBody['followerDetails']['count'].toString();
+        followee = responseBody['followingDetails']['count'].toString();
+        author = responseBody['user']['id'].toString();
+        print(name + ' ' + followers + ' ' + author);
+        return responseBody;
       } else {
         print(
             'Failed to fetch follow profile. Status Code: ${response.statusCode}');
         print(response.body);
+        throw Exception('Failed to load status: ${response.statusCode}');
       }
     } catch (e) {
       print('Error during GET request: $e');
+      throw Exception('exception: ${e}');
     }
   }
 }

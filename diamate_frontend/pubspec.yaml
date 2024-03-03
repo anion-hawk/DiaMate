@@ -46,7 +46,7 @@ dependencies:
   firebase_auth: ^4.17.4
   requests: ^4.7.0
   clippy_flutter: ^2.0.0-nullsafety.1
-  
+  cloud_firestore: ^4.15.6
 
 dev_dependencies:
   flutter_test:

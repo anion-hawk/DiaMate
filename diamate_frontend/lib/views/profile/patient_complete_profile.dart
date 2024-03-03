@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:diamate_frontend/config.dart';
 import 'package:diamate_frontend/routes/app_routes.dart';
 import 'package:diamate_frontend/widgets/choice_chips.dart';
 import 'package:diamate_frontend/widgets/custom_drop_down.dart';
@@ -5,6 +8,7 @@ import 'package:diamate_frontend/widgets/custom_elevated_button.dart';
 import 'package:diamate_frontend/widgets/form_text.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:requests/requests.dart';
 
 class PatientCompleteProfile extends StatelessWidget {
   PatientCompleteProfile({super.key});
@@ -72,7 +76,7 @@ class PatientCompleteProfile extends StatelessWidget {
                       CustomElevatedButton(
                           text: "Save Profile",
                           onPressed: () {
-                            saveDetails();
+                            saveDetails(context);
                           })
                     ])))));
   }
@@ -121,9 +125,23 @@ class PatientCompleteProfile extends StatelessWidget {
     });
   }
 
-  void saveDetails() {
-    print("Diabetes Type: $diabetesType");
-    print("Diagnosis Date: ${diagnosisDateController.text}");
-    print("Selected Diseases: $selectedOptions");
+  void saveDetails(BuildContext context) async {
+    final requestBody = {
+      "diabetesType": diabetesType,
+      "diagnosisDate": diagnosisDateController.text,
+      "diseases": jsonEncode(selectedOptions)
+    };
+    showDialog(
+        context: context,
+        builder: (context) => const Center(child: CircularProgressIndicator()));
+    await Requests.post(url_complete_profile, body: requestBody)
+        .then((response) {
+      Navigator.pop(context);
+      if (response.statusCode >= 200 && response.statusCode < 300) {
+        Navigator.pushReplacementNamed(context, AppRoutes.homeScreen);
+      } else {
+        print("Error: ${response.statusCode}");
+      }
+    });
   }
 }
