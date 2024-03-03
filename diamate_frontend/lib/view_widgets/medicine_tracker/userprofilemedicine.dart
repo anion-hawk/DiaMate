@@ -93,7 +93,7 @@ void _showModal(BuildContext context) {
                   children: [
                     Expanded(
                       child: TextField(
-                        controller: _dosagecontroller,
+                        controller:_dosagecontroller,
                         decoration: InputDecoration(
                           labelText: 'Dosage',
                           focusedBorder: UnderlineInputBorder(
@@ -211,13 +211,13 @@ void _showModal(BuildContext context) {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Date: 11/12/2023", style: theme.textTheme.titleMedium,),
+                  Text(widget.data['formatted_date'], style: theme.textTheme.titleMedium,),
                   SizedBox(height: 8),
-                  Text("Time: 1:34 PM", style: theme.textTheme.titleMedium,),
+                  Text(widget.data['formatted_time'], style: theme.textTheme.titleMedium,),
                   SizedBox(height: 8),
-                  Text("Metformin", style: theme.textTheme.titleMedium,),
+                  Text(widget.data['medication'], style: theme.textTheme.titleMedium,),
                   SizedBox(height: 8),
-                  Text("5 mg", style: theme.textTheme.titleLarge,),
+                  Text(widget.data['dosage'], style: theme.textTheme.titleLarge,),
                 ],
               ),
               actions: <Widget>[
@@ -250,12 +250,12 @@ void _showModal(BuildContext context) {
               child: Row(
                 children: [
                   Text(
-                    "11/12/2023",
+                    widget.data['formatted_date'].toString(),
                     style: theme.textTheme.titleMedium,
                   ),
                   SizedBox(width: 22),
                   Text(
-                    "1:34 PM",
+                    widget.data['formatted_time'].toString(),
                     style: theme.textTheme.titleMedium,
                   ),
                 ],
@@ -269,11 +269,11 @@ void _showModal(BuildContext context) {
                 children: [
                   
                   Text(
-                    "Metaformin",
+                    widget.data['medication'],
                     style: Theme.of(context).textTheme.bodyText1,
                   ),
                   Text(
-                    "5 mg",
+                    widget.data['dosage'],
                    style: theme.textTheme.titleMedium,
                   ),
                 ],

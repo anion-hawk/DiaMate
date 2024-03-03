@@ -40,22 +40,67 @@ async function insertMedicineDosage(req, res) {
     }
 }
 
-async function getMedicineList(req,res) {
-    id = req.user.id;  /// lllllllllllllllllllllllllllllllllllllllllll
+// async function getMedicineList(req,res) {
+//     id = req.user.id;  /// lllllllllllllllllllllllllllllllllllllllllll
+// 	console.log(id);
+// 	const result = await plannerRepository.getMedicineList(id);
+// 	if (result.success) {
+// 		let meds = result.data;
+// 		// let postDetailsFound = await getPostsDetails(posts, req, res);
+// 		// if (!postDetailsFound) {
+// 		// 	return;
+// 		// }
+// 		res.status(200).json(meds);
+// 	}
+// 	else {
+// 		res.status(500).json({ error: 'Internal server error: query failed' });
+// 	}
+// }
+
+async function getMedicineList(req, res) {
+	id = req.user.id;
 	console.log(id);
 	const result = await plannerRepository.getMedicineList(id);
+  
 	if (result.success) {
-		let meds = result.data;
-		// let postDetailsFound = await getPostsDetails(posts, req, res);
-		// if (!postDetailsFound) {
-		// 	return;
-		// }
-		res.status(200).json(meds);
+	  let meds = result.data;
+  
+	  // Loop over meds and format date and time
+	  meds = meds.map(med => {
+		// Format date
+		const formattedDate = new Date(med.date).toLocaleDateString('en-GB', {
+		  day: '2-digit',
+		  month: '2-digit',
+		  year: 'numeric'
+		});
+  
+		// Format time
+		const timeParts = med.time.split(':');
+		let formattedHour = parseInt(timeParts[0], 10);
+		const formattedMinute = timeParts[1];
+		const formattedSecond = timeParts[2] || '00';
+		let ampm = 'AM';
+  
+		if (formattedHour > 12) {
+		  formattedHour -= 12;
+		  ampm = 'PM';
+		}
+  
+		const formattedTime = `${formattedHour}:${formattedMinute}:${formattedSecond} ${ampm}`;
+  
+		return {
+		  ...med,
+		  formatted_date: formattedDate,
+		  formatted_time: formattedTime
+		};
+	  });
+  
+	  res.status(200).json(meds);
+	} else {
+	  res.status(500).json({ error: 'Internal server error: query failed' });
 	}
-	else {
-		res.status(500).json({ error: 'Internal server error: query failed' });
-	}
-}
+  }
+  
 
 async function getMedicineDetailsById(req, res) {
 	const { id } = req.params;

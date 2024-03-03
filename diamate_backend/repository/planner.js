@@ -12,6 +12,7 @@ async function insertMedicineDosage(userid, medication, dosage,date, time, repea
 
 async function getMedicineList(userId) {
 	const query = 'SELECT * FROM medicinePlanner WHERE userid = $1';
+//const query =' SELECT( id, userid, medication, dosage, TO_CHAR(date, "DD/MM/YYYY") AS formatted_date,TO_CHAR(time, "HH12:MI:SS AM") AS formatted_time, repeat) FROM medicinePlanner WHERE userid = $1';
 	const params = [userId];
 	const { success, data, error } = await repository.query(query,params);
 	if (success) {
