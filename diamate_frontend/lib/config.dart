@@ -3,7 +3,7 @@ import 'package:cookie_jar/cookie_jar.dart';
 import 'package:diamate_frontend/presentation/register_screen/register_screen.dart'
     as reg;
 
-String baseUrl = "http://192.168.25.167:3000";
+String baseUrl = "http://10.13.55.128:3000";
 
 final url_register = '$baseUrl/auth/register';
 final url_cookieCheck = '$baseUrl/user/test';

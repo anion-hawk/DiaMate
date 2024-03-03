@@ -37,12 +37,15 @@ class _OwnPostScreen extends State<OwnPostScreen> {
   TextEditingController titleController = TextEditingController();
 
   TextEditingController contentController = TextEditingController();
+
+  TextEditingController tagsController = TextEditingController();
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   void savePost(BuildContext context) async {
-    if (titleController.text.isNotEmpty && contentController.text.isNotEmpty) {
+    if (titleController.text.isNotEmpty && contentController.text.isNotEmpty && tagsController.text.isNotEmpty) {
       var reqbody = {
         "title": titleController.text,
-        "content": contentController.text
+        "content": contentController.text,
+        "tags": tagsController.text
       };
       print(reqbody);
       var response = await Requests.post(own_post, body: reqbody);
@@ -105,6 +108,27 @@ class _OwnPostScreen extends State<OwnPostScreen> {
                               vertical: 15.0), // Adjust padding as needed
                         ),
                       ),
+
+                      SizedBox(height: 21.v),
+                      TextField(
+                        controller: tagsController,
+                        style: CustomTextStyles.bodyLargePoppinsPrimary,
+                        maxLines:
+                            null, // Set to null or a specific number to allow multiline input
+                        decoration: InputDecoration(
+                          hintText: "tags....",
+                          hintStyle: CustomTextStyles.bodyLargePoppinsPrimary
+                              .copyWith(color: Colors.grey),
+                          filled: true,
+                          fillColor: Colors.transparent,
+                          border: InputBorder.none, // Remove the border
+                          contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 10.0,
+                              vertical: 15.0), // Adjust padding as needed
+                        ),
+                      ),
+
+
                       const Spacer(),
                       _buildHealthChipView(context),
                       SizedBox(height: 17.v),

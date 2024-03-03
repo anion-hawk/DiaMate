@@ -154,6 +154,19 @@ class _ShowPostScreenState extends State<ShowPostScreen> {
                         overflow: TextOverflow.ellipsis,
                         style: CustomTextStyles.bodyMediumPoppinsBlack90002))),
             SizedBox(height: 10.v),
+            Align(
+                alignment: Alignment.center,
+                child: Container(
+                    width: 328.h,
+                    margin: EdgeInsets.only(left: 15.h, right: 17.h),
+                    child: Text(
+                        //postContent,
+                        widget.post['tags'],
+                        //"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nisi ligula, sodales at lacinia eget, volutpat a augue. Aliquam auctor nisi nisi, vel tristique enim faucibus non. Integer venenatis dui eu diam facilisis consectetur. Nulla facilisi. Sed sed consequat justo. ",
+                        maxLines: 6,
+                        overflow: TextOverflow.ellipsis,
+                        style: CustomTextStyles.bodyMediumPoppinsBlack90002))),
+                        SizedBox(height: 10.v,),
             CustomImageView(
                 imagePath: ImageConstant.imgRectangle22474,
                 height: 240.v,

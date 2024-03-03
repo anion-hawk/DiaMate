@@ -65,6 +65,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.0"
+  clippy_flutter:
+    dependency: "direct main"
+    description:
+      name: clippy_flutter
+      sha256: f63f487afe1233f7189f83154aa9f4903dddda61687b5b81ce4955250c133a07
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.0-nullsafety.1"
   clock:
     dependency: transitive
     description:

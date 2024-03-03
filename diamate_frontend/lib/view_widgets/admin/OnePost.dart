@@ -1,16 +1,13 @@
 import 'dart:ui';
 
-import 'package:diamate_frontend/core/app_export.dart';
 import 'package:flutter/material.dart';
-import 'tags5_item_widget.dart';
 import 'package:intl/intl.dart';
-import 'package:diamate_frontend/presentation/show_post_screen/show_post_screen.dart';
 
 // ignore: must_be_immutable
-class PostlistcomponentItemWidget extends StatelessWidget {
+class OnePost extends StatelessWidget {
   final Map<String, dynamic> post;
 
-  const PostlistcomponentItemWidget({required this.post, Key? key})
+  const OnePost({required this.post, Key? key})
       : super(
           key: key,
         );
@@ -20,46 +17,38 @@ class PostlistcomponentItemWidget extends StatelessWidget {
     return GestureDetector(
         onTap: () {
           // Navigate to another page here
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => ShowPostScreen(post: post)));
+          // Navigator.push(
+          //     context,
+          //     MaterialPageRoute(
+          //         builder: (context) => ShowPostScreen(post: post)));
         },
         child: Container(
-          padding: EdgeInsets.all(13.h),
-          decoration: AppDecoration.outlineBlue.copyWith(
-            borderRadius: BorderRadiusStyle.roundedBorder10,
-          ),
+          padding: EdgeInsets.all(13),
+          // decoration: AppDecoration.outlineBlue.copyWith(
+          //   borderRadius: BorderRadiusStyle.roundedBorder10,
+          // ),
           child: SingleChildScrollView(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CustomImageView(
-                  //imagePath: ImageConstant.profile,
-                  height: 40.adaptSize,
-                  width: 40.adaptSize,
-                  radius: BorderRadius.circular(
-                    4.h,
-                  ),
-                  margin: EdgeInsets.only(bottom: 64.v),
-                ),
+                
                 Container(
-                  height: 119.v,
-                  width: 237.h,
-                  margin: EdgeInsets.only(left: 14.h),
+                  height: 119,
+                  width: 237,
+                  margin: EdgeInsets.only(left: 14),
                   child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // User details (name and time)
                     _buildNameTime(context),
 
-                    SizedBox(height: 5.v),
+                    SizedBox(height: 5),
 
                     // Post title
                     _buildTitle(context),
 
-                    SizedBox(height: 12.v),
+                    SizedBox(height: 12),
 
                     // Like and comment information
                     Row(
@@ -84,28 +73,18 @@ class PostlistcomponentItemWidget extends StatelessWidget {
       post['title'],
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
-      style: CustomTextStyles.labelLargeSourceSansProPrimary.copyWith(
-        //FontVariation.opticalSize(32),
-        height: 1.50,
+      style: TextStyle(
+        fontWeight: FontWeight.bold,
+        fontSize: 16.0,
       ),
     );
   }
 
-  Widget _buildTagsText(BuildContext context) {
-    return Text(
-      post['tags'],
-      maxLines: 1,
-      overflow: TextOverflow.ellipsis,
-      style: CustomTextStyles.labelLargeSourceSansProPrimary.copyWith(
-        //FontVariation.opticalSize(32),
-        height: 1.50,
-      ),
-    );
-  }
+  
 
   Widget _buildUpvote(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(left: 1.h),
+      padding: EdgeInsets.only(left: 1),
       child: Icon(Icons.arrow_upward,weight: 1200,
           size: 23, color: Color(0xDD6699ff)),
     );
@@ -113,17 +92,17 @@ class PostlistcomponentItemWidget extends StatelessWidget {
 
   Widget _buildUpvoteText(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(left: 8.h),
+      padding: EdgeInsets.only(left: 8),
       child: Text(
         post['upvotes'].toString(),
-        style: CustomTextStyles.bodySmallPrimary,
+        style: TextStyle(),
       ),
     );
   }
 
   Widget _buildComment(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(left: 18.h),
+      padding: EdgeInsets.only(left: 18),
       child: Icon(Icons.comment,
           size: 23, color: Color(0xDD6699ff)),
     );
@@ -131,10 +110,10 @@ class PostlistcomponentItemWidget extends StatelessWidget {
 
   Widget _buildCommentText(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(left: 8.h),
+      padding: EdgeInsets.only(left: 8),
       child: Text(
         post['comments'].toString(),
-        style: CustomTextStyles.bodySmallPrimary,
+        style: TextStyle(),
       ),
     );
   }
@@ -148,12 +127,12 @@ class PostlistcomponentItemWidget extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: 8.v),
+            SizedBox(height: 8),
             //title
             _buildTitle(context),
-            SizedBox(height: 8.v),
+            SizedBox(height: 8),
 
-            SizedBox(height: 12.v),
+            SizedBox(height: 12),
             Row(
               children: [
 //upvote
@@ -161,7 +140,7 @@ class PostlistcomponentItemWidget extends StatelessWidget {
                 _buildUpvoteText(context),
                 _buildComment(context),
                 _buildCommentText(context),
-                _buildTagsText(context),
+                
               ],
             ),
           ],
@@ -192,7 +171,7 @@ class PostlistcomponentItemWidget extends StatelessWidget {
                 color: Colors.grey,
               ),
             ),
-            SizedBox(height: 7.h),
+            SizedBox(height: 7),
           ],
         ),
       ],

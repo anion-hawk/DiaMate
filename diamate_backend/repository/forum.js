@@ -1,8 +1,8 @@
 const repository = require('./repository');
 
-async function createPost(userId, title, content, timestamp) {
-	const query = 'INSERT INTO posts(author, title, content, created) VALUES($1, $2, $3, $4) RETURNING id, title, content, created';
-	const params = [userId, title, content, timestamp];
+async function createPost(userId, title, content, timestamp,tags) {
+	const query = 'INSERT INTO posts(author, title, content, created,tags) VALUES($1, $2, $3, $4,$5) RETURNING id, title, content, created,tags';
+	const params = [userId, title, content, timestamp,tags];
 	const { success, data, error } = await repository.query(query, params);
 	if (success) {
 		return { success, data };
