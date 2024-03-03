@@ -53,15 +53,12 @@ class _OwnPostScreen extends State<OwnPostScreen> {
       var reqbody = {
         "title": titleController.text,
         "content": contentController.text,
-        "tags": selectedTags
+        "tags": jsonEncode(selectedTags)
       };
-      print(reqbody);
       var response = await Requests.post(own_post, body: reqbody);
-      print(response.body);
       print(response.statusCode);
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
-        print(response);
         //Navigator.pop(context);
       } else {
         print("Error: ${response.statusCode}");
@@ -118,16 +115,6 @@ class _OwnPostScreen extends State<OwnPostScreen> {
                       ),
                       const Spacer(),
                       _buildTags(),
-                      // _buildHealthChipView(context),
-                      // SizedBox(height: 17.v),
-                      // Row(children: [
-                      //   CustomIconButton(
-                      //       height: 40.adaptSize,
-                      //       width: 40.adaptSize,
-                      //       //onPressed: _pickImage,
-                      //       child: CustomImageView(
-                      //           imagePath: ImageConstant.imgUserPrimary40x40)),
-                      // ])
                     ]))));
   }
 
@@ -135,7 +122,6 @@ class _OwnPostScreen extends State<OwnPostScreen> {
     return ChoiceChips(
         onOptionsChanged: (options) {
           selectedTags = options;
-          print("Selected Diseases: $selectedTags");
         },
         options: availableTags);
   }
@@ -163,15 +149,6 @@ class _OwnPostScreen extends State<OwnPostScreen> {
               icon: const Icon(Icons.send))
         ],
         styleType: Style.bgFill_1);
-  }
-
-  /// Section Widget
-  Widget _buildHealthChipView(BuildContext context) {
-    return Wrap(
-        runSpacing: 9.49.v,
-        spacing: 9.49.h,
-        children: List<Widget>.generate(
-            1, (index) => const HealthchipviewItemWidget()));
   }
 
   /// Navigates back to the previous screen.

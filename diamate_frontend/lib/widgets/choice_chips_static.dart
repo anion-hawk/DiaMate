@@ -26,15 +26,15 @@ class _StaticChoiceChips extends State<StaticChoiceChips> {
             return ChoiceChip(
               label: Text(
                 option,
-                style: TextStyle(
-                  color: theme.colorScheme.primary,
+                style: const TextStyle(
+                  color: Colors.white,
                   fontSize: 14.0,
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w500,
                 ),
               ),
               selected: selectedOptions.contains(option),
-              backgroundColor: Colors.transparent,
+              backgroundColor: theme.colorScheme.primary,
               selectedColor: theme
                   .colorScheme.primary, // Set background color when selected
               shape: RoundedRectangleBorder(
@@ -44,15 +44,7 @@ class _StaticChoiceChips extends State<StaticChoiceChips> {
                 ),
                 borderRadius: BorderRadius.circular(13.0),
               ),
-              onSelected: (bool selected) {
-                // setState(() {
-                //   if (selected) {
-                //     print(options);
-                //   } else {
-                //     selectedOptions.remove(option);
-                //   }
-                // });
-              },
+              onSelected: (bool selected) {},
             );
           }).toList())
     ]);
