@@ -4,6 +4,7 @@ import 'package:diamate_frontend/widgets/app_bar/appbar_leading_image.dart';
 import 'package:diamate_frontend/widgets/app_bar/appbar_subtitle_one.dart';
 import 'package:diamate_frontend/widgets/app_bar/appbar_trailing_image.dart';
 import 'package:diamate_frontend/widgets/app_bar/custom_app_bar.dart';
+import 'package:diamate_frontend/widgets/choice_chips_static.dart';
 import 'package:diamate_frontend/widgets/custom_search_view.dart';
 import 'package:diamate_frontend/widgets/form_text.dart';
 import 'package:flutter/material.dart';
@@ -40,6 +41,7 @@ class User {
 class ShowPostScreen extends StatefulWidget {
   final Map<String, dynamic> post;
   ShowPostScreen({required this.post, Key? key}) : super(key: key);
+  List<String> tags = [];
 
   @override
   _ShowPostScreenState createState() => _ShowPostScreenState();
@@ -47,11 +49,6 @@ class ShowPostScreen extends StatefulWidget {
 
 class _ShowPostScreenState extends State<ShowPostScreen> {
   bool showAllComments = true;
-  // String postTime = "";
-  // String postTitle = "";
-  // String postContent = "";
-  // String userName = "";
-  // String userTimeAgo = "";
 
   TextEditingController textController = TextEditingController();
 
@@ -85,8 +82,7 @@ class _ShowPostScreenState extends State<ShowPostScreen> {
   @override
   void initState() {
     super.initState();
-    // Fetch data from the backend when the widget is created
-    fetchData();
+    //fetchData();
   }
 
   Future<void> fetchData() async {
@@ -97,13 +93,7 @@ class _ShowPostScreenState extends State<ShowPostScreen> {
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
 
-        setState(() {
-          // postTime = data["post_time"];
-          // postTitle = data["post_title"];
-          // postContent = data["post_content"];
-          // userName = data["user_name"];
-          // userTimeAgo = data["user_time_ago"];
-        });
+        setState(() {});
       } else {
         print("Failed to fetch data. Status code: ${response.statusCode}");
       }
@@ -135,7 +125,6 @@ class _ShowPostScreenState extends State<ShowPostScreen> {
                 child: Text(
                     //postTitle,
                     widget.post['title'],
-                    //"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nisi ligula, sodales at lacinia eget, volutpat a augue. Aliquam auctor nisi nisi, vel tristique enim faucibus non. Integer venenatis dui eu diam facilisis consectetur. Nulla facilisi. Sed sed consequat justo. ",
                     maxLines: 3,
                     overflow: TextOverflow.ellipsis,
                     style: CustomTextStyles.titleLargeOxygenPrimary
@@ -149,11 +138,20 @@ class _ShowPostScreenState extends State<ShowPostScreen> {
                     child: Text(
                         //postContent,
                         widget.post['content'],
-                        //"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nisi ligula, sodales at lacinia eget, volutpat a augue. Aliquam auctor nisi nisi, vel tristique enim faucibus non. Integer venenatis dui eu diam facilisis consectetur. Nulla facilisi. Sed sed consequat justo. ",
                         maxLines: 6,
                         overflow: TextOverflow.ellipsis,
                         style: CustomTextStyles.bodyMediumPoppinsBlack90002))),
-            SizedBox(height: 10.v),
+            const SizedBox(height: 20),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: StaticChoiceChips(
+                    options:
+                        List<String>.from(jsonDecode(widget.post["tags"]))),
+              ),
+            ),
+            const SizedBox(height: 20),
             CustomImageView(
                 imagePath: ImageConstant.imgRectangle22474,
                 height: 240.v,
