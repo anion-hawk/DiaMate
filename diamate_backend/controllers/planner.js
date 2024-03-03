@@ -9,14 +9,14 @@ const plannerRepository = require('../repository/planner');
 async function insertMedicineDosage(req, res) {
     const { medication, dosage, date, time, repeat } = req.body;
     const userId = req.user.id;
-
-    if(repeat.toLowerCase() === "Does not repeat") repeat = int(0);
+    let  k = 0;
+    if(repeat.toLowerCase() === "Does not repeat") k = int(0);
          
-    else if(repeat.toLowerCase() === "Every Day") repeat = int(1);
+    else if(repeat.toLowerCase() === "Every Day") k = int(1);
            
-    else if(repeat.toLowerCase() === "Every week") repeat = int(2);
+    else if(repeat.toLowerCase() === "Every week") k = int(2);
           
-    else if(repeat.toLowerCase() === "Every Month") repeat = int(3);
+    else if(repeat.toLowerCase() === "Every Month") k = int(3);
     
     try {
         // Use the to_timestamp function to convert AM/PM time to timestamp
@@ -24,9 +24,9 @@ async function insertMedicineDosage(req, res) {
             userId,
             medication,
             dosage,
-            `to_date('${date}', 'DD-MM-YYYY')`,
-            `extract(hour from to_timestamp('${time}', 'hh:mi AM')) || ':' || extract(minute from to_timestamp('${time}', 'hh:mi AM'))`,
-            repeat
+            date,
+			time,
+            k
         );
 
         if (result.success) {

@@ -28,7 +28,10 @@ class _MedicationEntryModalState extends State<MedicineTrackerScreen> {
   TimeOfDay selectedTime = TimeOfDay.now();
   TextEditingController _dateController = TextEditingController();
   TextEditingController _timeController = TextEditingController();
+  TextEditingController _medicinecontroller = TextEditingController();
+  TextEditingController _dosagecontroller = TextEditingController();
 
+  String rpt = '';
   List<String> dropdownItemList = [
     "Does not repeat",
     "Every Day",
@@ -56,7 +59,7 @@ class _MedicationEntryModalState extends State<MedicineTrackerScreen> {
 
       if (response.statusCode == 200) {
         final List<dynamic> data = json.decode(response.body);
-        print(data);
+       //print(data);
         return data.cast<Map<String, dynamic>>();
       } else {
         throw Exception('Failed to load medlist: ${response.statusCode}');
@@ -197,6 +200,7 @@ class _MedicationEntryModalState extends State<MedicineTrackerScreen> {
                   children: [
                     Expanded(
                       child: TextField(
+                        controller: _medicinecontroller,
                         decoration: InputDecoration(
                           labelText: 'Medication',
                           focusedBorder: UnderlineInputBorder(
@@ -216,6 +220,7 @@ class _MedicationEntryModalState extends State<MedicineTrackerScreen> {
                   children: [
                     Expanded(
                       child: TextField(
+                        controller: _dosagecontroller,
                         decoration: InputDecoration(
                           labelText: 'Dosage',
                           focusedBorder: UnderlineInputBorder(
@@ -249,7 +254,9 @@ class _MedicationEntryModalState extends State<MedicineTrackerScreen> {
                 CustomDropDown(
                   hintText: "Does not Repeat",
                   items: dropdownItemList,
-                  onChanged: (value) {},
+                  onChanged: (value) {
+                    rpt = value;
+                  },
                 ),
                 SizedBox(height: 8),
                 Row(
@@ -264,6 +271,8 @@ class _MedicationEntryModalState extends State<MedicineTrackerScreen> {
                         icon: Icon(Icons.check, color: Colors.white),
                         onPressed: () {
                           //print("print");
+                          insertMed();
+                          //fetchMedicineList();
 
                           Navigator.pop(context);
                           // Add your logic here when the tick button is pressed
@@ -348,5 +357,26 @@ class _MedicationEntryModalState extends State<MedicineTrackerScreen> {
                       ])),
             ),
             floatingActionButton: _buildFloatingActionButton(context)));
+  }
+
+  void insertMed() async {
+    var data = {
+      "medication": _medicinecontroller.text,
+      "dosage": _dosagecontroller.text,
+      "date": _dateController.text,
+      "time": _timeController.text,
+      "repeat": rpt
+    };
+    print(data);
+
+    var response =
+        await Requests.post(insertmed, body: data, timeoutSeconds: 30);
+    if (response.statusCode == 200) {
+      print("Med Added Successfully");
+    } else {
+      print("Med Adding failed");
+    }
+    print(response.statusCode);
+    print(response.body);
   }
 }
