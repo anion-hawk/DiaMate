@@ -1,4 +1,4 @@
-String baseUrl = "http://192.168.47.13:3000";
+String baseUrl = "http://192.168.250.46:3000";
 
 final url_register = '$baseUrl/auth/register';
 final url_cookieCheck = '$baseUrl/user/test';

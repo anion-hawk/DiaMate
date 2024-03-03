@@ -63,12 +63,13 @@ class ChatService {
               'recipientName': otherUserName,
               'lastMessage': lastMessage['message'],
               'lastMessageSender': lastMessageSenderSnapshot.data()!['name'],
+              'lastMessageTime': lastMessage['timestamp']
             });
           }
         }
       }
-      conversations.sort((a, b) => b['lastMessage']['timestamp']
-          .compareTo(a['lastMessage']['timestamp']));
+      conversations
+          .sort((a, b) => b['lastMessageTime'].compareTo(a['lastMessageTime']));
       return conversations;
     });
   }
