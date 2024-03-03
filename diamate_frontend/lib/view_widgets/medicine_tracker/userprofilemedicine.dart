@@ -3,14 +3,17 @@ import 'package:diamate_frontend/core/app_export.dart';
 
 
  //UserprofilelistItemWidget
- class Userprofilepressure extends StatefulWidget {
-  const Userprofilepressure({Key? key}) : super(key: key);
+ class UserMedicine extends StatefulWidget {
+   final Map<String, dynamic> data;
+
+  //UserMedicine({required this.data, Key? key});
+  const UserMedicine({required this.data, Key? key}) : super(key: key);
 
   @override
   _MedicationModalState createState() => _MedicationModalState();
 }
 
-class _MedicationModalState extends State<Userprofilepressure> {
+class _MedicationModalState extends State<UserMedicine> {
 
   String? dosageUnit = 'mg'; // Default dosage unit
   DateTime selectedDate = DateTime.now();

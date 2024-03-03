@@ -24,7 +24,7 @@ async function insertMedicineDosage(req, res) {
             userId,
             medication,
             dosage,
-            `to_date('${date}', 'YYYY-MM-DD')`,
+            `to_date('${date}', 'DD-MM-YYYY')`,
             `extract(hour from to_timestamp('${time}', 'hh:mi AM')) || ':' || extract(minute from to_timestamp('${time}', 'hh:mi AM'))`,
             repeat
         );
@@ -42,6 +42,7 @@ async function insertMedicineDosage(req, res) {
 
 async function getMedicineList(req,res) {
     id = req.user.id;  /// lllllllllllllllllllllllllllllllllllllllllll
+	console.log(id);
 	const result = await plannerRepository.getMedicineList(id);
 	if (result.success) {
 		let meds = result.data;
@@ -56,3 +57,29 @@ async function getMedicineList(req,res) {
 	}
 }
 
+async function getMedicineDetailsById(req, res) {
+	const { id } = req.params;
+	const result = await plannerRepository.getMedicineDetailsById(id);
+	if (result.success) {
+		if (result.data.length === 0) {
+			res.status(404).json({ error: 'Medicine Details not found' });
+			return;
+		}
+		// let posts = result.data;
+		// let postDetailsFound = await getPostsDetails(posts, req, res);
+		// if (!postDetailsFound) {
+		// 	return;
+		// }
+		res.status(200).json(result[0]);
+	}
+	else {
+		res.status(500).json({ error: 'Internal server error' });
+	}
+}
+
+
+module.exports = {
+	insertMedicineDosage,
+    getMedicineList,
+    getMedicineDetailsById
+};
