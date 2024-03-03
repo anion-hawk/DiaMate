@@ -104,15 +104,14 @@ class _ForumScreenState extends State<ForumScreen> {
       child: Row(
         children: [
           Expanded(
-              child: 
-              ElevatedButton(
+              child: ElevatedButton(
             onPressed: () {
               print('New');
             },
             child: const Text(
               'Newest',
               selectionColor: Color.fromARGB(255, 255, 255, 255),
-              style: TextStyle(color:Colors.white),
+              style: TextStyle(color: Colors.white),
             ),
             style: ElevatedButton.styleFrom(
               textStyle: TextStyle(color: Colors.white),
@@ -124,7 +123,10 @@ class _ForumScreenState extends State<ForumScreen> {
             onPressed: () {
               print('Popular');
             },
-            child: const Text('Popular', style: TextStyle(color:Colors.white),),
+            child: const Text(
+              'Popular',
+              style: TextStyle(color: Colors.white),
+            ),
             style: ElevatedButton.styleFrom(
               textStyle: TextStyle(color: Colors.white),
             ),
@@ -135,7 +137,10 @@ class _ForumScreenState extends State<ForumScreen> {
             onPressed: () {
               print('following');
             },
-            child: const Text('Following',style: TextStyle(color:Colors.white),),
+            child: const Text(
+              'Following',
+              style: TextStyle(color: Colors.white),
+            ),
             style: ElevatedButton.styleFrom(
               textStyle: TextStyle(color: Colors.white),
             ),
@@ -167,16 +172,6 @@ class _ForumScreenState extends State<ForumScreen> {
             setState(() {
               iconColor = Colors.blue; // Change icon color to blue
             });
-            // Add functionality for notifications action
-          },
-          icon: Icon(Icons.notifications),
-          color: iconColor,
-        ),
-        IconButton(
-          onPressed: () {
-            setState(() {
-              iconColor = Colors.blue; // Change icon color to blue
-            });
 
             Navigator.push(
               context,
@@ -187,13 +182,29 @@ class _ForumScreenState extends State<ForumScreen> {
           icon: Icon(Icons.person),
           color: iconColor,
         ),
+        IconButton(
+          onPressed: () {
+            setState(() {
+              iconColor = Colors.blue; // Change icon color to blue
+            });
+            logOut();
+            // Add functionality for notifications action
+          },
+          icon: Icon(Icons.logout),
+          color: iconColor,
+        ),
+        
       ],
       backgroundColor: Color(0xFF042142),
     );
   }
 
+  void logOut() async {
+    await FirebaseAuth.instance.signOut();
+  }
+
   /// Section Widget
-   Widget _buildInputData(BuildContext context) {
+  Widget _buildInputData(BuildContext context) {
     return Container(
       width: 120.h,
       padding: EdgeInsets.symmetric(
