@@ -14,6 +14,7 @@ final show_post = "$baseUrl/forum/show";
 final compUserProf = "$baseUrl/user/complete-profile";
 final own_post = "$baseUrl/forum/post";
 final forum = "$baseUrl/forum/posts";
+final selffollowdetails = baseUrl + "/user/self-follow-details";
 
 // // Cookie Management
 // var cj = new CookieJar();

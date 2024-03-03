@@ -8,7 +8,7 @@ import 'package:diamate_frontend/widgets/app_bar/custom_app_bar.dart';
 import 'package:diamate_frontend/config.dart';
 import "package:firebase_auth/firebase_auth.dart";
 
-import 'package:diamate_frontend/presentation/edit_profile_screen/edit_profile_screen.dart';
+import 'package:diamate_frontend/views/profile/main_profile_screen.dart';
 
 import "package:requests/requests.dart";
 
@@ -55,7 +55,7 @@ class _ForumScreenState extends State<ForumScreen> {
 
   Future<List<Map<String, dynamic>>> fetchPosts() async {
     try {
-      final response = await Requests.get(forum, timeoutSeconds: 120);
+      final response = await Requests.get(forum, timeoutSeconds: 300);
 
       if (response.statusCode == 200) {
         final List<dynamic> data = json.decode(response.body);
@@ -98,47 +98,49 @@ class _ForumScreenState extends State<ForumScreen> {
 
   Widget _buildRowBar(BuildContext context) {
     return SizedBox(
-      child: SizedBox(
-        height: 100,
-        width: 450,
-        child: Row(
-          children: [
-            Expanded(
-                child: ElevatedButton(
-              onPressed: () {
-                print('New');
-              },
-              child: const Text('Newest'),
-              style: ElevatedButton.styleFrom(
-                textStyle: TextStyle(color: Colors.white),
-              ),
-            )),
-            SizedBox(width: 10),
-            Expanded(
-                child: ElevatedButton(
-              onPressed: () {
-                print('Popular');
-              },
-              child: const Text('Popular'),
-              style: ElevatedButton.styleFrom(
-                textStyle: TextStyle(color: Colors.white),
-              ),
-            )),
-            SizedBox(width: 10),
-            Expanded(
-                child: ElevatedButton(
-              onPressed: () {
-                print('following');
-              },
-              child: const Text('Following'),
-              style: ElevatedButton.styleFrom(
-                textStyle: TextStyle(color: Colors.white),
-              ),
-            )),
-          ],
-        ),
+        child: SizedBox(
+      height: 100,
+      width: 450,
+      child: Row(
+        children: [
+          Expanded(
+              child: ElevatedButton(
+            onPressed: () {
+              print('New');
+            },
+            child: const Text(
+              'Newest',
+              selectionColor: Color.fromARGB(255, 255, 255, 255),
+            ),
+            style: ElevatedButton.styleFrom(
+              textStyle: TextStyle(color: Colors.white),
+            ),
+          )),
+          SizedBox(width: 10),
+          Expanded(
+              child: ElevatedButton(
+            onPressed: () {
+              print('Popular');
+            },
+            child: const Text('Popular'),
+            style: ElevatedButton.styleFrom(
+              textStyle: TextStyle(color: Colors.white),
+            ),
+          )),
+          SizedBox(width: 10),
+          Expanded(
+              child: ElevatedButton(
+            onPressed: () {
+              print('following');
+            },
+            child: const Text('Following'),
+            style: ElevatedButton.styleFrom(
+              textStyle: TextStyle(color: Colors.white),
+            ),
+          )),
+        ],
       ),
-    );
+    ));
   }
 
   Color iconColor = Colors.white;
@@ -176,7 +178,7 @@ class _ForumScreenState extends State<ForumScreen> {
 
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => EditProfileScreen()),
+              MaterialPageRoute(builder: (context) => MainProfileScreen()),
             );
             // Add functionality for person action
           },
