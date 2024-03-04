@@ -36,8 +36,6 @@ async function getProfileStatus(req, res) {
             res.status(500).json({ error: "Internal server error" });
             return;
     }
-
-    console.log(user);
     res.status(200).json(user);
 }
 
@@ -140,23 +138,21 @@ async function completePatientProfile(req, res) {
         res.status(301).redirect('/user/profile');
         return;
     }
-    const { type, diagnosis_date, diseases } = req.body;
+    const { diabetesType, diagnosisDate, diseases } = req.body;
 
     let diabetes_type;
-    if (type.toLowerCase() === "type 1") {
+    if (diabetesType.toLowerCase() === "type 1") {
         diabetes_type = 1;
-    } else if (type.toLowerCase() === "type 2") {
+    } else if (diabetesType.toLowerCase() === "type 2") {
         diabetes_type = 2;
     } else {
         diabetes_type = 0;
     }
-    console.log(diseases);
     const disease_keys = JSON.parse(diseases).map(disease => disease.toLowerCase().replace(/ /g, '_'));
-    console.log(disease_keys);
     let queryBody = {
         id,
         diabetes_type,
-        diagnosis_date,
+        diagnosis_date: diagnosisDate,
         coeliac_disease: false,
         thyroid_disease: false,
         hypertension: false,
