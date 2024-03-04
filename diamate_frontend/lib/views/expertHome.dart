@@ -10,21 +10,20 @@ import "package:firebase_auth/firebase_auth.dart";
 import "package:flutter/material.dart";
 import "package:requests/requests.dart";
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class ExpertHomeScreen extends StatefulWidget {
+  const ExpertHomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<ExpertHomeScreen> createState() => _ExpertHomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _ExpertHomeScreenState extends State<ExpertHomeScreen> {
   int selectedIndex = 0;
 
   final List<Widget> _pages = [
     ForumScreen(),
     ShowPlanner(),
     SugarTrackerScreen(),
-    ForumScreen(),
     ConversationList(),
   ];
   @override
@@ -67,10 +66,6 @@ class _HomeScreenState extends State<HomeScreen> {
           BottomNavigationBarItem(
             label: 'Tracker',
             icon: Icon(Icons.calendar_today),
-          ),
-          BottomNavigationBarItem(
-            label: 'Doctor',
-            icon: Icon(Icons.medication),
           ),
           BottomNavigationBarItem(
             label: 'Message',

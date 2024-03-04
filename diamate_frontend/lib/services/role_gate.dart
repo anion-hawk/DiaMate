@@ -1,7 +1,9 @@
 import 'dart:convert';
 
 import 'package:diamate_frontend/config.dart';
+import 'package:diamate_frontend/views/expertHome.dart';
 import 'package:diamate_frontend/views/home.dart';
+import 'package:diamate_frontend/views/profile/expert_complete_profile.dart';
 import 'package:diamate_frontend/views/profile/patient_complete_profile.dart';
 import 'package:diamate_frontend/widgets/custom_elevated_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -47,9 +49,9 @@ class _RoleGateState extends State<RoleGate> {
         }
       case 2:
         if (accountComplete) {
-          return _buildRoleView('Expert Page');
+          return const ExpertHomeScreen();
         } else {
-          return _buildRoleView('Expert Complete Profile Page');
+          return ExpertCompleteProfile();
         }
       default:
         return const Center(

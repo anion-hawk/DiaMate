@@ -1,6 +1,7 @@
 //github::::::::::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
 
 import 'package:diamate_frontend/presentation/forum_screen/forum_screen.dart';
+import 'package:diamate_frontend/views/expertHome.dart';
 import 'package:diamate_frontend/views/home.dart';
 import 'package:flutter/material.dart';
 
@@ -119,12 +120,14 @@ class AppRoutes {
   static const String dietMedicineScreen = '/diet_medicine_screen';
 
   static const String appNavigationScreen = '/app_navigation_screen';
+  static const String expertHomeScreen = '/experthome';
 
   static Map<String, WidgetBuilder> routes = {
     authGate: (context) => const AuthGate(),
     authView: (context) => const AuthView(),
     forumScreen: (context) => ForumScreen(),
     homeScreen: (context) => HomeScreen(),
+    expertHomeScreen: (context) => ExpertHomeScreen(),
     // editProfileScreen: (context) => EditProfileScreen(),
     editProfileScreen: (context) => EditProfileScreen(),
     mainProfileScreen: (context) => MainProfileScreen(),

@@ -35,6 +35,7 @@ app.use(async function (req, res, next) {
 
 app.use('/forum', require('./routes/forum'));
 app.use('/user', require('./routes/user'));
+app.use('/planner', require('./routes/planner'));
 
 
 

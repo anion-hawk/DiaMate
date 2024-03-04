@@ -21,7 +21,12 @@ async function getCommentById(id) {
 }
 
 async function getCommentsByPostId(postId) {
-	const query = 'SELECT * FROM comments WHERE post = $1 ORDER BY created DESC';
+	const query = `SELECT  comments.*, users.name AS author_name 
+					FROM  comments INNER JOIN 
+ 						   users ON comments.author = users.id
+					WHERE comments.post = $1 
+					ORDER BY comments.created DESC`;
+
 	const params = [postId];
 	const { success, data, error } = await repository.query(query, params);
 	if (success) {
