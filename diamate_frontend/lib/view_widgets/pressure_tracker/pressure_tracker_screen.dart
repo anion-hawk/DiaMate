@@ -1,29 +1,33 @@
-import 'widgets/userprofilelist_item_widget.dart';
+import 'package:diamate_frontend/view_widgets/pressure_tracker/userprofilepressure.dart';
 import 'package:diamate_frontend/core/app_export.dart';
 import 'package:diamate_frontend/widgets/app_bar/appbar_title_circleimage.dart';
-import 'package:diamate_frontend/presentation/tracker_home_screen/tracker_home_screen.dart';
+import 'package:diamate_frontend/views/tracker.dart';
 import 'package:diamate_frontend/widgets/app_bar/custom_app_bar.dart';
 import 'package:diamate_frontend/widgets/custom_floating_button.dart';
 import 'package:flutter/material.dart';
 
+//import 'package:diamate_frontend/presentation/modals/add_Pressure_modal.dart';
 
-class SugarTrackerScreen extends StatefulWidget {
-  const SugarTrackerScreen({Key? key}) : super(key: key);
+class PressureTrackerScreen extends StatefulWidget {
+  const PressureTrackerScreen({Key? key}) : super(key: key);
 
   @override
   _MedicationEntryModalState createState() => _MedicationEntryModalState();
 }
 
-class _MedicationEntryModalState extends State<SugarTrackerScreen> {
+class _MedicationEntryModalState extends State<PressureTrackerScreen> {
   //Widget _show;
   String? dosageUnit = 'mg'; // Default dosage unit
   DateTime selectedDate = DateTime.now();
   TimeOfDay selectedTime = TimeOfDay.now();
 
   String selectedOption = '';
+  String selectedArm = 'Right';
 
   TextEditingController _dateController = TextEditingController();
   TextEditingController _timeController = TextEditingController();
+
+
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -52,35 +56,41 @@ class _MedicationEntryModalState extends State<SugarTrackerScreen> {
       });
     }
   }
-
   /// Section Widget
   PreferredSizeWidget _buildAppBar(BuildContext context) {
     return CustomAppBar(
       height: 56.v,
+      leading: IconButton(
+        icon: Icon(Icons.arrow_back),
+        onPressed: () {
+          // Handle the 'back' button press here
+          // Typically, you would use Navigator to navigate back
+          Navigator.pop(context);
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => TrackerHomeScreen()),
+          );
+        },
+      ),
     );
   }
 
   /// Section Widget
   Widget _buildUserProfileList(BuildContext context) {
-    return SingleChildScrollView(
-      child: Container(
-        height: MediaQuery.of(context).size.height *
-            0.7, // Adjust the height as needed
+    return Padding(
         padding: EdgeInsets.only(left: 7.h, right: 4.h),
         child: ListView.separated(
-          shrinkWrap: true,
-          separatorBuilder: (context, index) {
-            return SizedBox(height: 21.v);
-          },
-          itemCount: 100,
-          itemBuilder: (context, index) {
-            return UserprofilelistItemWidget(
-                // Pass any necessary data to UserMeallistItemWidget
-                );
-          },
-        ),
-      ),
-    );
+            physics: NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            separatorBuilder: (context, index) {
+              return SizedBox(height: 21.v);
+            },
+            itemCount: 2,
+            itemBuilder: (context, index) {
+              return Userprofilepressure(
+                  //onTapUserProfile(context);
+                  );
+            }));
   }
 
   /// Section Widget
@@ -92,10 +102,13 @@ class _MedicationEntryModalState extends State<SugarTrackerScreen> {
       child: Icon(
         Icons.add_circle_outlined,
         color: Colors.white,
-        //size: 25.0,
+        size: 25.0,
       ),
+
       onTap: () {
         _showModal(context);
+
+        // _openAddPressureModal(context);
       },
     );
   }
@@ -116,22 +129,49 @@ class _MedicationEntryModalState extends State<SugarTrackerScreen> {
                     Expanded(
                       child: TextField(
                         decoration: InputDecoration(
-                          labelText: 'Sugar Concentration',
+                          labelText: 'Systolic Pressure',
                           focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(
-                        width: 2.0, // Set the desired width
-                      ),
-                    ),
+                            borderSide: BorderSide(
+                              color: Colors.indigo[900]!,
+                              width: 2.0, // Set the desired width
+                            ),
+                          ),
                         ),
                       ),
                     ),
                     SizedBox(width: 16),
                     Text(
-                      'mmol/L',
-                      ),
+                      'mm Hg',
+                      style: TextStyle(fontSize: 16, color: Colors.indigo[900]),
+                    ),
                   ],
                 ),
                 SizedBox(height: 16),
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        decoration: InputDecoration(
+                          labelText: 'Diastolic Pressure',
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.indigo[900]!,
+                              width: 2.0, // Set the desired width
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 16),
+                    Text(
+                      'mm Hg',
+                      style: TextStyle(fontSize: 16, color: Colors.indigo[900]),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 16,
+                ),
                 _buildMeasured(context),
                 SizedBox(height: 8),
                 _buildDateTime(context),
@@ -141,6 +181,7 @@ class _MedicationEntryModalState extends State<SugarTrackerScreen> {
                     labelText: 'Notes',
                     focusedBorder: UnderlineInputBorder(
                       borderSide: BorderSide(
+                        color: Colors.indigo[900]!,
                         width: 2.0, // Set the desired width
                       ),
                     ),
@@ -175,74 +216,53 @@ class _MedicationEntryModalState extends State<SugarTrackerScreen> {
   }
 
   Widget _buildMeasured(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
+    return Row(
       children: [
-        GestureDetector(
-          onTap: () {
-            _showOptionsModal(context);
-          },
-          child: Container(
-            padding: EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.indigo[900]!, width: 2.0),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Text(
-              selectedOption.isNotEmpty ? selectedOption : 'None',
-              style: TextStyle(
-                color: selectedOption.isNotEmpty ? Colors.black : Colors.grey,
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('Measured Arm'),
+              Row(
+                children: [
+                  DropdownButton<String>(
+                    value: selectedArm,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        print(newValue);
+                        selectedArm = newValue!;
+                      });
+                    },
+                    items:
+                        <String>['Right', 'Left'].map<DropdownMenuItem<String>>(
+                      (String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      },
+                    ).toList(),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+        SizedBox(width: 16),
+        Expanded(
+          child: TextFormField(
+            decoration: InputDecoration(
+              labelText: 'Pulse',
+              focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(
+                  color: Colors.indigo[900]!,
+                  width: 2.0,
+                ),
               ),
             ),
           ),
         ),
       ],
-    );
-  }
-
-  void _showOptionsModal(BuildContext context) async {
-    final result = await showModalBottomSheet<String>(
-      context: context,
-      builder: (BuildContext context) {
-        return Container(
-          padding: EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text(
-                'Select Meal Time',
-                ),
-              SizedBox(height: 20),
-              _buildOptionTile(context, 'Before Breakfast'),
-              _buildOptionTile(context, 'After Breakfast'),
-              _buildOptionTile(context, 'Before Lunch'),
-              _buildOptionTile(context, 'After Lunch'),
-              _buildOptionTile(context, 'Before Dinner'),
-              _buildOptionTile(context, 'After Dinner'),
-              _buildOptionTile(context, 'Before Sleep'),
-              _buildOptionTile(context, 'Fasting'),
-            ],
-          ),
-        );
-      },
-    );
-
-    if (result != null) {
-      setState(() {
-        selectedOption = result;
-        print(result);
-        print(selectedOption);
-      });
-    }
-  }
-
-  Widget _buildOptionTile(BuildContext context, String option) {
-    return ListTile(
-      title: Text(option),
-      onTap: () {
-        Navigator.pop(context, option);
-      },
     );
   }
 
@@ -253,6 +273,7 @@ class _MedicationEntryModalState extends State<SugarTrackerScreen> {
           child: TextField(
             decoration: InputDecoration(
               labelText: 'Date',
+              hintText: 'Select Date',
               suffixIcon: Icon(Icons.calendar_today),
               focusedBorder: UnderlineInputBorder(
                 borderSide: BorderSide(
@@ -271,6 +292,7 @@ class _MedicationEntryModalState extends State<SugarTrackerScreen> {
           child: TextField(
             decoration: InputDecoration(
               labelText: 'Time',
+              hintText: 'Select Time',
               suffixIcon: Icon(Icons.access_time),
               focusedBorder: UnderlineInputBorder(
                 borderSide: BorderSide(
@@ -293,7 +315,8 @@ class _MedicationEntryModalState extends State<SugarTrackerScreen> {
     return SafeArea(
         child: Scaffold(
             appBar: _buildAppBar(context),
-            body: Container(
+            body:SingleChildScrollView(
+             child:Container(
                 width: double.maxFinite,
                 padding: EdgeInsets.symmetric(vertical: 3.v),
                 child: Column(
@@ -303,15 +326,13 @@ class _MedicationEntryModalState extends State<SugarTrackerScreen> {
                       SizedBox(height: 22.v),
                       Padding(
                           padding: EdgeInsets.only(left: 11.h),
-                          child: Text("Blood Sugar ",
+                          child: Text("Blood Pressure ",
                               style: theme.textTheme.headlineSmall)),
                       SizedBox(height: 26.v),
                       _buildUserProfileList(context),
                       SizedBox(height: 26.v)
                     ])),
+            ),
             floatingActionButton: _buildFloatingActionButton(context)));
   }
-
-
-  
 }

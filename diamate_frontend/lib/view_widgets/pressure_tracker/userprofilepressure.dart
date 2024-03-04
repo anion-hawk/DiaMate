@@ -1,33 +1,32 @@
-import 'widgets/userprofilepressure.dart';
-import 'package:diamate_frontend/core/app_export.dart';
-import 'package:diamate_frontend/widgets/app_bar/appbar_title_circleimage.dart';
-import 'package:diamate_frontend/presentation/tracker_home_screen/tracker_home_screen.dart';
-import 'package:diamate_frontend/widgets/app_bar/custom_app_bar.dart';
-import 'package:diamate_frontend/widgets/custom_floating_button.dart';
 import 'package:flutter/material.dart';
+import 'package:diamate_frontend/core/app_export.dart';
 
-//import 'package:diamate_frontend/presentation/modals/add_Pressure_modal.dart';
 
-class PressureTrackerScreen extends StatefulWidget {
-  const PressureTrackerScreen({Key? key}) : super(key: key);
+ //UserprofilelistItemWidget
+ class Userprofilepressure extends StatefulWidget {
+  const Userprofilepressure({Key? key}) : super(key: key);
 
   @override
-  _MedicationEntryModalState createState() => _MedicationEntryModalState();
+  _MedicationModalState createState() => _MedicationModalState();
 }
 
-class _MedicationEntryModalState extends State<PressureTrackerScreen> {
-  //Widget _show;
+class _MedicationModalState extends State<Userprofilepressure> {
+
   String? dosageUnit = 'mg'; // Default dosage unit
   DateTime selectedDate = DateTime.now();
   TimeOfDay selectedTime = TimeOfDay.now();
-
-  String selectedOption = '';
+   String selectedOption = '';
   String selectedArm = 'Right';
 
-  TextEditingController _dateController = TextEditingController();
-  TextEditingController _timeController = TextEditingController();
+  TextEditingController _diastoliccontroller = TextEditingController(text: '90');
+  TextEditingController _systoliccontroller = TextEditingController(text: '140');
+  TextEditingController _notecontroller = TextEditingController(text: 'notes');
+  TextEditingController _pulsecontroller = TextEditingController(text: '123');
+  
 
 
+  TextEditingController _dateController = TextEditingController(text: '12/12/2012');
+  TextEditingController _timeController = TextEditingController(text:'6:33 PM');
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -39,7 +38,8 @@ class _MedicationEntryModalState extends State<PressureTrackerScreen> {
     if (picked != null && picked != selectedDate) {
       setState(() {
         selectedDate = picked;
-        _dateController.text = '${picked.day}/${picked.month}/${picked.year}';
+        _dateController.text =
+            '${picked.day}/${picked.month}/${picked.year}';
       });
     }
   }
@@ -56,64 +56,8 @@ class _MedicationEntryModalState extends State<PressureTrackerScreen> {
       });
     }
   }
-  /// Section Widget
-  PreferredSizeWidget _buildAppBar(BuildContext context) {
-    return CustomAppBar(
-      height: 56.v,
-      leading: IconButton(
-        icon: Icon(Icons.arrow_back),
-        onPressed: () {
-          // Handle the 'back' button press here
-          // Typically, you would use Navigator to navigate back
-          Navigator.pop(context);
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => TrackerHomeScreen()),
-          );
-        },
-      ),
-    );
-  }
 
-  /// Section Widget
-  Widget _buildUserProfileList(BuildContext context) {
-    return Padding(
-        padding: EdgeInsets.only(left: 7.h, right: 4.h),
-        child: ListView.separated(
-            physics: NeverScrollableScrollPhysics(),
-            shrinkWrap: true,
-            separatorBuilder: (context, index) {
-              return SizedBox(height: 21.v);
-            },
-            itemCount: 2,
-            itemBuilder: (context, index) {
-              return Userprofilepressure(
-                  //onTapUserProfile(context);
-                  );
-            }));
-  }
-
-  /// Section Widget
-  Widget _buildFloatingActionButton(BuildContext context) {
-    return CustomFloatingButton(
-      height: 35,
-      width: 35,
-      backgroundColor: Colors.indigo[900]!, // Replace with your color
-      child: Icon(
-        Icons.add_circle_outlined,
-        color: Colors.white,
-        size: 25.0,
-      ),
-
-      onTap: () {
-        _showModal(context);
-
-        // _openAddPressureModal(context);
-      },
-    );
-  }
-
-  void _showModal(BuildContext context) {
+void _showModal(BuildContext context) {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
@@ -124,10 +68,12 @@ class _MedicationEntryModalState extends State<PressureTrackerScreen> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
+                
                 Row(
                   children: [
                     Expanded(
                       child: TextField(
+                        controller: _systoliccontroller,
                         decoration: InputDecoration(
                           labelText: 'Systolic Pressure',
                           focusedBorder: UnderlineInputBorder(
@@ -151,6 +97,7 @@ class _MedicationEntryModalState extends State<PressureTrackerScreen> {
                   children: [
                     Expanded(
                       child: TextField(
+                        controller: _diastoliccontroller,
                         decoration: InputDecoration(
                           labelText: 'Diastolic Pressure',
                           focusedBorder: UnderlineInputBorder(
@@ -169,53 +116,56 @@ class _MedicationEntryModalState extends State<PressureTrackerScreen> {
                     ),
                   ],
                 ),
-                SizedBox(
-                  height: 16,
-                ),
+                SizedBox(height: 16,),
                 _buildMeasured(context),
                 SizedBox(height: 8),
                 _buildDateTime(context),
+
                 SizedBox(height: 8),
                 TextField(
-                  decoration: InputDecoration(
-                    labelText: 'Notes',
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Colors.indigo[900]!,
-                        width: 2.0, // Set the desired width
+                        controller: _notecontroller,
+                        decoration: InputDecoration(
+                          labelText: 'Notes',
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.indigo[900]!,
+                              width: 2.0, // Set the desired width
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 8),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.indigo[900]!,
-                      ),
-                      child: IconButton(
-                        icon: Icon(Icons.check, color: Colors.white),
-                        onPressed: () {
-                          print("print");
-                          Navigator.pop(context);
-                          // Add your logic here when the tick button is pressed
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
+                    SizedBox(height: 8),
+    Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Container(
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: Colors.indigo[900]!,
           ),
+          child: IconButton(
+            icon: Icon(Icons.check, color: Colors.white),
+            onPressed: () {
+              print("print");
+              Navigator.pop(context);
+              // Add your logic here when the tick button is pressed
+            },
+          ),
+        ),
+      ],
+    ),
+              ],
+                
+              
+            ),
+            ),
         );
       },
     );
   }
+  
 
-  Widget _buildMeasured(BuildContext context) {
+  Widget _buildMeasured(BuildContext context){
     return Row(
       children: [
         Expanded(
@@ -233,11 +183,11 @@ class _MedicationEntryModalState extends State<PressureTrackerScreen> {
                         selectedArm = newValue!;
                       });
                     },
-                    items:
-                        <String>['Right', 'Left'].map<DropdownMenuItem<String>>(
+                    items: <String>['Right', 'Left'].map<DropdownMenuItem<String>>(
                       (String value) {
                         return DropdownMenuItem<String>(
                           value: value,
+                         
                           child: Text(value),
                         );
                       },
@@ -251,6 +201,7 @@ class _MedicationEntryModalState extends State<PressureTrackerScreen> {
         SizedBox(width: 16),
         Expanded(
           child: TextFormField(
+            controller: _pulsecontroller,
             decoration: InputDecoration(
               labelText: 'Pulse',
               focusedBorder: UnderlineInputBorder(
@@ -264,9 +215,9 @@ class _MedicationEntryModalState extends State<PressureTrackerScreen> {
         ),
       ],
     );
+  
   }
-
-  Widget _buildDateTime(BuildContext context) {
+  Widget _buildDateTime(BuildContext context){
     return Row(
       children: [
         Expanded(
@@ -310,27 +261,95 @@ class _MedicationEntryModalState extends State<PressureTrackerScreen> {
     );
   }
 
+
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-        child: Scaffold(
-            appBar: _buildAppBar(context),
-            body: Container(
-                width: double.maxFinite,
-                padding: EdgeInsets.symmetric(vertical: 3.v),
-                child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(height: 22.v),
-                      Padding(
-                          padding: EdgeInsets.only(left: 11.h),
-                          child: Text("Blood Pressure ",
-                              style: theme.textTheme.headlineSmall)),
-                      SizedBox(height: 26.v),
-                      _buildUserProfileList(context),
-                      SizedBox(height: 26.v)
-                    ])),
-            floatingActionButton: _buildFloatingActionButton(context)));
+    return GestureDetector(
+      onTap: () {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text("Blood Pressure"),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("Date: 11/12/2023", style: theme.textTheme.titleMedium,),
+                  SizedBox(height: 8),
+                  Text("Time: 1:34 PM", style: theme.textTheme.titleMedium,),
+                  SizedBox(height: 8),
+                  Text("Arm: Right", style: theme.textTheme.titleMedium,),
+                  SizedBox(height: 8),
+                  Text("140/90 mmHg", style: theme.textTheme.titleLarge,),
+                ],
+              ),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    _showModal(context);
+                  },
+                  child: Text('Edit'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('Close'),
+                ),
+              ],
+            );
+          },
+        );
+      },
+      child: Container(
+        decoration: AppDecoration.outlineBlack900021,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 15),
+              decoration: AppDecoration.fillBlue,
+              child: Row(
+                children: [
+                  Text(
+                    "11/12/2023",
+                    style: theme.textTheme.titleMedium,
+                  ),
+                  SizedBox(width: 22),
+                  Text(
+                    "1:34 PM",
+                    style: theme.textTheme.titleMedium,
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 15),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 15),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Arm",
+                    style: Theme.of(context).textTheme.bodyText1,
+                  ),
+                  Text(
+                    "Right",
+                    style: Theme.of(context).textTheme.bodyText1,
+                  ),
+                  Text(
+                    "10.3 mmol/L",
+                   style: theme.textTheme.titleMedium,
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 15),
+          ],
+        ),
+      ),
+    );
   }
 }

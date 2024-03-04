@@ -1,11 +1,11 @@
 import 'package:diamate_frontend/core/app_export.dart';
-import 'package:diamate_frontend/presentation/all_tracker_screen/pressure_tracker_screen.dart';
+import 'package:diamate_frontend/view_widgets/pressure_tracker/pressure_tracker_screen.dart';
 import 'package:diamate_frontend/widgets/app_bar/appbar_leading_image.dart';
 import 'package:diamate_frontend/widgets/app_bar/appbar_trailing_image.dart';
 import 'package:diamate_frontend/widgets/app_bar/custom_app_bar.dart';
 import 'package:diamate_frontend/widgets/custom_drop_down.dart';
 import 'package:diamate_frontend/widgets/custom_floating_button.dart';
-import 'package:diamate_frontend/presentation/all_tracker_screen/sugar_tracker_screen.dart';
+import 'package:diamate_frontend/view_widgets/sugar_tracker/sugar_tracker_screen.dart';
 import 'package:flutter/material.dart';
 
 class TrackerHomeScreen extends StatefulWidget {

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:diamate_frontend/core/app_export.dart';
-import 'package:diamate_frontend/presentation/all_tracker_screen/sugar_tracker_screen.dart';
-
 //UserprofilelistItemWidget
 class UserMeallistItemWidget extends StatefulWidget {
   const UserMeallistItemWidget({Key? key}) : super(key: key);
@@ -31,13 +29,13 @@ class _MedicationModalState extends State<UserMeallistItemWidget> {
           ),
           SizedBox(width: 10.0), // Add some space between time range and box
           Container(
-            width: 300.0,
+            width: 220.0,
             // Set width of the box
             decoration: BoxDecoration(
               color: Color(0xFF012b68),
               borderRadius: BorderRadius.circular(10.0), // Set border radius
             ),
-            padding: EdgeInsets.all(20.0),
+           padding: EdgeInsets.all(15.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

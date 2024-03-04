@@ -30,9 +30,36 @@ async function isFollowing(follower, folowee) {
 	}
 	return { success, error };
 }
+async function getFollower(id)
+{
+	const query = 'SELECT COUNT(*) FROM follows WHERE follower = $1 ';
+    const params = [id];
+	const { success, data, error } = await repository.query(query, params);
+	if (success) {
+		const isComplete = data.length > 0;
+		
+		return { success,data};
+	}
+	return { success, error };
+}
+
+async function getFollowing(id)
+{
+	const query = 'SELECT COUNT(*) FROM follows WHERE followee = $1 ';
+    const params = [id];
+	const { success, data, error } = await repository.query(query, params);
+	if (success) {
+		const isComplete = data.length > 0;
+		
+		return { success, data };
+	}
+	return { success, error };
+}
 
 module.exports = {
 	followUser,
 	unfollowUser,
-	isFollowing
+	isFollowing,
+	getFollower,
+	getFollowing
 };

@@ -3,6 +3,43 @@ const userRepository = require('../repository/user');
 const patientRepository = require('../repository/patient');
 const followRepository = require('../repository/follow');
 
+async function getProfileStatus(req, res) {
+    const { id } = req.user;
+    const result = await userRepository.getUserById(id);
+    if (!result.success) {
+        res.status(500).json({ error: "Internal server error" });
+        return;
+    }
+    if (result.data.length === 0) {
+        res.status(404).json({ error: "User not found" });
+        return;
+    }
+    user = result.data[0];
+    delete user.id;
+
+    switch (user.role) {
+        case 0:
+            user.isComplete = true;
+            break;
+        case 1:
+            const patientQuery = await patientRepository.isProfileComplete(id);
+            if (!patientQuery.success) {
+                res.status(500).json({ error: "Internal server error" });
+                return;
+            }
+            user.isComplete = patientQuery.isComplete;
+            break;
+        case 2:
+            user.isComplete = false;
+            break;
+        default:
+            res.status(500).json({ error: "Internal server error" });
+            return;
+    }
+    res.status(200).json(user);
+}
+
+
 async function getSelfProfile(req, res) {
     const { id } = req.user;
     const result = await userRepository.getUserById(id);
@@ -13,6 +50,8 @@ async function getSelfProfile(req, res) {
     res.status(200).json(result.data[0]);
     return;
 }
+
+
 async function getSelfProfileDetails(req, res) {
     const { id } = req.user;
     const result = await userRepository.getUserDetailsById(id);
@@ -37,7 +76,37 @@ async function getSelfProfileDetails(req, res) {
     res.status(500).json({ error: "Internal server error" });
     return;
 }
-
+async function getSelfFollowingDetails(req, res) {
+    const { id } = req.user;
+    console.log(id);
+    const result = await userRepository.getUserDetailsById(id);
+    if (!result.success) {
+        res.status(500).json({ error: "Internal server error: query failed" });
+        console.log(res);
+        return;
+    }
+    if (result.data.length === 0) {
+        res.status(404).json({ error: "User not found" });
+        return;
+    }
+    user = result.data[0];
+    if (user.role === 2 || user.role === 1) {
+        const followerDetails = await followRepository.getFollower(id);
+        console.log(followerDetails.data[0]);
+        const followingDetails = await followRepository.getFollowing(id);
+        console.log(followingDetails.data[0]);
+        if (!followerDetails.success || !followingDetails.success) {
+            res.status(500).json({ error: "Internal server error: follow query failed" });
+            console.log(res);
+            return;
+        }
+        res.status(200).json({ user, followerDetails: followerDetails.data[0], followingDetails: followingDetails.data[0] });
+        return;
+    }
+    res.status(500).json({ error: "Internal server error" });
+    console.log(res);
+    return;
+}
 
 async function getUserById(req, res) {
     const { id } = req.params;
@@ -69,23 +138,21 @@ async function completePatientProfile(req, res) {
         res.status(301).redirect('/user/profile');
         return;
     }
-    const { type, diagnosis_date, diseases } = req.body;
+    const { diabetesType, diagnosisDate, diseases } = req.body;
 
     let diabetes_type;
-    if (type.toLowerCase() === "type 1") {
+    if (diabetesType.toLowerCase() === "type 1") {
         diabetes_type = 1;
-    } else if (type.toLowerCase() === "type 2") {
+    } else if (diabetesType.toLowerCase() === "type 2") {
         diabetes_type = 2;
     } else {
         diabetes_type = 0;
     }
-    console.log(diseases);
     const disease_keys = JSON.parse(diseases).map(disease => disease.toLowerCase().replace(/ /g, '_'));
-    console.log(disease_keys);
     let queryBody = {
         id,
         diabetes_type,
-        diagnosis_date,
+        diagnosis_date: diagnosisDate,
         coeliac_disease: false,
         thyroid_disease: false,
         hypertension: false,
@@ -178,9 +245,11 @@ async function followUser(req, res) {
 }
 
 module.exports = {
+    getProfileStatus,
     getSelfProfile,
     getSelfProfileDetails,
     getUserById,
     completeProfile,
-    followUser
+    followUser,
+    getSelfFollowingDetails
 };

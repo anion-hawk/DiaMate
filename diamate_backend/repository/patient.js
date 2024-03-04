@@ -21,8 +21,20 @@ async function completeProfile(patientDetails) {
 	return { success, error };
 
 }
+async function getPatientDetails(id){
+	const query = 'SELECT (SELECT COUNT(*) FROM follows WHERE follower = $1 ) AS total_following, (SELECT COUNT{*} FROM follows WHERE followee = $1 ) AS total_follower)';
+    const params = [id];
+	const { success, data, error } = await repository.query(query, params);
+	if (success) {
+		const isComplete = data.length > 0;
+		return { success, isComplete };
+	}
+	return { success, error };
 
+
+}
 module.exports = {
 	isProfileComplete,
-	completeProfile
+	completeProfile,
+	getPatientDetails
 };
