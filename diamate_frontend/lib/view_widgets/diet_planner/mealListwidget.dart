@@ -20,7 +20,7 @@ class _MedicationModalState extends State<UserMeallistItemWidget> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                widget.data['sformatted_time']+' - '+widget.data['sformatted_time'],
+                widget.data['sformatted_time']+' - '+widget.data['eformatted_time'],
                 //'08:00 AM - 09:10 AM', // Time range text
                 style: TextStyle(
                   color: Color(0xFF012b68),

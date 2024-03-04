@@ -162,9 +162,11 @@ async function insertDietPlan(req, res) {
 async function getDietList(req, res) {
 	console.log(req.body);
 	//let dt = req.query.dt; 
+	const {dt} = req.body;
+
 	id = req.user.id;//console.log(id+" "+ dt);
 	
-	const result = await plannerRepository.getDietList(id);
+	const result = await plannerRepository.getDietList(id,dt);
   
 	if (result.success) {
 	  let meds = result.data;

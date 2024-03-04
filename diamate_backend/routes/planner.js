@@ -6,7 +6,7 @@ router.route('/insert-medicine').post(plannerController.insertMedicineDosage);
 router.route('/medicinelist').get(plannerController.getMedicineList);
 
 router.route('/insert-diet').post(plannerController.insertDietPlan);
-router.route('/dietlist').get(plannerController.getDietList);
+router.route('/dietlist').post(plannerController.getDietList);
 router.route('/:id').get(plannerController.getMedicineDetailsById);
 
 router.get('/test', (req, res) => {

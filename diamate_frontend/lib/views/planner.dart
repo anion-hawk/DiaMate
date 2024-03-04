@@ -60,9 +60,12 @@ class _ShowPlannerState extends State<ShowPlanner> {
 
   Future<List<Map<String, dynamic>>> fetchDietList() async {
     try {
-    
+      String s =DateFormat('yyyy/MM/dd').format(selectedDay!);
+     var b = {"dt": s};
+     print(b);
+
       final response =
-          await Requests.get(dietlist, timeoutSeconds: 120);
+          await Requests.post(dietlist,body:b, timeoutSeconds: 120);
 
       if (response.statusCode == 200) {
         final List<dynamic> data = json.decode(response.body);
