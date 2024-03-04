@@ -193,7 +193,6 @@ class _ForumScreenState extends State<ForumScreen> {
           icon: Icon(Icons.logout),
           color: iconColor,
         ),
-        
       ],
       backgroundColor: Color(0xFF042142),
     );
@@ -293,20 +292,20 @@ class _ForumScreenState extends State<ForumScreen> {
       future: fetchPosts(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator(); // Display a loading indicator
+          return const CircularProgressIndicator(); // Display a loading indicator
         } else if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return Text('No posts available');
+          return const Text('No posts available');
         } else {
           // Display the posts using ListView.builder
           return ListView.builder(
-            physics: NeverScrollableScrollPhysics(),
+            physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
             itemCount: snapshot.data!.length,
             itemBuilder: (context, index) {
               return Padding(
-                padding: EdgeInsets.symmetric(
+                padding: const EdgeInsets.symmetric(
                     vertical: 8.0), // Adjust the vertical spacing as needed
                 child: PostlistcomponentItemWidget(post: snapshot.data![index]),
               );

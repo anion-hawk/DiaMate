@@ -84,22 +84,28 @@ async function createPost(req, res) {
 }
 
 async function getPosts(req, res) {
-	let param = { page: 1, limit: 20 };
-	const page = param.page;
-	const limit = param.limit;
-	const offset = (page - 1) * limit;
-	const result = await forumRepository.getPosts(offset, limit);
+	const userId = req.user.id;
+
+	const result = await forumRepository.getAllPosts(userId);
 	if (result.success) {
 		let posts = result.data;
-		let postDetailsFound = await getPostsDetails(posts, req, res);
-		if (!postDetailsFound) {
-			return;
-		}
 		res.status(200).json(posts);
 	}
 	else {
 		res.status(500).json({ error: 'Internal server error: query failed' });
 	}
+	// const result = await forumRepository.getPosts(offset, limit);
+	// if (result.success) {
+	// 	let posts = result.data;
+	// 	let postDetailsFound = await getPostsDetails(posts, req, res);
+	// 	if (!postDetailsFound) {
+	// 		return;
+	// 	}
+	// 	res.status(200).json(posts);
+	// }
+	// else {
+	// 	res.status(500).json({ error: 'Internal server error: query failed' });
+	// }
 }
 
 async function getPost(req, res) {

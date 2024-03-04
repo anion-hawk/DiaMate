@@ -10,6 +10,32 @@ async function createPost(userId, title, content, timestamp) {
 	return { success, error };
 }
 
+async function getAllPosts(userId) {
+	const query = `
+        SELECT 
+            posts.*, 
+            users.id AS author_id, 
+            users.name AS author_name, 
+            users.role AS author_role,
+            (SELECT COUNT(*) FROM comments WHERE comments.post = posts.id) AS comment_count,
+            (SELECT COUNT(*) FROM upvotes WHERE upvotes.postid = posts.id AND upvotes.up = true) AS upvote_count,
+            (SELECT CASE WHEN EXISTS (SELECT * FROM upvotes WHERE upvotes.postid = posts.id AND upvotes.userid = $1 AND upvotes.up = true) THEN true ELSE false END) AS user_upvote
+        FROM 
+            posts 
+        INNER JOIN 
+            users ON posts.author = users.id 
+        ORDER BY 
+            posts.created DESC`;
+	const params = [userId];
+	const { success, data, error } = await repository.query(query, params);
+	if (success) {
+		return { success, data };
+	}
+	console.log(error);
+	return { success, error };
+}
+
+
 async function getPosts(offset, limit) {
 	const query = 'SELECT * FROM posts ORDER BY created DESC OFFSET $1 LIMIT $2';
 	const params = [offset, limit];
@@ -41,6 +67,7 @@ async function getPostById(id) {
 module.exports = {
 	createPost,
 	getPosts,
+	getAllPosts,
 	getPostById,
 	getSelfPosts
 };
