@@ -1,5 +1,6 @@
 import "package:diamate_frontend/config.dart";
 import "package:diamate_frontend/presentation/forum_screen/forum_screen.dart";
+import "package:diamate_frontend/view_widgets/sugar_tracker/sugar_tracker_screen.dart";
 import "package:diamate_frontend/widgets/elevated_button.dart";
 import "package:diamate_frontend/views/tracker.dart";
 import "package:diamate_frontend/views/planner.dart";
@@ -22,7 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final List<Widget> _pages = [
     ForumScreen(),
     ShowPlanner(),
-    TrackerHomeScreen(),
+    SugarTrackerScreen(),
     ForumScreen(),
     ChatListScreen(),
   ];
