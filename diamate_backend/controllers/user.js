@@ -186,7 +186,7 @@ async function completePatientProfile(req, res) {
 async function completeDoctorProfile(req, res) {
     const { id } = req.user;
     const { specialty, experience, bmdc } = req.body;
-    const result = await expertRepository.completeDoctorProfile(id, specialty, experience, bmdc);
+    const result = await expertRepository.completeProfile(id, specialty, experience, bmdc);
     if (!result.success) {
         res.status(500).json({ error: "Internal server error: failed adding details" });
         return;

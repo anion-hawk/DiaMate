@@ -71,10 +71,10 @@ async function getPostsDetails(posts, req, res) {
 }
 
 async function createPost(req, res) {
-	const { title, content } = req.body;
+	const { title, content, tags } = req.body;
 	const userId = req.user.id;
 	const timestamp = new Date();
-	const result = await forumRepository.createPost(userId, title, content, timestamp);
+	const result = await forumRepository.createPost(userId, title, content, timestamp, tags);
 	if (result.success) {
 		res.status(200).json(result.data);
 	}

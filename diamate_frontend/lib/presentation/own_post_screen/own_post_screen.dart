@@ -55,6 +55,7 @@ class _OwnPostScreen extends State<OwnPostScreen> {
         "content": contentController.text,
         "tags": jsonEncode(selectedTags)
       };
+      print(reqbody);
       var response = await Requests.post(own_post, body: reqbody);
       print(response.statusCode);
 

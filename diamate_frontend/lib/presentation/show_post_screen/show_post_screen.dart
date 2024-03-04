@@ -84,6 +84,7 @@ class _ShowPostScreenState extends State<ShowPostScreen> {
   void initState() {
     super.initState();
     likeCount = int.parse(widget.post['upvote_count'].toString());
+    print(widget.post);
     //fetchData();
   }
 
