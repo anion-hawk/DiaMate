@@ -132,23 +132,23 @@ async function getMedicineDetailsById(req, res) {
 }
 
 async function insertDietPlan(req, res) {
-    const { userid, type, title, date, stime, etime } = req.body;
-    const userId = req.user.id;
-    
-	const parts = date.split('/'); // Split the input date
-    const day = parts[0];
-    const month = parts[1];
-    const year = parts[2];
+    const { type, title, date, stime, etime } = req.body;
+    const userid = req.user.id;
+    console.log(req.body);
+	// const parts = date.split('/'); // Split the input date
+    // const day = parts[0];
+    // const month = parts[1];
+    // const year = parts[2];
 
-    // Rearrange the parts to form the new date string
-    const newDate = `${year}-${month}-${day}`;
+    // // Rearrange the parts to form the new date string
+    // const newDate = `${year}-${month}-${day}`;
     
     try {
         // Use the to_timestamp function to convert AM/PM time to timestamp
         const result = await plannerRepository.insertDietPlan(
-            userid, type, title, newDate, stime, etime
+            userid, type, title, date, stime, etime
         );
-
+        
         if (result.success) {
             res.status(200).json(result.data);
         } else {
@@ -160,8 +160,10 @@ async function insertDietPlan(req, res) {
     }
 }
 async function getDietList(req, res) {
-	id = req.user.id;
-	console.log(id);
+	console.log(req.body);
+	//let dt = req.query.dt; 
+	id = req.user.id;//console.log(id+" "+ dt);
+	
 	const result = await plannerRepository.getDietList(id);
   
 	if (result.success) {

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:diamate_frontend/config.dart';
 import "package:diamate_frontend/view_widgets/medicine_tracker/medicine_tracker.dart";
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:requests/requests.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:diamate_frontend/core/app_export.dart';
@@ -41,6 +42,7 @@ class _ShowPlannerState extends State<ShowPlanner> {
       selectedDay = day;
     });
   }
+
   @override
   void initState() {
     super.initState();
@@ -56,9 +58,11 @@ class _ShowPlannerState extends State<ShowPlanner> {
     fetchDietList();
   }
 
-   Future<List<Map<String, dynamic>>> fetchDietList() async {
+  Future<List<Map<String, dynamic>>> fetchDietList() async {
     try {
-      final response = await Requests.get(dietlist, timeoutSeconds: 120);
+    
+      final response =
+          await Requests.get(dietlist, timeoutSeconds: 120);
 
       if (response.statusCode == 200) {
         final List<dynamic> data = json.decode(response.body);
@@ -72,6 +76,7 @@ class _ShowPlannerState extends State<ShowPlanner> {
       throw Exception('Failed to load dietlists: $e');
     }
   }
+
   DateTime today = DateTime.now();
   @override
   int selectedIndex = 0; // Default selected index
@@ -95,16 +100,16 @@ class _ShowPlannerState extends State<ShowPlanner> {
             },
           ),
         ),
-        body: SingleChildScrollView( 
+        body: SingleChildScrollView(
           child: Row(
-          children: [
-            //_buildNavigationSidebar(context),
-            Expanded(
-              child: content(),
-            ),
-          ],
+            children: [
+              //_buildNavigationSidebar(context),
+              Expanded(
+                child: content(),
+              ),
+            ],
+          ),
         ),
-      ),
         // bottomNavigationBar: _buildBottomBar(context),
         drawer: _buildDrawer(context),
       ),
@@ -214,7 +219,7 @@ class _ShowPlannerState extends State<ShowPlanner> {
             availableGestures: AvailableGestures.all,
             selectedDayPredicate: (day) => isSameDay(day, today),
             focusedDay: today,
-            firstDay: DateTime.now(),
+            firstDay: DateTime.utc(2010, 10, 16),
             lastDay: DateTime.now().add(Duration(days: 365 * 5)),
             onDaySelected: _ondaySelected,
           ),
@@ -324,6 +329,4 @@ class _ShowPlannerState extends State<ShowPlanner> {
       },
     );
   }
-  
-  
 }

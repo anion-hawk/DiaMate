@@ -48,7 +48,7 @@ async function insertDietPlan (userid, type, title, date, stime, etime){
 }
 
 async function getDietList(userId) {
-	const query = 'SELECT * FROM public.dietplanner WHERE userid = $1 ORDER BY stime ASC';
+	const query = 'SELECT * FROM public.dietplanner WHERE userid = $1  ORDER BY date, stime ASC';
 	const params = [userId];
 	
 	const { success, data, error } = await repository.query(query,params);
