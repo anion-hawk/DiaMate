@@ -60,10 +60,35 @@ async function getDietList(userId,dt) {
 	return { success, error };
 }
 
+async function getSugarList(userId) {
+	const query = 'SELECT * FROM sugartracker WHERE userid = $1';
+//const query =' SELECT( id, userid, medication, dosage, TO_CHAR(date, "DD/MM/YYYY") AS formatted_date,TO_CHAR(time, "HH12:MI:SS AM") AS formatted_time, repeat) FROM medicinePlanner WHERE userid = $1';
+	const params = [userId];
+	const { success, data, error } = await repository.query(query,params);
+	
+	if (success) {
+		return { success, data };
+	}
+	return { success, error };
+}
+async function insertSugar(userid, mealtime,date, time, notes, sugar) {
+	const query = 'INSERT INTO sugartracker(userid, mealtime,date, time, notes, sugar) VALUES($1, $2, $3, $4, $5,$6) RETURNING (id, userid, mealtime,date, time, notes, sugar) ';
+	const params = [userid, mealtime,date, time, notes, sugar ];
+	console.log(params);
+	const { success, data, error } = await repository.query(query, params);
+	console.log(data);
+	if (success) {
+		return { success, data };
+	}
+	return { success, error };
+}
+
 module.exports = {
 	insertMedicineDosage,
     getMedicineDetailsById,
     getMedicineList,
 	insertDietPlan,
-	getDietList
+	getDietList,
+	getSugarList,
+	insertSugar
 };
