@@ -155,7 +155,10 @@ class _ForumScreenState extends State<ForumScreen> {
   /// Section Widget
   PreferredSizeWidget _buildAppBar(BuildContext context) {
     return AppBar(
-      title: const Text('DiaMate', style: TextStyle(color: Colors.white),),
+      title: const Text(
+        'DiaMate',
+        style: TextStyle(color: Colors.white),
+      ),
       actions: [
         IconButton(
           onPressed: () {
@@ -200,6 +203,7 @@ class _ForumScreenState extends State<ForumScreen> {
 
   void logOut() async {
     await FirebaseAuth.instance.signOut();
+    Navigator.pushReplacementNamed(context, AppRoutes.authGate);
   }
 
   /// Section Widget

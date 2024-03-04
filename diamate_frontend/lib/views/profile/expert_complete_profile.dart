@@ -101,7 +101,7 @@ class _ExpertCompleteProfileState extends State<ExpertCompleteProfile> {
 
   void saveDetails() async {
     var b = {
-      "speciality": specialController.text,
+      "specialty": specialController.text,
       "experience": expController.text,
       "bmdc": bmdcController.text
     };
