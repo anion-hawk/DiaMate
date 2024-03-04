@@ -1,26 +1,30 @@
+import 'package:diamate_frontend/config.dart';
 import 'package:flutter/material.dart';
 import 'package:diamate_frontend/core/app_export.dart';
 
- //UserprofilelistItemWidget
- class UserprofilelistItemWidget extends StatefulWidget {
-  const UserprofilelistItemWidget({Key? key}) : super(key: key);
+//UserprofilelistItemWidget
+class UserprofilelistItemWidget extends StatefulWidget {
+  final Map<String, dynamic> data;
+  const UserprofilelistItemWidget({required this.data, Key? key})
+      : super(key: key);
 
   @override
   _MedicationModalState createState() => _MedicationModalState();
 }
 
 class _MedicationModalState extends State<UserprofilelistItemWidget> {
-  
-
   String? dosageUnit = 'mg'; // Default dosage unit
   DateTime selectedDate = DateTime.now();
   TimeOfDay selectedTime = TimeOfDay.now();
   String selectedOption = '';
 
-  TextEditingController _dateController = TextEditingController(text:'12/12/2023');
-  TextEditingController _timeController = TextEditingController(text:'1:34 PM');
-  TextEditingController _concentrationController = TextEditingController(text:'10');
-  TextEditingController _notesController = TextEditingController(text:'notes');
+  TextEditingController _dateController =
+      TextEditingController(text: '12/12/2023');
+  TextEditingController _timeController =
+      TextEditingController(text: '1:34 PM');
+  TextEditingController _concentrationController =
+      TextEditingController(text: '10');
+  TextEditingController _notesController = TextEditingController(text: 'notes');
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -32,8 +36,7 @@ class _MedicationModalState extends State<UserprofilelistItemWidget> {
     if (picked != null && picked != selectedDate) {
       setState(() {
         selectedDate = picked;
-        _dateController.text =
-            '${picked.day}/${picked.month}/${picked.year}';
+        _dateController.text = '${picked.day}/${picked.month}/${picked.year}';
       });
     }
   }
@@ -51,7 +54,6 @@ class _MedicationModalState extends State<UserprofilelistItemWidget> {
     }
   }
 
-
   void _showModal(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -63,7 +65,6 @@ class _MedicationModalState extends State<UserprofilelistItemWidget> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                
                 Row(
                   children: [
                     Expanded(
@@ -91,52 +92,49 @@ class _MedicationModalState extends State<UserprofilelistItemWidget> {
                 _buildMeasured(context),
                 SizedBox(height: 8),
                 _buildDateTime(context),
-
                 SizedBox(height: 8),
                 TextField(
-                        controller: _notesController,
-                        decoration: InputDecoration(
-                          labelText: 'Notes',
-                          focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.indigo[900]!,
-                              width: 2.0, // Set the desired width
-                            ),
-                          ),
-                        ),
+                  controller: _notesController,
+                  decoration: InputDecoration(
+                    labelText: 'Notes',
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.indigo[900]!,
+                        width: 2.0, // Set the desired width
                       ),
-                    SizedBox(height: 8),
-    Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        Container(
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: Colors.indigo[900]!,
-          ),
-          child: IconButton(
-            icon: Icon(Icons.check, color: Colors.white),
-            onPressed: () {
-              print("print");
-              Navigator.pop(context);
-              // Add your logic here when the tick button is pressed
-            },
-          ),
-        ),
-      ],
-    ),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 8),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.indigo[900]!,
+                      ),
+                      child: IconButton(
+                        icon: Icon(Icons.check, color: Colors.white),
+                        onPressed: () {
+                          print("print");
+                          //insertsugar();
+                          Navigator.pop(context);
+                          // Add your logic here when the tick button is pressed
+                        },
+                      ),
+                    ),
+                  ],
+                ),
               ],
-                
-              
             ),
-            ),
+          ),
         );
       },
     );
   }
-  
 
-  Widget _buildMeasured(BuildContext context){
+  Widget _buildMeasured(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -152,7 +150,6 @@ class _MedicationModalState extends State<UserprofilelistItemWidget> {
             ),
             child: Text(
               selectedOption.isNotEmpty ? selectedOption : 'None',
-              
               style: TextStyle(
                 color: selectedOption.isNotEmpty ? Colors.black : Colors.grey,
               ),
@@ -162,7 +159,6 @@ class _MedicationModalState extends State<UserprofilelistItemWidget> {
       ],
     );
   }
-
 
   void _showOptionsModal(BuildContext context) async {
     final result = await showModalBottomSheet<String>(
@@ -185,9 +181,6 @@ class _MedicationModalState extends State<UserprofilelistItemWidget> {
               _buildOptionTile(context, 'After Lunch'),
               _buildOptionTile(context, 'Before Dinner'),
               _buildOptionTile(context, 'After Dinner'),
-              _buildOptionTile(context, 'Before Sleep'),
-              _buildOptionTile(context, 'Fasting'),
-              
             ],
           ),
         );
@@ -212,12 +205,11 @@ class _MedicationModalState extends State<UserprofilelistItemWidget> {
     );
   }
 
-  Widget _buildDateTime(BuildContext context){
+  Widget _buildDateTime(BuildContext context) {
     return Row(
       children: [
         Expanded(
           child: TextField(
-            
             decoration: InputDecoration(
               labelText: 'Date',
               //hintText: 'Select Date',
@@ -237,7 +229,6 @@ class _MedicationModalState extends State<UserprofilelistItemWidget> {
         SizedBox(width: 16),
         Expanded(
           child: TextField(
-            
             decoration: InputDecoration(
               labelText: 'Time',
               //hintText: 'Select Time',
@@ -258,8 +249,6 @@ class _MedicationModalState extends State<UserprofilelistItemWidget> {
     );
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -273,13 +262,25 @@ class _MedicationModalState extends State<UserprofilelistItemWidget> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Date: 11/12/2023", style: theme.textTheme.titleMedium,),
+                  Text(
+                    "Date: " + widget.data['formatted_date'],
+                    style: theme.textTheme.titleMedium,
+                  ),
                   SizedBox(height: 8),
-                  Text("Time: 1:34 PM", style: theme.textTheme.titleMedium,),
+                  Text(
+                    "Time: " + widget.data['formatted_time'],
+                    style: theme.textTheme.titleMedium,
+                  ),
                   SizedBox(height: 8),
-                  Text("Measured: After breakfast", style: theme.textTheme.titleMedium,),
+                  Text(
+                    "Measured: " + widget.data['mealtime'],
+                    style: theme.textTheme.titleMedium,
+                  ),
                   SizedBox(height: 8),
-                  Text("10.3 mmol/L", style: theme.textTheme.titleLarge,),
+                  Text(
+                    widget.data['sugar'].toString() + " mmol/L",
+                    style: theme.textTheme.titleLarge,
+                  ),
                 ],
               ),
               actions: <Widget>[
@@ -312,12 +313,12 @@ class _MedicationModalState extends State<UserprofilelistItemWidget> {
               child: Row(
                 children: [
                   Text(
-                    "11/12/2023",
+                    widget.data['formatted_date'],
                     style: theme.textTheme.titleMedium,
                   ),
                   SizedBox(width: 22),
                   Text(
-                    "1:34 PM",
+                    widget.data['formatted_time'],
                     style: theme.textTheme.titleMedium,
                   ),
                 ],
@@ -330,12 +331,12 @@ class _MedicationModalState extends State<UserprofilelistItemWidget> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "After breakfast",
+                    widget.data['mealtime'],
                     style: Theme.of(context).textTheme.bodyText1,
                   ),
                   Text(
-                    "10.3 mmol/L",
-                   style: theme.textTheme.titleMedium,
+                    widget.data['sugar'].toString() + " mmol/L",
+                    style: theme.textTheme.titleMedium,
                   ),
                 ],
               ),

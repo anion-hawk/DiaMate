@@ -155,7 +155,7 @@ class _ForumScreenState extends State<ForumScreen> {
   /// Section Widget
   PreferredSizeWidget _buildAppBar(BuildContext context) {
     return AppBar(
-      title: const Text('DiaMate'),
+      title: const Text('DiaMate', style: TextStyle(color: Colors.white),),
       actions: [
         IconButton(
           onPressed: () {

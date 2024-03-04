@@ -1,8 +1,11 @@
+import 'package:diamate_frontend/config.dart';
 import 'package:diamate_frontend/core/app_export.dart';
 import 'package:diamate_frontend/widgets/custom_drop_down.dart';
 import 'package:diamate_frontend/widgets/custom_elevated_button.dart';
 import 'package:diamate_frontend/widgets/custom_text_form_field.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:requests/requests.dart';
 
 class AddDietScreen extends StatefulWidget {
   AddDietScreen({Key? key}) : super(key: key);
@@ -17,6 +20,8 @@ class _AddDietScreenState extends State<AddDietScreen> {
       TextEditingController(text: '1:34 PM');
   TextEditingController _lasttimeController =
       TextEditingController(text: '1:40 PM');
+  String type = "";
+  TextEditingController _dateController = TextEditingController();
 
   List<String> dropdownItemList = [
     "Breakfast",
@@ -46,7 +51,20 @@ class _AddDietScreenState extends State<AddDietScreen> {
       });
     }
   }
-
+    void _selectDate(context) {
+    showDatePicker(
+            context: context,
+            initialDate:DateTime.now(),
+                
+            firstDate: DateTime.now().subtract(const Duration(days: 1 * 365)),
+            lastDate: DateTime.now().add(Duration(days: 365 * 5)),
+            )
+        .then((value) {
+      if (value != null) {
+        _dateController.text = DateFormat('yyyy-MM-dd').format(value);
+      }
+    });
+  }
   Future<void> _selectTime_last(BuildContext context) async {
     final TimeOfDay? picked_last = await showTimePicker(
       context: context,
@@ -84,7 +102,9 @@ class _AddDietScreenState extends State<AddDietScreen> {
               CustomDropDown(
                 hintText: "Breakfast",
                 items: dropdownItemList,
-                onChanged: (value) {},
+                onChanged: (value) {
+                  type = value;
+                },
               ),
               SizedBox(height: 28.v),
               Text(
@@ -100,6 +120,24 @@ class _AddDietScreenState extends State<AddDietScreen> {
               SizedBox(height: 28.v),
               _buildTimeSection(context),
               SizedBox(height: 5.v),
+              Expanded(
+          child: TextField(
+            decoration: InputDecoration(
+              labelText: 'Date',
+              hintText: 'Select Date',
+              suffixIcon: Icon(Icons.calendar_today),
+              focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(
+                  color: Colors.indigo[900]!,
+                  width: 2.0,
+                ),
+              ),
+            ),
+            controller: _dateController,
+            readOnly: true,
+            onTap: () => _selectDate(context),
+          ),
+        ),
             ],
           ),
         ),
@@ -124,7 +162,6 @@ class _AddDietScreenState extends State<AddDietScreen> {
             horizontal: 0.h,
             vertical: 0.v,
           ),
-         
           child: TextField(
             controller: _starttimeController,
             readOnly: true,
@@ -149,7 +186,7 @@ class _AddDietScreenState extends State<AddDietScreen> {
           SizedBox(height: 4.v),
           Container(
             width: 139.h,
-              child: TextField(
+            child: TextField(
               controller: _lasttimeController,
               readOnly: true,
               onTap: () => _selectTime_last(context),
@@ -177,6 +214,7 @@ class _AddDietScreenState extends State<AddDietScreen> {
   Widget _buildSetScheduleButtonSection(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        insertDiet();
         Navigator.pop(context);
       },
       onTapUp: (_) {
@@ -219,4 +257,28 @@ class _AddDietScreenState extends State<AddDietScreen> {
       ),
     );
   }
+  
+  void insertDiet() async {
+   
+    var data = {
+      "type": type,
+      "title": planTitlevalueController.text,
+      "date": _dateController.text,
+      "stime":_starttimeController.text,
+      "etime": _lasttimeController.text,
+    };
+    print(data);
+
+    var response =
+        await Requests.post(insertdiet, body: data, timeoutSeconds: 60);
+    if (response.statusCode == 200) {
+      print("Diet Added Successfully");
+    } else {
+      print("Diet Adding failed");
+    }
+    print(response.statusCode);
+    print(response.body);
+  }
 }
+
+

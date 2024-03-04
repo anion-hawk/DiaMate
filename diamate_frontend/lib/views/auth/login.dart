@@ -30,7 +30,7 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Center(
                 child: Padding(
                     padding: const EdgeInsets.symmetric(
-                        vertical: 20, horizontal: 40),
+                        vertical: 10, horizontal: 40),
                     child: ListView(children: [
                       // app logo
 
@@ -40,7 +40,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         height: 300.v,
                         width: 400.h,
                       ),
-                      const SizedBox(height: 30),
+                      const SizedBox(height: 10),
 
                       const Center(
                         child: Text(
@@ -65,8 +65,22 @@ class _LoginScreenState extends State<LoginScreen> {
                           hintText: "Password",
                           obscureText: true,
                           icon: const Icon(Icons.lock)),
+                      const SizedBox(height: 5),
+
+                      if (errorMessage.isNotEmpty)
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            errorMessage,
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontSize: 16.0,
+                            ),
+                          ),
+                        ),
                       // login button
                       const SizedBox(height: 20),
+
                       CustomElevatedButton(
                           text: "Login",
                           onPressed: () {
@@ -95,25 +109,22 @@ class _LoginScreenState extends State<LoginScreen> {
           email: emailController.text, password: passwordController.text);
       Navigator.pop(context);
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found' || e.code == 'wrong-password') {
-        Navigator.pop(context);
-        print("Invalid email or password");
-        showError();
-      }
+      Navigator.pop(context); // Close the loading dialog
+
+      // Show error dialog based on the exception code
+      showError(e.code);
     }
   }
 
-  void showError() {
-    showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-                content: const Text("Invalid email or password"),
-                actions: [
-                  TextButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: const Text("OK"))
-                ]));
+   void showError(String errorCode) {
+    setState(() {
+      if (errorCode == 'user-not-found') {
+        errorMessage = "User not found";
+      } else if (errorCode == 'wrong-password') {
+        errorMessage = "Wrong password";
+      } else {
+        errorMessage = "Invalid email or password";
+      }
+    });
   }
 }

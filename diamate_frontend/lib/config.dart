@@ -15,3 +15,9 @@ final selfPosts = "$baseUrl/forum/selfposts";
 
 final medlist = "$baseUrl/planner/medicinelist";
 final insertmed = "$baseUrl/planner/insert-medicine";
+
+final dietlist = "$baseUrl/planner/dietlist";
+final insertdiet = "$baseUrl/planner/insert-diet";
+
+final sugarlist = "$baseUrl/planner/sugarlist";
+final insertsugar = "$baseUrl/planner/insert-sugar";

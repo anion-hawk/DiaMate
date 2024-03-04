@@ -33,9 +33,62 @@ async function getMedicineDetailsById(id) {
 	}
 	return { success, error };
 }
+//DIEEETTTTTT
+
+async function insertDietPlan (userid, type, title, date, stime, etime){
+	const query = 'INSERT INTO dietplanner (userid, type, title, date, stime, etime) VALUES($1, $2, $3, $4, $5,$6) RETURNING (id, userid, type, title, date, stime, etime) ';
+	const params = [userid, type, title, date, stime, etime ];
+	console.log(params);
+	const { success, data, error } = await repository.query(query, params);
+	console.log(data);
+	if (success) {
+		return { success, data };
+	}
+	return { success, error };
+}
+
+async function getDietList(userId,dt) {
+	const query = 'SELECT * FROM dietplanner WHERE userid = $1 AND date = $2 ORDER BY stime ASC';
+	const params = [userId,dt];
+	
+	const { success, data, error } = await repository.query(query,params);
+	console.log(userId+" "+ data);
+	if (success) {
+		return { success, data };
+	}
+	console.log(error);
+	return { success, error };
+}
+
+async function getSugarList(userId) {
+	const query = 'SELECT * FROM sugartracker WHERE userid = $1';
+//const query =' SELECT( id, userid, medication, dosage, TO_CHAR(date, "DD/MM/YYYY") AS formatted_date,TO_CHAR(time, "HH12:MI:SS AM") AS formatted_time, repeat) FROM medicinePlanner WHERE userid = $1';
+	const params = [userId];
+	const { success, data, error } = await repository.query(query,params);
+	
+	if (success) {
+		return { success, data };
+	}
+	return { success, error };
+}
+async function insertSugar(userid, mealtime,date, time, notes, sugar) {
+	const query = 'INSERT INTO sugartracker(userid, mealtime,date, time, notes, sugar) VALUES($1, $2, $3, $4, $5,$6) RETURNING (id, userid, mealtime,date, time, notes, sugar) ';
+	const params = [userid, mealtime,date, time, notes, sugar ];
+	console.log(params);
+	const { success, data, error } = await repository.query(query, params);
+	console.log(data);
+	if (success) {
+		return { success, data };
+	}
+	return { success, error };
+}
 
 module.exports = {
 	insertMedicineDosage,
     getMedicineDetailsById,
-    getMedicineList
+    getMedicineList,
+	insertDietPlan,
+	getDietList,
+	getSugarList,
+	insertSugar
 };

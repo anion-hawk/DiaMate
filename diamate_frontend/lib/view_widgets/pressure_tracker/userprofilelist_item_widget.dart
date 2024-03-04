@@ -3,7 +3,8 @@ import 'package:diamate_frontend/core/app_export.dart';
 
  //UserprofilelistItemWidget
  class UserprofilelistItemWidget extends StatefulWidget {
-  const UserprofilelistItemWidget({Key? key}) : super(key: key);
+  final Map<String, dynamic> data;
+  const UserprofilelistItemWidget({required this.data, Key? key})  : super(key: key);
 
   @override
   _MedicationModalState createState() => _MedicationModalState();
