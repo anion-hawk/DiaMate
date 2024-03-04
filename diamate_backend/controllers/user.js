@@ -1,6 +1,7 @@
 require('dotenv').config();
 const userRepository = require('../repository/user');
 const patientRepository = require('../repository/patient');
+const expertRepository = require('../repository/expert');
 const followRepository = require('../repository/follow');
 
 async function getProfileStatus(req, res) {
@@ -30,7 +31,12 @@ async function getProfileStatus(req, res) {
             user.isComplete = patientQuery.isComplete;
             break;
         case 2:
-            user.isComplete = false;
+            const expertQuery = await expertRepository.isProfileComplete(id);
+            if (!expertQuery.success) {
+                res.status(500).json({ error: "Internal server error" });
+                return;
+            }
+            user.isComplete = expertQuery.isComplete;
             break;
         default:
             res.status(500).json({ error: "Internal server error" });
@@ -178,7 +184,14 @@ async function completePatientProfile(req, res) {
 }
 
 async function completeDoctorProfile(req, res) {
-    res.status(404).json({ error: "Not available" });
+    const { id } = req.user;
+    const { specialty, experience, bmdc } = req.body;
+    const result = await expertRepository.completeDoctorProfile(id, specialty, experience, bmdc);
+    if (!result.success) {
+        res.status(500).json({ error: "Internal server error: failed adding details" });
+        return;
+    }
+    res.status(201).json({ message: "Expert details added successfully" });
 }
 
 async function completeProfile(req, res) {
