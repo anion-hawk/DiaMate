@@ -5,6 +5,7 @@ final url_cookieCheck = '$baseUrl/user/test';
 final url_selfProfile = '$baseUrl/user/profile';
 final url_profileStatus = '$baseUrl/user/status';
 final url_complete_profile = '$baseUrl/user/complete-profile';
+final url_comments = '$baseUrl/forum/';
 
 final show_post = "$baseUrl/forum/show";
 final own_post = "$baseUrl/forum/post";

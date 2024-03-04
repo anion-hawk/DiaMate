@@ -17,7 +17,7 @@ async function isValidParent(parentId, res) {
 }
 
 async function createComment(req, res) {
-	const postId = req.params['id'];
+	const postId = req.body['id'];
 	let { content, parent } = req.body;
 	const validPost = await isValidPost(postId, res);
 	if (!validPost) {
@@ -47,15 +47,17 @@ async function createComment(req, res) {
 
 async function getComments(req, res) {
 	const { id } = req.params;
-	const validPost = await isValidPost(id, res);
-	if (!validPost) {
-		return;
-	}
+	// const validPost = await isValidPost(id, res);
+	// if (!validPost) {
+	// 	return;
+	// }
+	console.log(id)
 	const result = await commentRepository.getCommentsByPostId(id);
 	if (result.success) {
 		res.status(200).json(result.data);
 	}
 	else {
+		console.log(result.error);
 		res.status(500).json({ error: 'Internal server error' });
 	}
 }

@@ -8,6 +8,7 @@ import 'package:diamate_frontend/widgets/choice_chips_static.dart';
 import 'package:diamate_frontend/widgets/custom_search_view.dart';
 import 'package:diamate_frontend/widgets/form_text.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:requests/requests.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:http/http.dart' as http;
@@ -50,7 +51,7 @@ class ShowPostScreen extends StatefulWidget {
 class _ShowPostScreenState extends State<ShowPostScreen> {
   bool showAllComments = true;
 
-  TextEditingController textController = TextEditingController();
+  TextEditingController _commentController = TextEditingController();
 
   List<Comment> comments = [
     Comment(
@@ -82,6 +83,7 @@ class _ShowPostScreenState extends State<ShowPostScreen> {
   @override
   void initState() {
     super.initState();
+    likeCount = int.parse(widget.post['upvote_count'].toString());
     //fetchData();
   }
 
@@ -91,7 +93,7 @@ class _ShowPostScreenState extends State<ShowPostScreen> {
       final response = await Requests.get(show_post);
 
       if (response.statusCode == 200) {
-        final data = json.decode(response.body);
+        // final data = json.decode(response.body);
 
         setState(() {});
       } else {
@@ -116,7 +118,14 @@ class _ShowPostScreenState extends State<ShowPostScreen> {
             SizedBox(height: 11.v),
             Padding(
                 padding: EdgeInsets.only(left: 15.h),
-                child: Text(widget.post['created'],
+                child: Text(
+                    DateFormat('HH:mm a, dd MMM yyyy')
+                        .format(DateTime.parse(widget.post['created'])),
+                    style: CustomTextStyles.bodyMediumPoppinsBlue300)),
+            SizedBox(height: 13.v),
+            Padding(
+                padding: EdgeInsets.only(left: 15.h),
+                child: Text(widget.post['author_name'],
                     style: CustomTextStyles.bodyMediumPoppinsBlue300)),
             SizedBox(height: 13.v),
             Container(
@@ -152,87 +161,105 @@ class _ShowPostScreenState extends State<ShowPostScreen> {
               ),
             ),
             const SizedBox(height: 20),
-            CustomImageView(
-                imagePath: ImageConstant.imgRectangle22474,
-                height: 240.v,
-                width: 349.h),
-            SizedBox(height: 12.v),
-            _buildArrowRightRow(context),
-            SizedBox(height: 21.v),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12.0),
+              child: _buildArrowRightRow(context),
+            ),
+            const SizedBox(height: 20),
             Align(
-              alignment: Alignment.center,
-              child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 13.h),
-                  child: Row(
-                    children: [
-                      if (showComment)
-                        const CircleAvatar(
-                          radius: 12.0,
-                          child: Icon(Icons.person),
-                        ),
-                      if (showComment) const SizedBox(width: 5.0),
-                      if (showComment)
-                        Expanded(
-                          child: CustomTextFormField(
-                            controller: textController,
-                            hintText: "Write a Comment",
-                            obscureText: false,
+                alignment: Alignment.center,
+                child: Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: Row(children: <Widget>[
+                      Expanded(
+                        child: TextField(
+                          controller: _commentController,
+                          decoration: const InputDecoration(
+                            labelText: 'Write a comment...',
                           ),
                         ),
-                      if (showComment) const SizedBox(width: 8.0),
-                      if (showComment)
-                        InkWell(
-                          onTap: () {},
-                          child: const Icon(Icons.send),
-                        ),
-                    ],
-                  )),
-            ),
-            const SizedBox(
-                height:
-                    3.5), // Adjust the spacing between the text field and button
-
-            if (showAllComments)
-              // Render all comments
-              Expanded(
-                child: ListView.builder(
-                  itemCount: comments.length,
-                  itemBuilder: (context, index) =>
-                      _buildCommentWidget(comments[index]),
-                ),
-              ),
-
-            // Container(
-            //     width: 242.h,
-            //     margin: EdgeInsets.only(left: 40.h),
-            // child: Text(
-            //     "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nisi ligula",
-            //     maxLines: 2,
-            //     overflow: TextOverflow.ellipsis,
-            //     style: CustomTextStyles.bodySmallPoppinsPrimary)
-
-            // )
+                      ),
+                      IconButton(
+                          icon: const Icon(Icons.send),
+                          onPressed: () {
+                            _postComment();
+                          })
+                    ]))),
+            const SizedBox(height: 3.5),
+            _buildComments(
+                context), // Adjust the spacing between the text field and button
           ])),
     ));
+  }
+
+  void _postComment() async {
+    final req = {
+      'id': widget.post['id'],
+      'content': _commentController.text,
+      'parent': '00000000-0000-0000-0000-000000000000'
+    };
+    final response = await Requests.post('${url_comments}comment', body: req);
+
+    print(response.statusCode);
+  }
+
+  Widget _buildComments(BuildContext context) {
+    return FutureBuilder<List<Map<String, dynamic>>>(
+      future: fetchComments(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));
+        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          return const Center(child: Text('No comments'));
+        } else {
+          // Display the posts using ListView.builder
+          return ListView.builder(
+              physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemCount: snapshot.data!.length,
+              itemBuilder: (context, index) =>
+                  _buildCommentWidget(comments[index]));
+        }
+      },
+    );
+  }
+
+  Future<List<Map<String, dynamic>>> fetchComments() async {
+    try {
+      final response = await Requests.get(
+          '${url_comments + widget.post['id']}/comments',
+          timeoutSeconds: 300);
+
+      if (response.statusCode == 200) {
+        final List<dynamic> data = json.decode(response.body);
+        return data.cast<Map<String, dynamic>>();
+      } else {
+        throw Exception('Failed to load comments: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error fetching comments: $e');
+      throw Exception('Failed to load comments: $e');
+    }
   }
 
   /// Section Widget
   PreferredSizeWidget _buildAppBar(BuildContext context) {
     return CustomAppBar(
         leadingWidth: 29.h,
-        leading: AppbarLeadingImage(
-            imagePath: ImageConstant.imgArrowLeftOnerrorcontainer,
-            margin: EdgeInsets.only(left: 11.h, top: 18.v, bottom: 19.v),
-            onTap: () {
-              onTapArrowLeft(context);
-            }),
-        title:
-            AppbarSubtitleOne(text: "Back", margin: EdgeInsets.only(left: 5.h)),
-        actions: [
-          AppbarTrailingImage(
-              imagePath: ImageConstant.imgSettingsOnerrorcontainer,
-              margin: EdgeInsets.symmetric(horizontal: 16.h, vertical: 19.v))
-        ],
+        leading: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: IconButton(
+              icon: const Icon(Icons.arrow_back, size: 40, color: Colors.white),
+              onPressed: () {
+                onTapArrowLeft(context);
+              }),
+        ),
+        title: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          child: AppbarSubtitleOne(text: widget.post['title']),
+        ),
         styleType: Style.bgFill_1);
   }
 
@@ -252,27 +279,10 @@ class _ShowPostScreenState extends State<ShowPostScreen> {
                         likeCount++;
                       });
                     },
-                    child: CustomImageView(
-                      imagePath: ImageConstant.imgArrowRightPrimary,
-                      height: 20.v,
-                      width: 26.h,
-                    ),
+                    child: const Icon(Icons.arrow_upward_rounded, size: 25),
                   ),
                   Text(likeCount.toString(),
                       style: CustomTextStyles.titleMediumPoppinsBlue300),
-                  GestureDetector(
-                    onTap: () {
-                      // Handle decrease button tap
-                      setState(() {
-                        likeCount--;
-                      });
-                    },
-                    child: CustomImageView(
-                      imagePath: ImageConstant.imgLightBulb,
-                      height: 20.v,
-                      width: 26.h,
-                    ),
-                  ),
                 ],
               ),
               const Spacer(flex: 5),
@@ -285,14 +295,10 @@ class _ShowPostScreenState extends State<ShowPostScreen> {
                 },
                 child: Row(
                   children: [
-                    CustomImageView(
-                      imagePath: ImageConstant.imgSettingsBlue300,
-                      height: 20.adaptSize,
-                      width: 20.adaptSize,
-                    ),
+                    const Icon(Icons.comment, size: 25),
                     Padding(
                       padding: EdgeInsets.only(left: 5.h),
-                      child: Text("4682",
+                      child: Text(widget.post['comment_count'],
                           style: CustomTextStyles.titleMediumPoppinsBlue300),
                     ),
                   ],
@@ -325,7 +331,7 @@ class _ShowPostScreenState extends State<ShowPostScreen> {
         ]));
   }
 
-  Widget _buildCommentWidget(Comment comment, {int indent = 1}) {
+  Widget _buildCommentWidget(comment, {int indent = 1}) {
     const indentWidth = 25.0;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -351,14 +357,15 @@ class _ShowPostScreenState extends State<ShowPostScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        comment.user.username,
+                        comment['author_name'],
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16.0,
                         ),
                       ),
                       Text(
-                        timeago.format(comment.timestamp, locale: 'en_short'),
+                        DateFormat('HH:mm a, dd MMM yyyy')
+                            .format(DateTime.parse(comment['created'])),
                         style: const TextStyle(
                           fontSize: 12.0,
                           color: Colors.grey,
@@ -369,58 +376,58 @@ class _ShowPostScreenState extends State<ShowPostScreen> {
                 ],
               ),
               const SizedBox(height: 5.0),
-              Text(comment.content),
+              Text(comment['content']),
             ],
           ),
-          subtitle: Row(
-            children: [
-              IconButton(
-                icon: const Icon(Icons.arrow_upward, size: 20.0),
-                onPressed: () {
-                  // Handle like/upvote button press
-                  setState(() {
-                    comment.likeCount++;
-                  });
-                },
-              ),
-              Text(comment.likeCount.toString()),
-              IconButton(
-                icon: const Icon(Icons.arrow_downward, size: 20.0),
-                onPressed: () {
-                  // Handle dislike/downvote button press
-                  setState(() {
-                    comment.likeCount--;
-                  });
-                },
-              ),
-              IconButton(
-                icon: const Icon(Icons.reply, size: 20.0),
-                onPressed: () {
-                  // Handle reply button press
-                },
-              ),
-              IconButton(
-                icon: const Icon(Icons.delete, size: 20.0),
-                onPressed: () {
-                  // Handle delete button press
-                },
-              ),
-              if (comment.nestedComments.isNotEmpty)
-                TextButton(
-                  onPressed: () {
-                    setState(() {
-                      showReplies = !showReplies;
-                    });
-                  },
-                  child: Text(showReplies ? "Hide Replies" : "View Replies"),
-                ),
-            ],
-          ),
+          // subtitle: Row(
+          //   children: [
+          //     IconButton(
+          //       icon: const Icon(Icons.arrow_upward, size: 20.0),
+          //       onPressed: () {
+          //         // Handle like/upvote button press
+          //         setState(() {
+          //           comment.likeCount++;
+          //         });
+          //       },
+          //     ),
+          //     Text(comment.likeCount.toString()),
+          //     IconButton(
+          //       icon: const Icon(Icons.arrow_downward, size: 20.0),
+          //       onPressed: () {
+          //         // Handle dislike/downvote button press
+          //         setState(() {
+          //           comment.likeCount--;
+          //         });
+          //       },
+          //     ),
+          //     IconButton(
+          //       icon: const Icon(Icons.reply, size: 20.0),
+          //       onPressed: () {
+          //         // Handle reply button press
+          //       },
+          //     ),
+          //     IconButton(
+          //       icon: const Icon(Icons.delete, size: 20.0),
+          //       onPressed: () {
+          //         // Handle delete button press
+          //       },
+          //     ),
+          //     if (comment.nestedComments.isNotEmpty)
+          //       TextButton(
+          //         onPressed: () {
+          //           setState(() {
+          //             showReplies = !showReplies;
+          //           });
+          //         },
+          //         child: Text(showReplies ? "Hide Replies" : "View Replies"),
+          //       ),
+          //   ],
+          // ),
         ),
-        if (showReplies)
-          // Display nested comments with replies using recursion
-          for (int i = 0; i < comment.nestedComments.length; i++)
-            _buildCommentWidget(comment.nestedComments[i], indent: indent + 2),
+        // if (showReplies)
+        //   // Display nested comments with replies using recursion
+        //   for (int i = 0; i < comment.nestedComments.length; i++)
+        //     _buildCommentWidget(comment.nestedComments[i], indent: indent + 2),
       ],
     );
   }
